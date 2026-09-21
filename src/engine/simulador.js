@@ -1,14 +1,7 @@
 // Simulador para balancear el juego sin tener que jugarlo mil veces a mano.
 import { Juego } from './juego.js';
 import { FASES, STATS } from './constantes.js';
-
-function valorEsperado(valor) {
-  if (valor == null) return 0;
-  if (typeof valor === 'number') return valor;
-  if (Array.isArray(valor)) return (valor[0] + valor[1]) / 2;
-  if (typeof valor === 'object') return ((valor.min ?? 0) + (valor.max ?? 0)) / 2;
-  return 0;
-}
+import { valorEsperado } from './efectos.js';
 
 // Cuánto "duele" un stat: mucho cerca de los bordes, poco en el medio.
 function riesgo(valor) {

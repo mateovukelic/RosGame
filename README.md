@@ -10,7 +10,8 @@ un país, y cuatro equilibrios que no se pueden sostener todos juntos.
 
 ## Jugar
 
-No hay build, no hay dependencias. Es HTML + módulos ES:
+Hay una **demo jugable publicada** (ver abajo cómo se genera), y también corre
+local sin build ni dependencias — es HTML + módulos ES:
 
 ```bash
 npm start            # levanta http://localhost:8080
@@ -20,7 +21,10 @@ python3 -m http.server 8080
 
 Abrí `http://localhost:8080` y asumí el cargo.
 
-**Controles:** arrastrá la carta, usá `←` / `→`, o tocá los botones.
+**Controles:** arrastrá la carta hacia un lado y las barras te muestran a dónde
+iría cada medidor si soltás ahí; soltá pasando el umbral para confirmar, o volvé
+al centro para cancelar. También andan `←` / `→` y los botones (apuntarlos con el
+mouse o con el tab previsualiza igual).
 
 También hay una galería de retratos en `http://localhost:8080/galeria.html`, que
 sirve para revisar los personajes y probar combinaciones de partes al azar.
@@ -80,8 +84,9 @@ El archivo del menú los va revelando.
 ## Desarrollo
 
 ```bash
-npm test        # 51 tests: motor, mazo, retratos, legado y balance
+npm test        # 55 tests: motor, mazo, retratos, legado y balance
 npm run validar # reporte de salud del mazo + 1000 corridas simuladas
+npm run demo    # arma dist/demo.html, la versión de una sola página
 ```
 
 ### Estructura
@@ -140,6 +145,19 @@ Metela en el paquete que corresponda dentro de `src/data/cartas/`:
 respuestas entren en la carta, que las magnitudes sean razonables, y que **ninguna
 carta requiera una flag que nadie pone nunca**.
 
+### La previsualización de impacto
+
+Mientras arrastrás, `Juego.previsualizar(lado)` devuelve, por cada medidor que se
+mueve, la dirección, la magnitud estimada **ya pasada por tus decretos activos**,
+el valor proyectado y si esa opción te deja en zona de final. El HUD lo pinta como
+un segmento fantasma sobre la barra más una flecha ▲/▼; en dorado y parpadeando si
+esa elección termina la partida.
+
+A propósito **no muestra números**: se ve la dirección y el tamaño relativo, no el
+`-8`. Con los números exactos la partida se vuelve una cuenta y se pierde la
+tensión que hace funcionar a Reigns. Los efectos que son un rango se marcan con
+`▲?`, porque ahí ni el juego sabe cuánto va a salir.
+
 ### Agregar un personaje
 
 Los retratos no son imágenes: se arman combinando partes en `src/ui/retratos.js`.
@@ -181,6 +199,17 @@ falla si el juego se vuelve imposible, trivial, o si un solo final se come todas
 las partidas.
 
 ---
+
+## Publicar la demo
+
+`.github/workflows/pages.yml` publica el repo tal cual en GitHub Pages en cada
+push. Hay que habilitarlo una vez: **Settings → Pages → Source: "GitHub Actions"**.
+El workflow corre `npm test` antes de publicar, así que nunca sale una demo rota.
+
+`npm run demo` arma además `dist/demo.html`: el mismo juego en una sola página, sin
+`<html>`/`<head>`/`<body>` propios y sin recursos externos, para embeber en hosts
+que aportan su propio esqueleto. Se genera desde `index.html` y `styles/main.css`
+en vez de mantenerse a mano, para que no se desincronice.
 
 ## Estado
 

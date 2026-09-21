@@ -91,7 +91,7 @@ function empezar(semilla, gabinete) {
   if (!carta) {
     carta = new CartaArrastrable($('#carta'), {
       alElegir: (lado) => resolver(lado),
-      alMover: (lado) => pintarPistas(lado)
+      alMover: (lado, fuerza) => previsualizar(lado, fuerza)
     });
   }
   mostrarPantalla('pantalla-juego');
@@ -125,7 +125,15 @@ function pintarCarta(c) {
   $('#replica').classList.remove('visible');
 }
 
-function pintarPistas(lado) {
+// Muestra, mientras se arrastra (o se apunta un botón), a dónde iría cada barra.
+// `fuerza` va de 0 a 1 según lo cerca que esté el arrastre del umbral: el
+// fantasma se va haciendo más sólido a medida que la decisión se vuelve firme.
+function previsualizar(lado, fuerza = 1) {
+  if (!juego || juego.estado.fase !== FASES.CARTA) return;
+
+  const impactos = lado ? juego.previsualizar(lado) : [];
+  hud.previsualizar(impactos, lado ? fuerza : 0);
+
   for (const [id, clave] of [['#pista-izq', 'izq'], ['#pista-der', 'der']]) {
     const nodo = $(id);
     if (lado !== clave) {
@@ -133,9 +141,7 @@ function pintarPistas(lado) {
       nodo.replaceChildren();
       continue;
     }
-    nodo.replaceChildren(
-      ...hud.pistas(juego.previsualizar(clave)).map((icono) => crear('span', { texto: icono }))
-    );
+    nodo.replaceChildren(...hud.pistas(impactos).map((icono) => crear('span', { texto: icono })));
     nodo.classList.add('visible');
   }
 }
@@ -143,8 +149,9 @@ function pintarPistas(lado) {
 function resolver(lado) {
   const resultado = juego.elegir(lado);
   pintarEstado();
+  hud.limpiarPrevisualizacion();
   hud.golpear(resultado.deltas);
-  pintarPistas(null);
+  previsualizar(null);
 
   if (resultado.replica) {
     const nodo = $('#replica');
@@ -227,6 +234,36 @@ function mostrarFinal() {
   pintarMenu();
 }
 
+// Confirmación en dos toques. Reemplaza a confirm(), que además de ser feo no
+// existe dentro de un iframe en sandbox (la demo publicada es uno).
+function confirmarDosPasos(boton, textoConfirma, accion) {
+  const original = boton.textContent;
+  let armado = false;
+  let reloj = null;
+
+  const desarmar = () => {
+    armado = false;
+    boton.textContent = original;
+    boton.classList.remove('armado');
+    clearTimeout(reloj);
+  };
+
+  boton.addEventListener('click', () => {
+    if (armado) {
+      desarmar();
+      accion();
+      return;
+    }
+    armado = true;
+    boton.textContent = textoConfirma;
+    boton.classList.add('armado');
+    reloj = setTimeout(desarmar, 4000);
+  });
+
+  boton.addEventListener('blur', desarmar);
+  return desarmar;
+}
+
 // ---------------------------------------------------------------- EVENTOS
 function cablear() {
   $('#input-semilla').value = semillaAlAzar();
@@ -240,14 +277,19 @@ function cablear() {
     empezar(semilla, gabineteElegido);
   });
 
-  $('#btn-izq').addEventListener('click', () => carta.confirmar('izq'));
-  $('#btn-der').addEventListener('click', () => carta.confirmar('der'));
+  for (const [selector, lado] of [['#btn-izq', 'izq'], ['#btn-der', 'der']]) {
+    const boton = $(selector);
+    boton.addEventListener('click', () => carta.confirmar(lado));
+    // Apuntar el botón previsualiza igual que arrastrar la carta hacia ese lado.
+    boton.addEventListener('pointerenter', () => previsualizar(lado, 0.75));
+    boton.addEventListener('focus', () => previsualizar(lado, 0.75));
+    boton.addEventListener('pointerleave', () => previsualizar(null));
+    boton.addEventListener('blur', () => previsualizar(null));
+  }
 
-  $('#btn-abandonar').addEventListener('click', () => {
-    if (confirm('¿Renunciás al cargo? Se pierde la corrida.')) {
-      mostrarPantalla('pantalla-menu');
-      pintarMenu();
-    }
+  confirmarDosPasos($('#btn-abandonar'), 'Tocá de nuevo para renunciar', () => {
+    mostrarPantalla('pantalla-menu');
+    pintarMenu();
   });
 
   $('#btn-continuar').addEventListener('click', () => {
@@ -267,11 +309,9 @@ function cablear() {
     pintarMenu();
   });
 
-  $('#btn-borrar').addEventListener('click', () => {
-    if (confirm('¿Borrar todo el legado? No hay vuelta atrás.')) {
-      legado.borrar();
-      pintarMenu();
-    }
+  confirmarDosPasos($('#btn-borrar'), 'Tocá de nuevo para borrar todo', () => {
+    legado.borrar();
+    pintarMenu();
   });
 
   document.addEventListener('keydown', (e) => {

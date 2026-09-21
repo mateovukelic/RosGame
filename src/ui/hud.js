@@ -8,14 +8,15 @@ export class Hud {
     for (const stat of STATS) {
       const meta = META_STATS[stat];
       const relleno = crear('div', { clase: 'medidor-relleno' });
+      const fantasma = crear('div', { clase: 'medidor-fantasma' });
       const delta = crear('div', { clase: 'medidor-delta' });
       const medidor = crear('div', { clase: 'medidor', title: `${meta.nombre}: ${meta.desc}` }, [
         crear('div', { clase: 'medidor-icono', texto: meta.icono }),
         delta,
-        crear('div', { clase: 'medidor-barra' }, [relleno]),
+        crear('div', { clase: 'medidor-barra' }, [relleno, fantasma]),
         crear('div', { clase: 'medidor-nombre', texto: meta.nombre })
       ]);
-      this.medidores[stat] = { raiz: medidor, relleno, delta };
+      this.medidores[stat] = { raiz: medidor, relleno, fantasma, delta };
       contenedor.append(medidor);
     }
   }
@@ -38,6 +39,8 @@ export class Hud {
       const { raiz, delta: nodo } = this.medidores[stat];
       nodo.className = 'medidor-delta';
       nodo.textContent = '';
+      nodo.style.opacity = '';
+      delete nodo.dataset.modo;
       raiz.classList.remove('pulso');
       if (!delta) continue;
       void raiz.offsetWidth; // reinicia la animación
@@ -54,11 +57,73 @@ export class Hud {
   }
 
   // Pistas de qué stats toca cada opción, sin decir cuánto.
-  pistas(claves) {
-    return claves
-      .map((k) => (k === 'inflacion' ? META_INFLACION.icono : META_STATS[k]?.icono))
+  pistas(impactos) {
+    return impactos
+      .map((i) => (i.clave === 'inflacion' ? META_INFLACION.icono : META_STATS[i.clave]?.icono))
       .filter(Boolean);
   }
+
+  /**
+   * Muestra sobre las barras a dónde iría cada medidor si se elige esta opción.
+   * @param {Array}  impactos  lo que devuelve Juego.previsualizar(lado)
+   * @param {number} fuerza    0..1 — qué tan cerca está el arrastre del umbral
+   */
+  previsualizar(impactos, fuerza = 1) {
+    const porClave = new Map((impactos || []).map((i) => [i.clave, i]));
+
+    for (const stat of STATS) {
+      const { raiz, fantasma, delta } = this.medidores[stat];
+      const impacto = porClave.get(stat);
+
+      raiz.classList.remove('sube', 'baja', 'alerta');
+      if (!impacto || fuerza <= 0) {
+        fantasma.style.opacity = '0';
+        fantasma.style.width = '0%';
+        if (delta.dataset.modo === 'previo') {
+          delta.textContent = '';
+          delta.className = 'medidor-delta';
+          delete delta.dataset.modo;
+        }
+        continue;
+      }
+
+      const desde = Math.min(impacto.actual, impacto.proyectado);
+      const hasta = Math.max(impacto.actual, impacto.proyectado);
+      fantasma.style.left = `${desde}%`;
+      // Un cambio de 3 puntos son 3px de barra: sin un mínimo no se ve nada.
+      fantasma.style.width = `${Math.max(2, hasta - desde)}%`;
+      fantasma.style.opacity = String(0.35 + 0.65 * fuerza);
+      raiz.classList.add(impacto.delta > 0 ? 'sube' : 'baja');
+      if (impacto.letal) raiz.classList.add('alerta');
+
+      // La flecha dice la dirección aunque el fantasma sea de dos píxeles.
+      // El signo de interrogación marca los efectos que son un rango.
+      delta.dataset.modo = 'previo';
+      delta.textContent = (impacto.delta > 0 ? '▲' : '▼') + (impacto.incierto ? '?' : '');
+      delta.className = `medidor-delta previo ${impacto.delta > 0 ? 'sube' : 'baja'}`;
+      delta.style.opacity = String(0.45 + 0.55 * fuerza);
+    }
+
+    const inflacion = porClave.get('inflacion');
+    pintarFlechaInflacion(inflacion, fuerza);
+  }
+
+  limpiarPrevisualizacion() {
+    this.previsualizar([], 0);
+  }
+}
+
+function pintarFlechaInflacion(impacto, fuerza) {
+  const nodo = $('#inflacion-flecha');
+  if (!nodo) return;
+  if (!impacto || fuerza <= 0) {
+    nodo.textContent = '';
+    nodo.className = 'inflacion-flecha';
+    return;
+  }
+  nodo.textContent = impacto.delta > 0 ? '▲' : '▼';
+  nodo.className = `inflacion-flecha ${impacto.delta > 0 ? 'sube' : 'baja'}`;
+  nodo.style.opacity = String(0.4 + 0.6 * fuerza);
 }
 
 export function pintarInflacion(valor) {

@@ -1,7 +1,9 @@
 // Motor del juego. No sabe nada de DOM: se puede correr entero desde Node.
 import { crearRng, semillaAlAzar } from './rng.js';
 import { BALANCE, FASES, STATS, LADOS } from './constantes.js';
-import { calcularEfectos, aplicarDeltas, aplicarFlags, cumpleCondicion, limitar } from './efectos.js';
+import {
+  calcularEfectos, aplicarDeltas, aplicarFlags, cumpleCondicion, limitar, efectosEsperados
+} from './efectos.js';
 import { Mazo } from './mazo.js';
 import { resolverFinal } from './finales.js';
 import { TODAS_LAS_CARTAS } from '../data/cartas/index.js';
@@ -78,14 +80,25 @@ export class Juego {
     return { anio, mesDelAnio };
   }
 
-  // Previsualización de a qué stats afecta una opción, sin revelar cuánto.
+  // Impacto estimado de una opción: qué medidor se mueve, en qué dirección,
+  // cuánto (aproximado, ya modulado por los decretos activos) y si además
+  // deja el país en zona de final. Se usa para el arrastre de la carta.
   previsualizar(lado) {
     const opcion = this.estado.carta?.[lado];
     if (!opcion?.efectos) return [];
-    return Object.keys(opcion.efectos).filter((k) => {
-      const v = opcion.efectos[k];
-      if (typeof v === 'number') return v !== 0;
-      return v != null;
+    return efectosEsperados(opcion.efectos, this.estado.decretos).map((e) => {
+      const actual = e.clave === 'inflacion' ? this.estado.inflacion : this.estado.stats[e.clave];
+      const proyectado = limitar(actual + e.delta, BALANCE.statMin, BALANCE.statMax);
+      return {
+        ...e,
+        actual,
+        proyectado,
+        // La caja no muere en cero: se emite. Por eso no avisa en el borde de abajo.
+        letal:
+          e.clave === 'inflacion'
+            ? proyectado >= BALANCE.inflacionMax
+            : proyectado >= BALANCE.statMax || (proyectado <= BALANCE.statMin && e.clave !== 'caja')
+      };
     });
   }
 

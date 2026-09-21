@@ -112,6 +112,32 @@ partidas**. Si uno domina, el mazo empuja demasiado en una dirección.
 Esas cuatro condiciones son tests (`test/balance.test.js`), no recomendaciones.
 Tocá `constantes.js` y te avisan.
 
+## Cuánto mostrar antes de elegir
+
+Reigns no te dice nada: arrastrás y ves qué pasó. Eso genera tensión, pero también
+genera muertes que se sienten arbitrarias — perdiste por un medidor que no estabas
+mirando.
+
+El término medio que usa este juego: mientras arrastrás, cada barra muestra un
+**segmento fantasma** hacia dónde iría, más una flecha de dirección. Dirección y
+tamaño relativo, nunca el número. Tres reglas lo sostienen:
+
+- **La estimación pasa por tus decretos.** Si tenés Cadena Nacional, el golpe al
+  Pueblo que se previsualiza ya viene amortiguado. Mostrar el efecto pelado de la
+  carta sería mentir.
+- **Los rangos se marcan con `?`.** Hay cartas cuyo efecto es `[-30, 35]`. Ahí ni
+  el juego sabe, y el jugador tiene que saber que no sabe.
+- **Lo letal se avisa en dorado.** Si la opción te lleva un medidor a 0 o a 100,
+  la barra parpadea. Esto enseña la regla de que el exceso mata, que es la menos
+  intuitiva del juego y la que más frustra cuando te agarra de sorpresa.
+
+La Caja es la excepción: llevarla a 0 no avisa, porque no es un final — se emite.
+Esa asimetría es justamente lo que el jugador tiene que internalizar.
+
+Cancelar es parte del diseño: si volvés la carta al centro no pasa nada, así que la
+previsualización se puede consultar gratis. El costo de mirar tiene que ser cero
+para que valga la pena mirar.
+
 ## Los retratos
 
 Podrían haber sido 25 SVG dibujados a mano. No lo son, por dos razones: a mano el
@@ -159,6 +185,8 @@ respaldo que nada usa es dato muerto que miente en la próxima lectura.
 ## Pendiente
 
 - Sonido: un golpe por carta, algo feo cuando un medidor entra en zona roja.
+- Un modo "a ciegas" que apague la previsualización, para quien quiera el Reigns
+  puro. Hoy la decisión está tomada por el juego, no por el jugador.
 - Retratos que reaccionen: la misma receta con `ceja: 'enojada'` cuando el Pueblo
   está en rojo, o `ojos: 'cansado'` pasados los tres años de mandato.
 - Elecciones de medio término como evento de mes 24 con consecuencias en Rosca.

@@ -5,6 +5,40 @@ export function limitar(valor, min, max) {
   return Math.max(min, Math.min(max, valor));
 }
 
+// Valor medio de un efecto, sin tirar dados. Se usa para previsualizar el impacto
+// antes de elegir, y para que el simulador pueda proyectar sin gastar el rng.
+export function valorEsperado(valor) {
+  if (valor == null) return 0;
+  if (typeof valor === 'number') return valor;
+  if (Array.isArray(valor)) return (valor[0] + valor[1]) / 2;
+  if (typeof valor === 'object' && 'min' in valor && 'max' in valor) {
+    return (valor.min + valor.max) / 2;
+  }
+  return 0;
+}
+
+export function esRango(valor) {
+  return Array.isArray(valor) || (valor != null && typeof valor === 'object' && 'min' in valor);
+}
+
+// Impacto estimado de una opción, ya pasado por los decretos activos.
+// Devuelve [{ clave, delta, incierto }] ordenado de mayor a menor impacto.
+export function efectosEsperados(efectos = {}, decretos = []) {
+  const claves = [...STATS, 'inflacion'];
+  return claves
+    .map((clave) => {
+      const crudo = valorEsperado(efectos[clave]);
+      if (!crudo) return null;
+      return {
+        clave,
+        delta: modularDelta(clave, crudo, decretos),
+        incierto: esRango(efectos[clave])
+      };
+    })
+    .filter(Boolean)
+    .sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta));
+}
+
 // Un efecto puede ser un número fijo (-8) o un rango ({ min: -12, max: -4 })
 export function resolverValor(valor, rng) {
   if (valor == null) return 0;

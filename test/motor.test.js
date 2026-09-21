@@ -177,11 +177,81 @@ test('una carta no se repite mientras haya alternativas', () => {
   assert.equal(new Set(unicas).size, unicas.length, `se repitieron cartas: ${vistas.join(', ')}`);
 });
 
-test('previsualizar devuelve las áreas que toca cada opción sin revelar números', () => {
+test('previsualizar estima el impacto de cada opción antes de elegirla', () => {
   const j = new Juego({ semilla: 'PREV-1' });
-  const areas = j.previsualizar('izq');
-  assert.ok(Array.isArray(areas));
-  assert.ok(areas.every((a) => ['pueblo', 'rosca', 'campo', 'caja', 'inflacion'].includes(a)));
+  const impactos = j.previsualizar('izq');
+  assert.ok(impactos.length > 0, 'la carta de asunción mueve algo');
+
+  for (const i of impactos) {
+    assert.ok(['pueblo', 'rosca', 'campo', 'caja', 'inflacion'].includes(i.clave));
+    assert.notEqual(i.delta, 0, 'no se listan medidores que no se mueven');
+    assert.equal(typeof i.proyectado, 'number');
+    assert.ok(i.proyectado >= 0 && i.proyectado <= 100, 'el proyectado ya viene acotado');
+    assert.equal(typeof i.letal, 'boolean');
+  }
+
+  // Viene ordenado por impacto, para que la pista más fuerte se lea primero
+  const magnitudes = impactos.map((i) => Math.abs(i.delta));
+  assert.deepEqual(magnitudes, [...magnitudes].sort((a, b) => b - a));
+});
+
+test('la previsualización coincide con lo que después pasa de verdad', () => {
+  // Con efectos fijos (sin rangos) la estimación tiene que dar exacto.
+  const j = new Juego({ semilla: 'PREV-2' });
+  const antes = { ...j.estado.stats };
+  const impactos = j.previsualizar('der');
+  const esperado = Object.fromEntries(impactos.map((i) => [i.clave, i.delta]));
+  const resultado = j.elegir('der');
+
+  for (const [clave, delta] of Object.entries(esperado)) {
+    if (clave === 'inflacion') continue; // la deriva mensual la mueve aparte
+    assert.equal(
+      resultado.deltas[clave],
+      Math.round(delta),
+      `${clave}: se previsualizó ${delta} y se aplicó ${resultado.deltas[clave]}`
+    );
+    assert.ok(antes[clave] != null);
+  }
+});
+
+test('previsualizar avisa cuando la opción empuja a un medidor a un final', () => {
+  const j = new Juego({ semilla: 'PREV-3' });
+  j.estado.stats.campo = 97;
+  j.estado.carta = {
+    id: 'falsa', personaje: 'chanta', texto: 'x',
+    izq: { texto: 'a', efectos: { campo: 8 } },
+    der: { texto: 'b', efectos: { campo: -8 } }
+  };
+  const [subeCampo] = j.previsualizar('izq');
+  assert.equal(subeCampo.letal, true, 'llevar Campo a 100 es un final y hay que avisarlo');
+  const [bajaCampo] = j.previsualizar('der');
+  assert.equal(bajaCampo.letal, false);
+});
+
+test('la Caja en cero no se marca letal: se emite en vez de perder', () => {
+  const j = new Juego({ semilla: 'PREV-4' });
+  j.estado.stats.caja = 3;
+  j.estado.carta = {
+    id: 'falsa', personaje: 'chanta', texto: 'x',
+    izq: { texto: 'a', efectos: { caja: -20 } },
+    der: { texto: 'b', efectos: { pueblo: -60 } }
+  };
+  assert.equal(j.previsualizar('izq')[0].letal, false);
+  assert.equal(j.previsualizar('der')[0].letal, true);
+});
+
+test('la previsualización refleja los decretos activos', () => {
+  const j = new Juego({ semilla: 'PREV-5' });
+  j.estado.carta = {
+    id: 'falsa', personaje: 'chanta', texto: 'x',
+    izq: { texto: 'a', efectos: { pueblo: -10 } },
+    der: { texto: 'b', efectos: { pueblo: 10 } }
+  };
+  const sinDecreto = j.previsualizar('izq')[0].delta;
+  j.estado.decretos.push({ id: 'escudo', efecto: { amortigua: { pueblo: 0.5 } } });
+  const conDecreto = j.previsualizar('izq')[0].delta;
+  assert.equal(sinDecreto, -10);
+  assert.equal(conDecreto, -5, 'el jugador tiene que ver el efecto real, no el de la carta pelada');
 });
 
 test('el gabinete define el estado inicial', () => {
