@@ -146,6 +146,55 @@ test('los finales tienen id único y prioridad numérica', () => {
   }
 });
 
+// ---- La convención de lados ----
+// Cuando alguien viene a proponer algo, aceptar está SIEMPRE a la derecha y
+// rechazar SIEMPRE a la izquierda. Que el lado sea predecible es lo que deja
+// que la dificultad esté en decidir, y no en descifrar de qué lado quedó el sí.
+test('toda carta declara si es una propuesta o un dilema', () => {
+  for (const carta of TODAS_LAS_CARTAS) {
+    assert.ok(
+      ['propuesta', 'dilema'].includes(carta.forma),
+      `${carta.id}: forma inválida o ausente ("${carta.forma}")`
+    );
+  }
+});
+
+test('en una propuesta, aceptar va a la derecha y rechazar a la izquierda', () => {
+  for (const carta of TODAS_LAS_CARTAS.filter((c) => c.forma === 'propuesta')) {
+    assert.equal(carta.der.acepta, true, `${carta.id}: la derecha tiene que ser el sí`);
+    assert.equal(carta.izq.rechaza, true, `${carta.id}: la izquierda tiene que ser el no`);
+    assert.ok(!carta.izq.acepta, `${carta.id}: hay un "acepta" a la izquierda`);
+    assert.ok(!carta.der.rechaza, `${carta.id}: hay un "rechaza" a la derecha`);
+  }
+});
+
+test('un dilema no marca ningún lado como el sí', () => {
+  for (const carta of TODAS_LAS_CARTAS.filter((c) => c.forma === 'dilema')) {
+    for (const lado of ['izq', 'der']) {
+      assert.ok(
+        !carta[lado].acepta && !carta[lado].rechaza,
+        `${carta.id}.${lado}: un dilema no tiene un lado "correcto"`
+      );
+    }
+  }
+});
+
+test('ninguna carta marca acepta o rechaza sin declararse propuesta', () => {
+  for (const carta of TODAS_LAS_CARTAS) {
+    const marcada = carta.izq.acepta || carta.izq.rechaza || carta.der.acepta || carta.der.rechaza;
+    if (marcada) assert.equal(carta.forma, 'propuesta', `${carta.id}: marca lados pero no es propuesta`);
+  }
+});
+
+test('la mayoría del mazo son propuestas, no dilemas', () => {
+  // Si los dilemas fueran mayoría, la convención no le serviría a nadie.
+  const propuestas = TODAS_LAS_CARTAS.filter((c) => c.forma === 'propuesta').length;
+  assert.ok(
+    propuestas > TODAS_LAS_CARTAS.length / 2,
+    `sólo ${propuestas} de ${TODAS_LAS_CARTAS.length} cartas son propuestas`
+  );
+});
+
 test('el mazo tiene volumen suficiente en cada paquete', () => {
   assert.ok(TODAS_LAS_CARTAS.length >= 100, 'el mazo es chico para una corrida de 48 meses');
   for (const [nombre, cartas] of Object.entries(PAQUETES)) {

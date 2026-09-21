@@ -148,6 +148,37 @@ así que el día que alguien filtre el signo por comodidad, el build falla.
 Cancelar sigue siendo gratis: volver la carta al centro no hace nada. Mirar tiene
 que salir cero para que valga la pena mirar.
 
+## De qué lado está el sí
+
+Reigns mezcla los lados a propósito: parte del desafío es leer rápido y no
+equivocarse de gesto. Acá la decisión es la opuesta, y es deliberada.
+
+**Cuando un personaje viene a pedir algo, aceptar está siempre a la derecha y
+rechazar siempre a la izquierda.** Las cartas que son un dilema entre dos caminos
+—shock o gradualismo, escritorio o fábrica— no tienen un sí, y no marcan nada.
+
+El motivo: si el lado del sí varía, una parte del error del jugador es motriz
+—arrastró para el lado que no era— y eso no es el juego. La fricción tiene que
+estar en *qué* aceptás, con qué plata y a costa de quién. Que el gesto sea
+predecible libera atención para lo único que importa, que es leer.
+
+Esto es un dato del mazo, no una costumbre: cada carta declara `forma`, y las
+propuestas marcan `acepta` y `rechaza` en el lado que corresponde. Cuatro tests
+lo verifican; una carta con el sí a la izquierda no compila.
+
+**El riesgo que introduce** es evidente: si el lado es predecible, quizá la
+decisión también. Si "decile que sí a todo el mundo" fuera razonable, el juego se
+resolvería sin pensar. Así que eso también es un test, con dos condiciones:
+
+- Aceptar todo y rechazar todo tienen que rendir **peor** que jugar al azar. Hoy
+  dan 23 y 21 meses de mediana contra 29 al azar.
+- Tienen que **morir de formas distintas**. Si los dos terminaran en el mismo
+  final, el mazo estaría empujando sistemáticamente para un lado. Hoy aceptar todo
+  termina en *La patria contratista* (te compraron) y rechazar todo en *Que se
+  vayan todos* (te soltó la calle).
+
+Esas dos condiciones son lo que mantiene honesta la convención.
+
 ## Historia y objetivos
 
 Reigns tiene un reino que persiste, una maldición de fondo y misiones. Sin nada de

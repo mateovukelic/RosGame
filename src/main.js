@@ -184,6 +184,12 @@ function pintarCarta(c) {
   $('#resp-der').textContent = c.der.texto;
   $('#btn-izq-txt').textContent = c.izq.texto;
   $('#btn-der-txt').textContent = c.der.texto;
+  // Las propuestas llevan el ✓ / ✗ para que la convención se aprenda sola.
+  // Los dilemas no lo llevan: ahí no hay un "sí", hay dos caminos.
+  const propuesta = c.forma === 'propuesta';
+  $('#btn-izq-signo').textContent = propuesta ? '✗' : '';
+  $('#btn-der-signo').textContent = propuesta ? '✓' : '';
+  $('#carta').classList.toggle('es-propuesta', propuesta);
   $('#replica').classList.remove('visible');
 }
 

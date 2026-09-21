@@ -226,6 +226,9 @@ input[type="text"]:focus { outline: none; border-color: var(--celeste); }
 }
 .carta-respuesta-izq { left: 16px; text-align: left; color: var(--rojo); }
 .carta-respuesta-der { right: 16px; text-align: right; color: var(--celeste-hondo); }
+/* En una propuesta, los rótulos de la carta también marcan el sí y el no */
+.carta.es-propuesta .carta-respuesta-izq::before { content: '✗ '; }
+.carta.es-propuesta .carta-respuesta-der::after { content: ' ✓'; }
 .carta.hacia-izq .carta-respuesta-izq,
 .carta.hacia-der .carta-respuesta-der { opacity: 1; }
 
@@ -257,6 +260,11 @@ input[type="text"]:focus { outline: none; border-color: var(--celeste); }
 .btn-opcion:hover { border-color: var(--celeste); background: #20242d; }
 .btn-opcion:active { transform: scale(.98); }
 .flecha { color: var(--celeste); font-size: 16px; }
+.signo { font-size: 13px; opacity: .75; }
+.signo:empty { display: none; }
+#btn-izq-signo { color: var(--rojo); }
+#btn-der-signo { color: var(--verde); }
+.ayuda b { color: var(--tinta-suave); font-weight: 700; }
 .ayuda { text-align: center; font-size: 11px; color: #4a4d55; margin: 12px 0 0; }
 
 /* ---------- Decretos ---------- */

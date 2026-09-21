@@ -2,22 +2,26 @@
 export const CARTAS_FOLKLORE = [
   {
     id: 'asado_quincho',
+    forma: 'propuesta',
     personaje: 'puntero',
     texto: 'Asado en el quincho con los muchachos. ¿Vas o mandás saludos?',
     peso: 1,
     izq: {
-      texto: 'Voy y hago el fuego',
-      efectos: { rosca: 6, pueblo: 3, campo: 2, caja: -2 },
-      replica: 'Hiciste el fuego. Salió bien. Eso pesa más de lo que parece.'
-    },
-    der: {
+      rechaza: true,
       texto: 'Mando saludos',
       efectos: { rosca: -5, caja: 1 },
       replica: 'Hablaron de vos toda la noche. No bien.'
+    },
+    der: {
+      acepta: true,
+      texto: 'Voy y hago el fuego',
+      efectos: { rosca: 6, pueblo: 3, campo: 2, caja: -2 },
+      replica: 'Hiciste el fuego. Salió bien. Eso pesa más de lo que parece.'
     }
   },
   {
     id: 'mate_cumbre',
+    forma: 'dilema',
     personaje: 'gobernadora',
     texto: '¿Cebás vos o cebo yo? En esta mesa eso define quién manda.',
     peso: 0.9,
@@ -26,91 +30,107 @@ export const CARTAS_FOLKLORE = [
   },
   {
     id: 'precio_asado',
+    forma: 'propuesta',
     personaje: 'vecina',
     texto: 'El kilo de asado está impagable. Ya comemos pollo. Pollo, presidente.',
     peso: 1.3,
     urgeSi: { inflacion: { min: 55 } },
     izq: {
+      rechaza: true,
+      texto: 'Que el mercado acomode',
+      efectos: { pueblo: -8, campo: 8, caja: 3 }
+    },
+    der: {
+      acepta: true,
       texto: 'Cortes populares',
       efectos: { caja: -7, pueblo: 8, campo: -8, inflacion: -1 },
       pone: ['cortes_populares']
-    },
-    der: {
-      texto: 'Que el mercado acomode',
-      efectos: { pueblo: -8, campo: 8, caja: 3 }
     }
   },
   {
     id: 'carne_exportacion',
+    forma: 'propuesta',
     personaje: 'productor',
     texto: 'Hay demanda récord afuera. Si nos dejan exportar entran dólares de verdad.',
     peso: 1.2,
     izq: {
-      texto: 'Abrir la exportación',
-      efectos: { caja: 11, campo: 12, pueblo: -8, inflacion: 3 }
-    },
-    der: {
+      rechaza: true,
       texto: 'Primero la mesa de los argentinos',
       efectos: { campo: -11, pueblo: 8, caja: -5 },
       pone: ['cierre_exportacion']
+    },
+    der: {
+      acepta: true,
+      texto: 'Abrir la exportación',
+      efectos: { caja: 11, campo: 12, pueblo: -8, inflacion: 3 }
     }
   },
   {
     id: 'quiniela',
+    forma: 'propuesta',
     personaje: 'taxista',
     texto: 'Soñé con un muerto que hablaba. Eso es el cero. ¿Le juego algo, jefe?',
     peso: 0.7,
-    izq: { texto: 'Jugale', efectos: { pueblo: 3, rosca: -1 } },
-    der: { texto: 'Andá a trabajar', efectos: { pueblo: -2, campo: 2 } }
+    izq: { rechaza: true, texto: 'Andá a trabajar', efectos: { pueblo: -2, campo: 2 } },
+    der: { acepta: true, texto: 'Jugale', efectos: { pueblo: 3, rosca: -1 } }
   },
   {
     id: 'fernet',
+    forma: 'propuesta',
     personaje: 'pibe',
     texto: 'Se disparó el precio del fernet. Los pibes están indignados. En serio.',
     peso: 0.8,
-    izq: { texto: 'Bajarle impuestos', efectos: { pueblo: 5, caja: -4 } },
-    der: { texto: 'No es prioridad', efectos: { pueblo: -4, caja: 2 } }
+    izq: { rechaza: true, texto: 'No es prioridad', efectos: { pueblo: -4, caja: 2 } },
+    der: { acepta: true, texto: 'Bajarle impuestos', efectos: { pueblo: 5, caja: -4 } }
   },
   {
     id: 'peaje_ruta',
+    forma: 'propuesta',
     personaje: 'productor',
     texto: 'La ruta que saca la cosecha tiene más pozos que asfalto.',
     peso: 1,
-    izq: { texto: 'Repavimentar', efectos: { caja: -9, campo: 10, pueblo: 3 } },
-    der: { texto: 'Está en el plan', efectos: { campo: -7, caja: 3 } }
+    izq: { rechaza: true, texto: 'Está en el plan', efectos: { campo: -7, caja: 3 } },
+    der: { acepta: true, texto: 'Repavimentar', efectos: { caja: -9, campo: 10, pueblo: 3 } }
   },
   {
     id: 'aguinaldo',
+    forma: 'propuesta',
     personaje: 'sindicalista',
     texto: 'Viene el medio aguinaldo. Un bono encima y nos quedamos tranquilos hasta marzo.',
     peso: 1.2,
     izq: {
+      rechaza: true,
+      texto: 'Solo el aguinaldo',
+      efectos: { pueblo: -6, caja: 4, inflacion: -1 }
+    },
+    der: {
+      acepta: true,
       texto: 'Bono para todos',
       efectos: { caja: -12, pueblo: 11, inflacion: 4 },
       pone: ['bono_pagado']
-    },
-    der: {
-      texto: 'Solo el aguinaldo',
-      efectos: { pueblo: -6, caja: 4, inflacion: -1 }
     }
   },
   {
     id: 'verano_costa',
+    forma: 'propuesta',
     personaje: 'intendente',
     texto: 'Temporada de verano. Si la gente no puede veranear, se nota en las encuestas.',
     peso: 1,
     requiere: { mesMin: 10 },
     izq: {
-      texto: 'Plan de turismo subsidiado',
-      efectos: { caja: -8, pueblo: 8, rosca: 3 }
-    },
-    der: {
+      rechaza: true,
       texto: 'Que cada uno haga lo que pueda',
       efectos: { pueblo: -5, caja: 4 }
+    },
+    der: {
+      acepta: true,
+      texto: 'Plan de turismo subsidiado',
+      efectos: { caja: -8, pueblo: 8, rosca: 3 }
     }
   },
   {
     id: 'empanadas',
+    forma: 'dilema',
     personaje: 'primera_dama',
     texto: 'La cumbre con los gobernadores: ¿catering de hotel o empanadas de la provincia?',
     peso: 0.8,
@@ -119,47 +139,55 @@ export const CARTAS_FOLKLORE = [
   },
   {
     id: 'cumbia_acto',
+    forma: 'propuesta',
     personaje: 'puntero',
     texto: 'Para el acto conseguí una banda de cumbia que llena plazas. Sale una fortuna.',
     peso: 0.9,
-    izq: { texto: 'Contratala', efectos: { caja: -6, pueblo: 7, campo: -3 } },
-    der: { texto: 'Con el himno alcanza', efectos: { pueblo: -3, caja: 2 } }
+    izq: { rechaza: true, texto: 'Con el himno alcanza', efectos: { pueblo: -3, caja: 2 } },
+    der: { acepta: true, texto: 'Contratala', efectos: { caja: -6, pueblo: 7, campo: -3 } }
   },
   {
     id: 'mundial_clasificacion',
+    forma: 'propuesta',
     personaje: 'hincha',
     texto: 'Clasificamos. El país está insoportablemente feliz por primera vez en años.',
     peso: 1,
     requiere: { mesMin: 6 },
     izq: {
+      rechaza: true,
+      texto: 'No mezclar fútbol con política',
+      efectos: { pueblo: -3, campo: 3, rosca: 3 }
+    },
+    der: {
+      acepta: true,
       texto: 'Aprovechar el envión',
       efectos: { pueblo: 7, rosca: 2 },
       pone: ['fiebre_mundial']
-    },
-    der: {
-      texto: 'No mezclar fútbol con política',
-      efectos: { pueblo: -3, campo: 3, rosca: 3 }
     }
   },
   {
     id: 'diez',
+    forma: 'propuesta',
     personaje: 'hincha',
     texto: 'Se murió un ídolo. Hay tres días de duelo y medio país en la calle.',
     peso: 0.9,
     requiere: { mesMin: 8 },
     izq: {
+      rechaza: true,
+      texto: 'Duelo nacional y nada más',
+      efectos: { pueblo: -5, rosca: 3 }
+    },
+    der: {
+      acepta: true,
       texto: 'Velatorio en la Rosada',
       efectos: { pueblo: 8, rosca: -4, campo: -3 },
       pone: ['velatorio_rosada'],
       replica: 'Fue una marea humana. Se desbordó todo. Valió la pena igual.'
-    },
-    der: {
-      texto: 'Duelo nacional y nada más',
-      efectos: { pueblo: -5, rosca: 3 }
     }
   },
   {
     id: 'billete_nuevo',
+    forma: 'dilema',
     personaje: 'ministro',
     texto: 'Hay que sacar un billete de mayor denominación. ¿Qué cara le ponemos?',
     peso: 1,
@@ -176,6 +204,7 @@ export const CARTAS_FOLKLORE = [
   },
   {
     id: 'monedas',
+    forma: 'dilema',
     personaje: 'taxista',
     texto: 'Ya no hay monedas. Te dan un caramelo de vuelto. ¿Eso es legal?',
     peso: 0.8,
@@ -185,6 +214,7 @@ export const CARTAS_FOLKLORE = [
   },
   {
     id: 'yerba',
+    forma: 'dilema',
     personaje: 'productor',
     texto: 'El precio de la yerba se fue al doble. Esto es más sensible que el dólar.',
     peso: 0.9,
@@ -193,34 +223,40 @@ export const CARTAS_FOLKLORE = [
   },
   {
     id: 'vieja_consejo',
+    forma: 'propuesta',
     personaje: 'abuela',
     texto: 'Nene, acordate: al que traiciona una vez, le sale fácil la segunda.',
     peso: 0.8,
     requiere: { mesMin: 18 },
     izq: {
+      rechaza: true,
+      texto: 'Esto es distinto',
+      efectos: { rosca: 4, pueblo: -3 }
+    },
+    der: {
+      acepta: true,
       texto: 'Tenés razón, ma',
       efectos: { rosca: -3, pueblo: 4 },
       pone: ['consejo_materno']
-    },
-    der: {
-      texto: 'Esto es distinto',
-      efectos: { rosca: 4, pueblo: -3 }
     }
   },
   {
     id: 'homenaje',
+    forma: 'propuesta',
     personaje: 'periodista',
     texto: 'Quieren ponerle su nombre a una autopista. Usted sigue vivo y en el cargo.',
     peso: 0.7,
     requiere: { mesMin: 24, stats: { pueblo: { min: 60 } } },
     izq: {
+      rechaza: true,
+      texto: 'Que lleve otro nombre',
+      efectos: { pueblo: 5, rosca: 3 }
+    },
+    der: {
+      acepta: true,
       texto: 'Aceptar',
       efectos: { pueblo: 4, rosca: -5, campo: -3 },
       pone: ['culto_personalidad']
-    },
-    der: {
-      texto: 'Que lleve otro nombre',
-      efectos: { pueblo: 5, rosca: 3 }
     }
   }
 ];

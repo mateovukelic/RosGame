@@ -38,6 +38,32 @@ test('apretar siempre el mismo botón no es una estrategia viable', () => {
   }
 });
 
+// La convención "aceptar a la derecha" hace predecible el LADO. El riesgo que
+// introduce es que vuelva predecible la DECISIÓN: si decirle que sí a todo el
+// mundo fuera una estrategia razonable, el juego se resolvería sin pensar.
+test('decir que sí a todo y decir que no a todo son peores que jugar al azar', () => {
+  const azar = simularLote({ corridas: 250, estrategia: 'azar' });
+  const siempreSi = simularLote({ corridas: 250, estrategia: 'siempreDer' });
+  const siempreNo = simularLote({ corridas: 250, estrategia: 'siempreIzq' });
+
+  assert.ok(
+    siempreSi.mediana < azar.mediana,
+    `aceptar todo rinde ${siempreSi.mediana} meses contra ${azar.mediana} al azar: es una estrategia`
+  );
+  assert.ok(
+    siempreNo.mediana < azar.mediana,
+    `rechazar todo rinde ${siempreNo.mediana} meses contra ${azar.mediana} al azar: es una estrategia`
+  );
+});
+
+test('aceptar todo y rechazar todo fallan por motivos distintos', () => {
+  // Si los dos murieran igual, el mazo estaría empujando a un solo lado.
+  const masComun = (r) => Object.entries(r.finales).sort((a, b) => b[1] - a[1])[0][0];
+  const si = masComun(simularLote({ corridas: 250, estrategia: 'siempreDer' }));
+  const no = masComun(simularLote({ corridas: 250, estrategia: 'siempreIzq' }));
+  assert.notEqual(si, no, `aceptar y rechazar todo terminan igual (${si}): falta tensión`);
+});
+
 test('las corridas llegan a finales variados, no siempre al mismo', () => {
   const r = simularLote({ corridas: 250, estrategia: 'azar' });
   assert.ok(r.finalesDistintos >= 4, `sólo se alcanzan ${r.finalesDistintos} finales distintos`);

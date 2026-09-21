@@ -2,6 +2,7 @@
 export const CARTAS_CRISIS = [
   {
     id: 'crisis_confianza',
+    forma: 'propuesta',
     personaje: 'ministro',
     texto: 'Nadie cree en el programa. Ni afuera, ni adentro, ni yo del todo.',
     peso: 0.8,
@@ -9,17 +10,20 @@ export const CARTAS_CRISIS = [
     urgeMult: 5,
     requiere: { mesMin: 8 },
     izq: {
+      rechaza: true,
+      texto: 'Sostener el rumbo',
+      efectos: { caja: -6, campo: -5, pueblo: 4, inflacion: 3 }
+    },
+    der: {
+      acepta: true,
       texto: 'Anunciar un plan nuevo',
       efectos: { caja: 6, campo: 6, pueblo: -5, inflacion: -3 },
       pone: ['plan_refundacional']
-    },
-    der: {
-      texto: 'Sostener el rumbo',
-      efectos: { caja: -6, campo: -5, pueblo: 4, inflacion: 3 }
     }
   },
   {
     id: 'crisis_plan_fracaso',
+    forma: 'dilema',
     personaje: 'periodista',
     texto: 'El plan nuevo cumplió dos meses. Todos los indicadores empeoraron.',
     peso: 1.5,
@@ -38,23 +42,27 @@ export const CARTAS_CRISIS = [
   },
   {
     id: 'crisis_desborde',
+    forma: 'propuesta',
     personaje: 'militar',
     texto: 'La situación excede a las fuerzas de seguridad provinciales.',
     peso: 1.8,
     requiere: { flags: ['desborde'], mesMin: 6 },
     izq: {
-      texto: 'Militarizar',
-      efectos: { pueblo: -13, rosca: 6, campo: 7 },
-      pone: ['estado_de_sitio']
-    },
-    der: {
+      rechaza: true,
       texto: 'Abrir todas las cajas',
       efectos: { caja: -18, pueblo: 12, inflacion: 6 },
       saca: ['desborde']
+    },
+    der: {
+      acepta: true,
+      texto: 'Militarizar',
+      efectos: { pueblo: -13, rosca: 6, campo: 7 },
+      pone: ['estado_de_sitio']
     }
   },
   {
     id: 'crisis_renuncia',
+    forma: 'dilema',
     personaje: 'interna',
     texto: 'Hay gente del propio espacio pidiendo que des un paso al costado.',
     peso: 1.6,
@@ -73,6 +81,7 @@ export const CARTAS_CRISIS = [
   },
   {
     id: 'crisis_plebiscito',
+    forma: 'dilema',
     personaje: 'periodista',
     texto: 'Convocó a la gente a la plaza para medir fuerzas. ¿Y si no va nadie?',
     peso: 1.7,
@@ -91,6 +100,7 @@ export const CARTAS_CRISIS = [
   },
   {
     id: 'crisis_fuga',
+    forma: 'dilema',
     personaje: 'empresario',
     texto: 'Mis socios están sacando todo del país. Yo también. Se lo aviso por respeto.',
     peso: 1.2,
@@ -107,6 +117,7 @@ export const CARTAS_CRISIS = [
   },
   {
     id: 'crisis_bancos',
+    forma: 'propuesta',
     personaje: 'ministro',
     texto: 'Hay cola en los bancos desde las seis de la mañana. Se está yendo todo.',
     peso: 0.7,
@@ -114,64 +125,75 @@ export const CARTAS_CRISIS = [
     urgeMult: 9,
     requiere: { mesMin: 10 },
     izq: {
+      rechaza: true,
+      texto: 'Que cada uno saque lo suyo',
+      efectos: { caja: -16, pueblo: 7, inflacion: 5 }
+    },
+    der: {
+      acepta: true,
       texto: 'Limitar retiros',
       efectos: { caja: 12, pueblo: -16, campo: -6 },
       pone: ['corralito'],
       replica: 'Le pusiste un nombre técnico. La gente le puso otro y ese quedó.'
-    },
-    der: {
-      texto: 'Que cada uno saque lo suyo',
-      efectos: { caja: -16, pueblo: 7, inflacion: 5 }
     }
   },
   {
     id: 'crisis_corralito',
+    forma: 'propuesta',
     personaje: 'vecina',
     texto: 'Tengo los ahorros de toda mi vida adentro de un banco que no me los da.',
     peso: 1.9,
     requiere: { flags: ['corralito'], mesMin: 3 },
     izq: {
-      texto: 'Devolver en cuotas',
-      efectos: { caja: -14, pueblo: 8, inflacion: 4 },
-      saca: ['corralito']
-    },
-    der: {
+      rechaza: true,
       texto: 'Sostener la medida',
       efectos: { pueblo: -14, campo: 4, caja: 6 },
       pone: ['desborde']
+    },
+    der: {
+      acepta: true,
+      texto: 'Devolver en cuotas',
+      efectos: { caja: -14, pueblo: 8, inflacion: 4 },
+      saca: ['corralito']
     }
   },
   {
     id: 'crisis_adelanto',
+    forma: 'propuesta',
     personaje: 'gobernadora',
     texto: 'Si adelantás las elecciones, quizá salís por la puerta y no por la ventana.',
     peso: 1.4,
     requiere: { mesMin: 20, stats: { pueblo: { max: 30 }, rosca: { max: 35 } } },
     izq: {
-      texto: 'Adelantar',
-      efectos: { rosca: 10, pueblo: 4, campo: 5, caja: -6 },
-      pone: ['elecciones_adelantadas']
-    },
-    der: {
+      rechaza: true,
       texto: 'Termino mi mandato',
       efectos: { rosca: -6, pueblo: 3 },
       pone: ['se_planta']
+    },
+    der: {
+      acepta: true,
+      texto: 'Adelantar',
+      efectos: { rosca: 10, pueblo: 4, campo: 5, caja: -6 },
+      pone: ['elecciones_adelantadas']
     }
   },
   {
     id: 'crisis_ultimo_recurso',
+    forma: 'propuesta',
     personaje: 'cura',
     texto: 'Vine a decirte una sola cosa: todavía estás a tiempo de hacer una cosa bien.',
     peso: 1,
     requiere: { mesMin: 16, stats: { pueblo: { max: 25 } } },
     izq: {
+      rechaza: true,
+      texto: 'Ya es tarde',
+      efectos: { pueblo: -5, rosca: 2 }
+    },
+    der: {
+      acepta: true,
       texto: 'Escucharlo',
       efectos: { pueblo: 7, rosca: -3, caja: -5 },
       pone: ['ultima_chance']
-    },
-    der: {
-      texto: 'Ya es tarde',
-      efectos: { pueblo: -5, rosca: 2 }
     }
   }
 ];

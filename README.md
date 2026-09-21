@@ -26,6 +26,10 @@ facciones toca esa opción y con cuánta fuerza** — nunca en qué dirección. 
 pasando el umbral para confirmar, o volvé al centro para cancelar. También andan
 `←` / `→` y los botones (apuntarlos con el mouse o con el tab da la misma pista).
 
+**Cuando alguien te viene a pedir algo, aceptar está siempre a la derecha (✓) y
+rechazar siempre a la izquierda (✗).** Las cartas que son un dilema entre dos
+caminos no llevan esos signos, porque ahí no hay un sí.
+
 También hay una galería de retratos en `http://localhost:8080/galeria.html`, que
 sirve para revisar los personajes y probar combinaciones de partes al azar.
 
@@ -84,7 +88,7 @@ El archivo del menú los va revelando.
 ## Desarrollo
 
 ```bash
-npm test        # 72 tests: motor, mazo, objetivos, retratos, legado y balance
+npm test        # 79 tests: motor, mazo, objetivos, retratos, legado y balance
 npm run validar # reporte de salud del mazo + 1000 corridas simuladas
 npm run demo    # arma dist/demo.html, la versión de una sola página
 ```
@@ -127,18 +131,24 @@ Metela en el paquete que corresponda dentro de `src/data/cartas/`:
 ```js
 {
   id: 'tachero_plan',                 // único en todo el mazo
+  forma: 'propuesta',                 // 'propuesta' (hay un sí) o 'dilema'
   personaje: 'taxista',               // de src/data/personajes.js
   texto: '¿Sabe qué pasa? Acá falta...',
   peso: 1,                            // probabilidad relativa
   requiere: { mesMin: 6, flags: ['paro_hecho'] },
   urgeSi: { inflacion: { min: 60 } }, // sale mucho más si el país arde
   izq: {
-    texto: 'Escucharlo',              // máximo 34 caracteres
+    rechaza: true,                    // el no va SIEMPRE a la izquierda
+    texto: 'Dejame trabajar',         // máximo 34 caracteres
+    efectos: { pueblo: -3, rosca: 3 }
+  },
+  der: {
+    acepta: true,                     // el sí va SIEMPRE a la derecha
+    texto: 'Contame tu plan',
     efectos: { pueblo: 4, campo: -2, inflacion: 1 },
     pone: ['escucho_al_tachero'],     // flags para cartas futuras
     replica: 'Tenía razón en una cosa.'
-  },
-  der: { texto: 'Dejame trabajar', efectos: { pueblo: -3, rosca: 3 } }
+  }
 }
 ```
 
@@ -162,6 +172,20 @@ Hay un `Juego.previsualizar(lado)` que sí devuelve dirección, magnitud y valor
 proyectado, pero es de uso interno (tests, balance, un eventual modo asistido): la
 interfaz de juego nunca lo llama. Un test verifica que subir 9 y bajar 9 produzcan
 pistas byte por byte idénticas, así que el día que alguien filtre el signo, falla.
+
+### La convención de lados
+
+De las 116 cartas, **89 son propuestas** (alguien pide algo) y **27 son dilemas**
+(dos caminos, ningún sí). Cada carta lo declara en `forma`, y las propuestas marcan
+`der: { acepta: true }` / `izq: { rechaza: true }`. Cuatro tests lo verifican, así
+que no se puede colar una carta con el sí a la izquierda.
+
+La idea es que la dificultad esté en **decidir**, no en descifrar de qué lado quedó
+el sí. Eso abre un riesgo obvio —que decirle que sí a todo el mundo se vuelva una
+estrategia— y por eso hay dos tests que lo miden: aceptar todo y rechazar todo
+tienen que rendir *peor* que jugar al azar, y tienen que morir de formas distintas.
+Hoy dan 23 y 21 meses de mediana contra 29 al azar; aceptar todo termina en *La
+patria contratista* y rechazar todo en *Que se vayan todos*.
 
 ### Objetivos, prólogo y crónica
 
