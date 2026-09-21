@@ -212,5 +212,95 @@ export const CARTAS_CRISIS = [
       pone: ['ultima_chance'],
       replica: 'Te dijo cuál. Era más chica de lo que esperabas y más difícil de lo que parecía.'
     }
+  },
+  // ---- Avisos de zona de riesgo ----
+  // Perder por exceso es legítimo, pero perder sin haber visto venir nada es
+  // arbitrario. Estas cuatro cartas se disparan cuando un medidor entra en zona
+  // alta y ofrecen siempre una salida con costo: el jugador puede gastar de lo
+  // que le sobra para comprar lo que le falta. Si igual llega a cien, la muerte
+  // ya no es una sorpresa, es una decisión que tomó.
+  //
+  // El urgeMult es deliberadamente enorme. Con un multiplicador normal el aviso
+  // pesaba 6 contra 107 del resto del mazo: llegaba tarde o no llegaba, que para
+  // una carta cuyo único trabajo es avisar equivale a no existir.
+  {
+    id: 'aviso_pueblo',
+    forma: 'dilema',
+    personaje: 'interna',
+    texto: 'Hay tres medidas que había que tomar y las cajoneamos porque te bajaban la imagen. Las tres siguen ahí.',
+    peso: 0.4,
+    urgeSi: { pueblo: { min: 84 } },
+    urgeMult: 200,
+    requiere: { mesMin: 8, stats: { pueblo: { min: 80 } } },
+    izq: {
+      texto: 'Que sigan cajoneadas',
+      efectos: { pueblo: 6, caja: -7, campo: -6 },
+      replica: 'Siguieron cajoneadas. La aprobación subió otros dos puntos y las tres cosas empeoraron en silencio.'
+    },
+    der: {
+      texto: 'Firmo las tres hoy',
+      efectos: { pueblo: -14, caja: 9, campo: 8, rosca: 4 },
+      replica: 'Gastaste catorce puntos de imagen en una tarde. Fue la decisión más cara y más sensata del mandato.'
+    }
+  },
+  {
+    id: 'aviso_rosca',
+    forma: 'dilema',
+    personaje: 'periodista',
+    texto: 'Conté los últimos catorce decretos: doce los redactó gente que no trabaja para usted. ¿Quién gobierna acá?',
+    peso: 0.4,
+    urgeSi: { rosca: { min: 84 } },
+    urgeMult: 200,
+    requiere: { mesMin: 8, stats: { rosca: { min: 80 } } },
+    izq: {
+      texto: 'Así se gobierna',
+      efectos: { rosca: 5, pueblo: -6, campo: -4 },
+      replica: 'Los otros dos decretos también los terminó redactando alguien de afuera antes de fin de mes.'
+    },
+    der: {
+      texto: 'Los próximos los escribo yo',
+      efectos: { rosca: -13, pueblo: 8, campo: 5 },
+      replica: 'Escribiste el siguiente vos. Salió peor redactado y era tuyo, que a esa altura importaba más.'
+    }
+  },
+  {
+    id: 'aviso_campo',
+    forma: 'dilema',
+    personaje: 'cientifico',
+    texto: 'Revisé las últimas nueve resoluciones del área. Siete las pidió textualmente la misma cámara empresaria.',
+    peso: 0.4,
+    urgeSi: { campo: { min: 84 } },
+    urgeMult: 200,
+    requiere: { mesMin: 8, stats: { campo: { min: 80 } } },
+    izq: {
+      texto: 'Coincidimos, nada más',
+      efectos: { campo: 5, pueblo: -6, rosca: -3 },
+      replica: 'La octava y la novena también coincidieron. A esa altura ya no hacía falta ni que las pidieran.'
+    },
+    der: {
+      texto: 'La décima la escribimos acá',
+      efectos: { campo: -13, pueblo: 8, caja: 5 },
+      replica: 'La escribieron adentro. Cuatro cámaras sacaron el mismo comunicado el mismo día a la misma hora.'
+    }
+  },
+  {
+    id: 'aviso_caja',
+    forma: 'dilema',
+    personaje: 'cura',
+    texto: 'Nunca hubo tantas reservas y nunca hubo tan poco en el comedor. Las dos cosas son ciertas al mismo tiempo.',
+    peso: 0.4,
+    urgeSi: { caja: { min: 84 } },
+    urgeMult: 200,
+    requiere: { mesMin: 8, stats: { caja: { min: 80 } } },
+    izq: {
+      texto: 'Primero ordenar la casa',
+      efectos: { caja: 5, pueblo: -8, rosca: -3 },
+      replica: 'La casa quedó ordenadísima. Al comedor le llegó, tres meses después, una carta de reconocimiento.'
+    },
+    der: {
+      texto: 'Se usa parte del superávit',
+      efectos: { caja: -13, pueblo: 11, rosca: 4 },
+      replica: 'Se usó una parte. El número dejó de ser récord y once mil personas comieron. Las dos cosas son ciertas.'
+    }
   }
 ];

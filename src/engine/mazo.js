@@ -10,7 +10,11 @@ export class Mazo {
     this.desbloqueadas = desbloqueadas; // Set de ids, o null = todo disponible
     this.usadas = new Set();
     this.recientes = [];
-    this.cola = []; // cartas encadenadas, tienen prioridad absoluta
+    this.cola = []; // cartas encadenadas, salen en el turno siguiente
+    // Cartas sembradas: una decisión de hoy agenda una carta para dentro de N
+    // meses. A diferencia de las flags, que sólo habilitan, esto GARANTIZA que
+    // la consecuencia llegue y llegue con fecha. La factura siempre vuelve.
+    this.sembradas = [];
   }
 
   carta(id) {
@@ -19,6 +23,28 @@ export class Mazo {
 
   encolar(id) {
     if (this.porId.has(id)) this.cola.push(id);
+  }
+
+  /** Agenda una carta para un mes futuro (absoluto, en meses totales jugados). */
+  sembrar(id, mes, origen = null) {
+    if (!this.porId.has(id)) return;
+    if (this.sembradas.some((s) => s.id === id)) return; // no se siembra dos veces
+    this.sembradas.push({ id, mes, origen });
+  }
+
+  /** La sembrada más vencida, si hay alguna cuya fecha ya llegó. */
+  cosechar(mesActual) {
+    const vencidas = this.sembradas
+      .filter((s) => s.mes <= mesActual)
+      .sort((a, b) => a.mes - b.mes);
+    if (!vencidas.length) return null;
+    const elegida = vencidas[0];
+    this.sembradas = this.sembradas.filter((s) => s !== elegida);
+    return elegida;
+  }
+
+  pendientes() {
+    return this.sembradas.slice();
   }
 
   estaDisponible(carta, estado) {
@@ -50,6 +76,16 @@ export class Mazo {
   }
 
   robar(estado) {
+    // Primero lo sembrado: una consecuencia con fecha no espera a nada.
+    const cosecha = this.cosechar(estado.mesesTotales);
+    if (cosecha) {
+      const carta = this.porId.get(cosecha.id);
+      if (carta) {
+        this.marcar(carta);
+        return carta;
+      }
+    }
+
     while (this.cola.length) {
       const id = this.cola.shift();
       const carta = this.porId.get(id);

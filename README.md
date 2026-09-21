@@ -41,14 +41,21 @@ sirve para revisar los personajes y probar combinaciones de partes al azar.
 
 | | | Si llega a 0 | Si llega a 100 |
 |---|---|---|---|
-| ✊ | **Pueblo** — la calle, los sindicatos, el aguante | *Que se vayan todos* | *El conductor eterno* |
+| ✊ | **Pueblo** — la calle, los sindicatos, el aguante | *Que se vayan todos* | *Rehén de la plaza* |
 | 🎩 | **Rosca** — la interna, los gobernadores, el Congreso | *Juicio político* | *El sello de goma* |
 | 🌾 | **Campo** — el agro, los exportadores, los dólares de verdad | *Lockout* | *La patria contratista* |
 | 💵 | **Caja** — reservas, tesoro, la plata que hay | *Default* | *La plata no se come* |
 
-Como en Reigns, **el exceso mata igual que la falta**. Gobernar es mantener cuatro
-números lejos de los dos bordes al mismo tiempo, con cartas que siempre empujan en
-direcciones opuestas.
+Como en Reigns, **el exceso mata igual que la falta** — pero acá el exceso no mata
+por ser exceso: mata porque cada techo es una forma de captura. Con la Rosca en 100
+no gobernás, firmás lo que te traen; con el Campo en 100 el gobierno tiene dueño;
+con el Pueblo en 100 no podés tomar ninguna decisión que la calle no aplauda, y un
+país no aguanta mucho tiempo así.
+
+Y no te agarra de sorpresa: **cuando una facción pasa de 84, aparece una carta de
+aviso** que te dice exactamente qué está pasando y te ofrece una salida con costo
+—gastar de lo que te sobra para comprar lo que te falta—. Si igual llegás a 100,
+la caída ya no es arbitraria: es una decisión que tomaste.
 
 ### 🔥 La inflación
 
@@ -88,7 +95,7 @@ El archivo del menú los va revelando.
 ## Desarrollo
 
 ```bash
-npm test        # 86 tests: motor, mazo, prosa, objetivos, retratos, legado y balance
+npm test        # 97 tests: motor, mazo, siembra, prosa, objetivos, retratos y balance
 npm run validar # reporte de salud del mazo + 1000 corridas simuladas
 npm run demo    # arma dist/demo.html, la versión de una sola página
 ```
@@ -110,7 +117,8 @@ src/
     rng.js          # random determinístico por semilla
     constantes.js   # ⚙️ todo el balance en un solo lugar
   data/             # contenido
-    cartas/         # base · economia · calle · rosca · folklore · crisis · eventos
+    cartas/         # base · economia · calle · rosca · folklore
+                    # crisis · eventos · consecuencias
     personajes.js decretos.js gabinetes.js finales.js objetivos.js
   ui/               # presentación (DOM)
     retratos.js     # retratos SVG paramétricos (puro: se testea en Node)
@@ -203,6 +211,34 @@ tienen que rendir *peor* que jugar al azar, y tienen que morir de formas distint
 Hoy dan 23 y 21 meses de mediana contra 29 al azar; aceptar todo termina en *La
 patria contratista* y rechazar todo en *Que se vayan todos*.
 
+### La factura vuelve: consecuencias con fecha
+
+Algunas decisiones **siembran** una carta en el mazo, agendada para dentro de N
+meses:
+
+```js
+der: {
+  acepta: true,
+  texto: 'Que haga el turno',
+  efectos: { caja: 12, inflacion: 8 },
+  siembra: { carta: 'factura_emision', meses: [6, 9] }
+}
+```
+
+Seis a nueve meses después llega una carta que empieza nombrando la decisión:
+*"Aquel turno extra de la máquina, el de hace medio año. Acá está el dato del mes
+con eso ya adentro."*
+
+La diferencia con las flags importa: una flag **habilita** una carta y deja que el
+azar decida si aparece; una siembra **garantiza** la llegada y le pone fecha. Son
+dieciséis decisiones con consecuencia agendada — unas cobran y otras pagan: bancar
+a la científica devuelve una patente dos años después, comprar tres votos para tu
+ley los trae a cobrar cuando ya te habías olvidado.
+
+Un test verifica que ninguna consecuencia quede huérfana (sembrada por nadie) y que
+la ventana nunca pase de veinticuatro meses, porque más allá de eso el jugador ya
+no ata el cabo.
+
 ### Peticiones y hechos consumados
 
 El mazo tiene dos clases de carta y la diferencia importa más de lo que parece.
@@ -288,8 +324,9 @@ en vez de mantenerse a mano, para que no se desincronice.
 
 ## Estado
 
-Vertical slice jugable y completa: 138 cartas, 16 decretos, 14 objetivos,
-6 gabinetes, 14 finales, 25 personajes con retrato propio.
+Vertical slice jugable y completa: 158 cartas (16 de ellas consecuencias con
+fecha), 16 decretos, 14 objetivos, 6 gabinetes, 14 finales, 25 personajes con
+retrato propio.
 
 **Lo próximo, en orden:** sonido · un hilo narrativo que cruce corridas (que lo que
 hiciste en el mandato anterior aparezca en el siguiente) · más cadenas largas ·

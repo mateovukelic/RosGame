@@ -42,13 +42,18 @@ body {
 .app {
   max-width: 560px;
   margin: 0 auto;
-  min-height: 100%;
+  /* Altura definida, no mínima: sin esto los hijos con flex:1 crecen con su
+     contenido y la botonera se va abajo del fold en pantallas bajas. */
+  height: 100%;
+  overflow-y: auto;
   padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom);
   display: flex;
   flex-direction: column;
 }
 
-.pantalla { display: none; flex: 1; flex-direction: column; padding: 18px 0 28px; }
+.pantalla { display: none; flex: 1; min-height: 0; flex-direction: column; padding: 18px 0 28px; }
+/* El menú y el final se leen scrolleando; la partida entra entera o no sirve. */
+#pantalla-juego.activa { overflow: hidden; }
 .pantalla.activa { display: flex; }
 
 /* ---------- Títulos ---------- */
@@ -204,15 +209,20 @@ input[type="text"]:focus { outline: none; border-color: var(--celeste); }
 /* ---------- Mesa y carta ---------- */
 .mesa {
   position: relative; flex: 1; display: flex; align-items: center;
-  justify-content: center; min-height: 340px; padding: 10px 0 78px;
+  justify-content: center; min-height: 0; padding: 8px 0 62px;
 }
 
 .carta {
-  position: relative; width: 100%; max-width: 330px; min-height: 330px;
+  /* Proporción de celular, no de posavasos: la carta es alta y angosta, así el
+     texto cae en renglones cortos y el retrato tiene dónde respirar arriba. */
+  /* La altura manda y la proporción deriva el ancho: así la carta se achica
+     para entrar en la pantalla en vez de empujar los botones abajo del fold. */
+  position: relative; height: 100%; max-height: 440px; min-height: 210px;
+  aspect-ratio: 10 / 16; width: auto; max-width: 100%;
   background: linear-gradient(170deg, var(--papel), var(--papel-sombra));
   color: var(--tinta); border-radius: var(--radio); box-shadow: var(--sombra);
-  padding: 20px 20px 24px; cursor: grab; user-select: none;
-  touch-action: none; display: flex; flex-direction: column; gap: 12px;
+  padding: 22px 19px 26px; cursor: grab; user-select: none;
+  touch-action: none; display: flex; flex-direction: column; gap: 10px;
   transition: transform .28s cubic-bezier(.2,.8,.3,1), opacity .2s;
   will-change: transform;
 }
@@ -222,23 +232,26 @@ input[type="text"]:focus { outline: none; border-color: var(--celeste); }
 .carta:focus-visible { outline: 3px solid var(--celeste); outline-offset: 4px; }
 
 .carta-retrato {
-  width: 86px; height: 86px; border-radius: 50%; margin: 0 auto;
+  width: 84px; height: 84px; border-radius: 50%; margin: 2px auto 0; flex: none;
   overflow: hidden; background: var(--acento, #888);
   box-shadow: inset 0 -5px 14px rgba(0, 0, 0, .28), 0 3px 10px rgba(0, 0, 0, .18);
 }
 .retrato { display: block; width: 100%; height: 100%; }
 .carta-cuerpo { text-align: center; flex: 1; display: flex; flex-direction: column; }
-.carta-personaje { font-family: var(--fuente-tit); font-size: 17px; margin: 0; letter-spacing: .02em; }
-.carta-bajada { font-size: 11.5px; color: #6d6a5f; font-style: italic; margin: 3px 0 14px; }
-.carta-texto { font-size: 16.5px; line-height: 1.52; margin: auto 0; color: #2b2d33; }
+.carta-personaje { font-family: var(--fuente-tit); font-size: 16px; margin: 0; letter-spacing: .02em; text-wrap: balance; }
+.carta-bajada { font-size: 11px; color: #6d6a5f; font-style: italic; margin: 3px 0 10px; line-height: 1.35; }
+.carta-texto {
+  font-size: 15.5px; line-height: 1.48; margin: auto 0; color: #2b2d33;
+  text-wrap: pretty; overflow-y: auto;
+}
 
 .carta-respuesta {
-  position: absolute; top: 16px; font-size: 12px; font-weight: 800;
+  position: absolute; top: 14px; font-size: 11px; font-weight: 800;
   letter-spacing: .06em; text-transform: uppercase; opacity: 0;
   transition: opacity .12s; max-width: 42%; line-height: 1.3;
 }
-.carta-respuesta-izq { left: 16px; text-align: left; color: var(--rojo); }
-.carta-respuesta-der { right: 16px; text-align: right; color: var(--celeste-hondo); }
+.carta-respuesta-izq { left: 13px; text-align: left; color: var(--rojo); }
+.carta-respuesta-der { right: 13px; text-align: right; color: var(--celeste-hondo); }
 /* En una propuesta, los rótulos de la carta también marcan el sí y el no */
 .carta.es-propuesta .carta-respuesta-izq::before { content: '✗ '; }
 .carta.es-propuesta .carta-respuesta-der::after { content: ' ✓'; }
@@ -282,7 +295,7 @@ input[type="text"]:focus { outline: none; border-color: var(--celeste); }
 #btn-izq-signo { color: var(--rojo); }
 #btn-der-signo { color: var(--verde); }
 .ayuda b { color: var(--tinta-suave); font-weight: 700; }
-.ayuda { text-align: center; font-size: 11px; color: #4a4d55; margin: 12px 0 0; }
+.ayuda { text-align: center; font-size: 10.5px; color: #4a4d55; margin: 9px 0 0; line-height: 1.5; }
 
 /* ---------- Decretos ---------- */
 .decretos { display: grid; gap: 10px; }
@@ -311,10 +324,32 @@ input[type="text"]:focus { outline: none; border-color: var(--celeste); }
 .final-resumen { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 26px; }
 .final-botones { display: grid; gap: 10px; }
 
-@media (max-height: 700px) {
-  .carta { min-height: 280px; }
-  .mesa { min-height: 290px; }
-  .carta-retrato { width: 68px; height: 68px; }
+/* Pantallas bajas: se comprime el marco, la carta conserva la proporción */
+@media (max-height: 780px) {
+  .carta { padding: 16px 15px 20px; max-height: 380px; }
+  .mesa { padding-bottom: 54px; }
+  .carta-retrato { width: 66px; height: 66px; }
+  .carta-texto { font-size: 14.5px; line-height: 1.42; }
+  .carta-personaje { font-size: 14.5px; }
+  .carta-bajada { margin-bottom: 7px; }
+  .pantalla { padding-top: 12px; padding-bottom: 16px; }
+  .hud { margin-bottom: 8px; }
+  .objetivos .objetivo { padding: 6px 10px; }
+  .objetivos .objetivo-tit { font-size: 11.5px; }
+  .botonera { margin-top: 10px; }
+  .ayuda { margin-top: 8px; }
+  .btn-texto { padding: 8px; }
+}
+@media (max-height: 660px) {
+  .carta { max-height: 320px; padding: 13px 13px 16px; }
+  .objetivos .objetivo-plazo { display: none; }
+  .carta-retrato { width: 54px; height: 54px; }
+  .carta-texto { font-size: 13.5px; line-height: 1.38; }
+  .carta-bajada { display: none; }
+  .mesa { padding-bottom: 46px; }
+  .medidor-pista { height: 14px; margin-top: 3px; }
+  .ayuda { display: none; }
+  .objetivos { padding-top: 5px; }
 }
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition-duration: .01ms !important; }
@@ -348,7 +383,7 @@ input[type="text"]:focus { outline: none; border-color: var(--celeste); }
 .objetivo.cumplido { border-left-color: var(--verde); }
 .objetivo.fallido { border-left-color: var(--rojo); opacity: .6; }
 .objetivo.activo { border-left-color: var(--dorado); }
-.objetivo-cuerpo { flex: 1; }
+.objetivo-cuerpo { flex: 1; min-width: 0; }
 .objetivo-tit { font-weight: 700; font-size: 14px; }
 .objetivo-desc { font-size: 12.5px; color: #a6a294; margin-top: 4px; line-height: 1.45; }
 .objetivo-plazo {
@@ -357,16 +392,37 @@ input[type="text"]:focus { outline: none; border-color: var(--celeste); }
 }
 .objetivo-marca { font-size: 14px; }
 
-/* Tira compacta durante la partida: se toca para ver el detalle */
+/* Durante la partida los objetivos viven como dos fichas chicas en una línea:
+   el espacio vertical es de la carta. Se tocan para ver de qué se tratan. */
 .objetivos {
-  display: grid; gap: 5px; width: 100%; text-align: left; cursor: pointer;
-  background: none; border: none; color: inherit; font: inherit; padding: 8px 2px 2px;
+  display: flex; flex-wrap: nowrap; gap: 6px; width: 100%; text-align: left;
+  cursor: pointer; background: none; border: none; color: inherit; font: inherit;
+  padding: 7px 2px 1px;
 }
 .objetivos:empty { display: none; }
-.objetivos .objetivo { padding: 8px 11px; border-radius: 8px; }
+.objetivos .objetivo {
+  flex: 1 1 0; min-width: 0; align-items: center; gap: 7px;
+  padding: 5px 10px; border-radius: 999px; border-left-width: 1px;
+  border-color: var(--borde);
+}
+.objetivos .objetivo.activo { border-color: #4a4230; }
+.objetivos .objetivo-marca { font-size: 10px; color: var(--dorado); flex: none; }
+.objetivos .objetivo-cuerpo { overflow: hidden; }
+.objetivos .objetivo-plazo { flex: none; }
+.objetivos .objetivo-tit {
+  font-size: 11.5px; font-weight: 600; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+}
 .objetivos .objetivo-desc { display: none; }
+.objetivos .objetivo-plazo { font-size: 9.5px; }
+
+.objetivos[aria-expanded="true"] { display: grid; grid-auto-flow: row; gap: 6px; }
+.objetivos[aria-expanded="true"] .objetivo {
+  border-radius: 10px; padding: 9px 12px; align-items: flex-start;
+  border-left-width: 3px; border-left-color: var(--dorado);
+}
+.objetivos[aria-expanded="true"] .objetivo-tit { white-space: normal; font-size: 12.5px; }
 .objetivos[aria-expanded="true"] .objetivo-desc { display: block; }
-.objetivos .objetivo-tit { font-size: 12.5px; font-weight: 600; }
 
 /* Aviso cuando un objetivo se resuelve */
 .aviso {

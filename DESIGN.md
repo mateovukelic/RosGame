@@ -18,6 +18,66 @@ Acá la tensión es otra, y más específica:
 - **Caja** es el recurso que todos quieren y nadie genera.
 - **Inflación** es el cuarto jugador de la mesa, y no se sienta a negociar.
 
+## Morir por exceso, y por qué hay que avisar
+
+Sí: en Reigns los cuatro medidores matan tanto en cero como en el máximo. Es la
+mecánica central y es lo que obliga a mantener todo en el medio en vez de empujar
+un número para arriba y olvidarse.
+
+El problema no era la mecánica: era la justificación. *"El pueblo te quiere tanto
+que la Rosca te saca"* pedía que el jugador aceptara una traición ajena como
+explicación de su propia derrota. Eso se siente arbitrario, y con razón.
+
+La regla nueva: **cada techo es una forma de captura, y la captura se explica
+sola**. Con la Rosca en 100 seguís en el cargo y hace meses que no gobernás: pedís
+un café y te traen un decreto ya firmado por vos. Con el Campo en 100 el gobierno
+tiene dueño y vos firmaste el manual de uso. Con la Caja en 100 la meta fiscal dejó
+de ser un instrumento y pasó a ser la única política. Y con el Pueblo en 100 no
+podés tomar una sola decisión que la calle no aplauda: la tarifa que había que
+tocar, la partida que había que cerrar, el nombramiento que había que revisar,
+todo se pospone para no romper el encanto, y un país no aguanta quince meses así.
+
+Ninguna de esas cuatro depende de que alguien te traicione. Todas son consecuencia
+directa de lo que el jugador hizo.
+
+La segunda mitad del arreglo es más importante que la primera: **avisar**. Pasando
+84 en cualquier facción entra una carta de aviso que nombra exactamente el problema
+y ofrece una salida con costo — gastar de lo que sobra para comprar lo que falta.
+El `urgeMult` de esas cartas es deliberadamente enorme (200 contra el 4 o 9 del
+resto del mazo), porque una carta cuyo único trabajo es avisar y que llega tarde
+equivale a no existir. Hoy aparece a las dos o tres cartas de entrar en zona.
+
+Con aviso y con salida, llegar a cien deja de ser algo que te pasa y pasa a ser
+algo que elegiste.
+
+## La factura siempre vuelve
+
+Las flags encadenan bien pero tienen un problema: **habilitan** una carta y después
+dejan que el sorteo decida si alguna vez aparece. La consecuencia de una decisión
+importante puede no llegar nunca, y el jugador nunca sabe si el juego se acordó.
+
+`siembra` resuelve eso. Una opción agenda una carta para dentro de una ventana de
+meses y esa carta llega, con fecha:
+
+```js
+siembra: { carta: 'favor_legislativo', meses: [8, 14] }
+```
+
+Lo que hace que funcione no es la mecánica sino la redacción: **todas las cartas de
+consecuencia arrancan nombrando la decisión que las trajo.** "Los tres votos que
+compraste para tu ley estrella vienen a cobrar." "Las escuelas que conectaste en
+junio pasaron el invierno con calefacción." El punto es que el jugador ate el cabo
+justo cuando ya se había olvidado.
+
+Tres reglas que las sostienen:
+
+- **La mitad cobra y la mitad paga.** Si todas fueran facturas, sembrar sería
+  siempre malo y el jugador aprendería a no comprometerse con nada.
+- **La ventana nunca pasa de veinticuatro meses.** Más allá de eso el cabo no se
+  ata: la carta llega y parece un evento suelto.
+- **Ninguna sale por sorteo.** Son `soloEncadenada`: si nadie la sembró, no existe.
+  Un test verifica que ninguna quede huérfana.
+
 ## Por qué la inflación es un medidor aparte
 
 Los cuatro stats son *equilibrios*: matan por exceso y por defecto. La inflación
@@ -340,6 +400,25 @@ cerrados, y la barba tapando la boca).
 
 Los emojis originales se eliminaron del todo en vez de dejarlos como respaldo: un
 respaldo que nada usa es dato muerto que miente en la próxima lectura.
+
+## La forma de la carta
+
+Arrancó siendo casi cuadrada, 330 por 330. Se ve mal por dos razones: el texto cae
+en renglones largos que obligan a barrer con la vista, y no se parece a nada que
+uno tenga en la mano.
+
+Ahora la proporción es 10:16 — la de un teléfono. Renglones cortos, el retrato con
+aire arriba, y la carta se lee como un objeto y no como un panel.
+
+El detalle técnico que importa: **la altura manda y la proporción deriva el ancho**
+(`height: 100%` + `aspect-ratio`), no al revés. Con el ancho fijo, en pantallas
+bajas la carta empujaba la botonera abajo del fold; con la altura al mando, la
+carta se achica para que todo entre. La pantalla de juego es la única con
+`overflow: hidden`: el menú y el final se leen scrolleando, pero una partida que
+obliga a scrollear para ver los botones no es jugable.
+
+Eso también obligó a comprimir la tira de objetivos a dos fichas en una línea: el
+espacio vertical es de la carta, y todo lo demás está de invitado.
 
 ## Decisiones de tono
 

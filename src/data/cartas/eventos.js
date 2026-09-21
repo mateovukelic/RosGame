@@ -195,6 +195,7 @@ export const CARTAS_EVENTOS = [
       replica: 'El repelente llegó a costar lo que una jornada de trabajo. La foto de la góndola vacía circuló sola.'
     },
     der: {
+      siembra: { carta: 'demanda_importador', meses: [12,18] },
       acepta: true,
       texto: 'Importamos y repartimos',
       efectos: { pueblo: 9, caja: -8, campo: -4 },
@@ -209,6 +210,7 @@ export const CARTAS_EVENTOS = [
     peso: 1,
     requiere: { mesMin: 10 },
     izq: {
+      siembra: { carta: 'puerto_rinde', meses: [8,12] },
       texto: 'Dragamos lo que haga falta',
       efectos: { caja: -12, campo: 12, pueblo: -2 },
       replica: 'Se dragó. El canal quedó operativo y ninguna persona ajena al puerto se enteró jamás de que eso pasó.'
@@ -233,6 +235,7 @@ export const CARTAS_EVENTOS = [
       replica: 'El hospital se hizo y funciona bien. El satélite quedó en un galpón con una lona encima, terminado.'
     },
     der: {
+      siembra: { carta: 'satelite_arriba', meses: [16,22] },
       acepta: true,
       texto: 'Que se lance',
       efectos: { caja: -11, campo: 7, pueblo: 4, rosca: -3 },
@@ -304,6 +307,7 @@ export const CARTAS_EVENTOS = [
     peso: 1,
     requiere: { mesMin: 12 },
     izq: {
+      siembra: { carta: 'juicio_contenedor', meses: [10,16] },
       texto: 'Que se abra con cámaras',
       efectos: { pueblo: 7, rosca: -8, campo: -3 },
       pone: ['causa_abierta'],
@@ -345,6 +349,7 @@ export const CARTAS_EVENTOS = [
     peso: 0.95,
     requiere: { mesMin: 10 },
     izq: {
+      siembra: { carta: 'plaga_vuelve', meses: [10,14] },
       rechaza: true,
       texto: 'Que se abran otros mercados',
       efectos: { campo: -9, caja: -4, pueblo: -2 },

@@ -91,10 +91,10 @@ export const FINALES = [
     id: 'pueblo_lleno',
     tipo: 'caida',
     prioridad: 45,
-    titulo: 'El conductor eterno',
+    titulo: 'Rehén de la plaza',
     epigrafe: 'Pueblo: 100',
     texto:
-      'Te querían tanto que empezaron a pedir que te quedes para siempre. Salieron pintadas con tu cara. La Rosca leyó la pared, entendió que ya no te necesitaba a vos sino a tu mito, y consiguió el mito mucho más barato sin vos adentro.',
+      'No te voltearon por quererte: te quedaste sin poder hacer nada que la calle no aplaudiera. La tarifa que había que tocar, la partida que había que cerrar, el nombramiento que había que revisar: todo se pospuso para no romper el encanto. Gobernaste quince meses sin tomar una sola decisión impopular, y un país no aguanta quince meses así. Cuando la cuenta llegó no había con qué pagarla, y los mismos que te aplaudían pedían explicaciones que ya no se podían dar.',
     condicion: (e) => e.stats.pueblo >= 100
   },
   {
@@ -104,7 +104,7 @@ export const FINALES = [
     titulo: 'El sello de goma',
     epigrafe: 'Rosca: 100',
     texto:
-      'Les diste todo: cajas, cargos, obras, listas. Un martes pediste un café y te trajeron un decreto ya firmado por vos. Seguís en el cargo. Hace meses que no gobernás.',
+      'Les diste todo: cajas, cargos, obras, listas. Cada cosa que entregaste compró una semana de gobernabilidad y vendió un pedazo de la decisión. Un martes pediste un café y te trajeron un decreto ya firmado por vos, que no habías leído y que salía al día siguiente. Seguís en el cargo. Hace meses que no gobernás.',
     condicion: (e) => e.stats.rosca >= 100
   },
   {
@@ -114,7 +114,7 @@ export const FINALES = [
     titulo: 'La patria contratista',
     epigrafe: 'Campo: 100',
     texto:
-      'Bajaste todo lo que había para bajar y el puerto funcionó como un reloj suizo. El problema es que el reloj era de ellos. Cuando quisiste cambiar una coma, descubriste que el gobierno tenía dueño y no eras vos.',
+      'Bajaste todo lo que había para bajar y el puerto funcionó como un reloj suizo. El problema es que el reloj era de ellos y vos habías firmado el manual de uso. Cuando quisiste cambiar una coma en una resolución menor, cuatro cámaras empresarias publicaron el mismo comunicado el mismo día a la misma hora. Ahí entendiste que el gobierno tenía dueño y que no eras vos.',
     condicion: (e) => e.stats.campo >= 100
   },
   {
@@ -124,7 +124,7 @@ export const FINALES = [
     titulo: 'La plata no se come',
     epigrafe: 'Caja: 100',
     texto:
-      'Juntaste una montaña de reservas récord mientras los hospitales pedían gasas por radio. "Estamos ordenando la casa", dijiste. La casa quedó impecable y vacía: no quedaba nadie adentro dispuesto a defenderte.',
+      'La meta fiscal dejó de ser un instrumento y pasó a ser la única política. Cada decisión se medía contra la planilla y la planilla siempre decía que no. Juntaste reservas récord mientras un hospital pedía gasas por radio y una escuela cerraba por falta de gas. La casa quedó impecable y vacía: el día que necesitaste que alguien saliera a bancarte, no quedaba nadie adentro.',
     condicion: (e) => e.stats.caja >= 100
   },
 

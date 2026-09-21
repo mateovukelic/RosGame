@@ -148,6 +148,14 @@ export class Juego {
       );
     }
 
+    // Consecuencias con fecha: esta decisión mete una carta en el mazo que va a
+    // llegar dentro de N meses, cuando ya no te acuerdes de haberla tomado.
+    for (const semilla of [].concat(opcion.siembra || [])) {
+      const [min, max] = semilla.meses || [6, 10];
+      const enMeses = this.rng.entero(min, max);
+      this.mazo.sembrar(semilla.carta, this.estado.mesesTotales + enMeses, carta.id);
+    }
+
     this.estado.historia.push({
       mes: this.estado.mes,
       mandato: this.estado.mandato,
@@ -353,6 +361,7 @@ export class Juego {
       final: this.estado.final?.id ?? null,
       tipoFinal: this.estado.final?.tipo ?? null,
       decisiones: this.estado.historia.length,
+      facturasPendientes: this.mazo.pendientes().length,
       objetivos: this.estado.objetivos.map((o) => ({ id: o.id, titulo: o.titulo, resultado: o.resultado })),
       objetivosCumplidos: this.estado.objetivos.filter((o) => o.resultado === ESTADO_OBJETIVO.CUMPLIDO).length,
       cronica: this.cronica()

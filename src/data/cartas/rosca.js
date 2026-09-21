@@ -289,6 +289,7 @@ export const CARTAS_ROSCA = [
       replica: 'Se cayó por dos votos. La oposición aplaudió de pie y tu propio bloque aplaudió sentado.'
     },
     der: {
+      siembra: { carta: 'favor_legislativo', meses: [8,14] },
       acepta: true,
       texto: 'Pagamos lo que haya que pagar',
       efectos: { caja: -11, rosca: 8, pueblo: 4, campo: 3 },

@@ -275,7 +275,8 @@ export const CARTAS_CALLE = [
     texto: 'Se inundó otra vez la manzana ocho, la cuarta vez este año. El proyecto de cloacas está hecho hace seis años.',
     peso: 1,
     izq: { rechaza: true, texto: 'Ahora no se puede', efectos: { caja: 4, pueblo: -6 }, replica: 'No se pudo ese año ni el siguiente. El proyecto sigue en una carpeta, impecable.' },
-    der: { acepta: true, texto: 'Se hace', efectos: { caja: -10, pueblo: 10, rosca: 2 }, replica: 'Se hizo en catorce meses. Nadie cortó ninguna cinta porque no había nada que mostrar arriba de la tierra.' }
+    der: {
+      siembra: { carta: 'cloacas_listas', meses: [10,16] }, acepta: true, texto: 'Se hace', efectos: { caja: -10, pueblo: 10, rosca: 2 }, replica: 'Se hizo en catorce meses. Nadie cortó ninguna cinta porque no había nada que mostrar arriba de la tierra.' }
   },
   {
     id: 'ferias',

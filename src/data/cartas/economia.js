@@ -74,6 +74,7 @@ export const CARTAS_ECONOMIA = [
       replica: 'Se fue en el vuelo de la tarde. No hizo declaraciones, que fue una forma de hacerlas.'
     },
     der: {
+      siembra: { carta: 'letra_chica', meses: [8,12] },
       acepta: true,
       texto: 'Firmamos',
       efectos: { caja: 18, campo: 8, pueblo: -10, inflacion: -2 },
@@ -135,6 +136,7 @@ export const CARTAS_ECONOMIA = [
       replica: 'Aguantó el invierno. En febrero la distribuidora avisó que no garantizaba el verano.'
     },
     der: {
+      siembra: { carta: 'factura_luz', meses: [4,7] },
       acepta: true,
       texto: 'Que se sincere',
       efectos: { caja: 8, pueblo: -7, campo: 5, inflacion: 3 },
@@ -174,6 +176,7 @@ export const CARTAS_ECONOMIA = [
       replica: 'No se emitió. Se pagó tarde, y a los que se les pagó tarde se acordaron.'
     },
     der: {
+      siembra: { carta: 'factura_emision', meses: [6,9] },
       acepta: true,
       texto: 'Que haga el turno',
       efectos: { caja: 12, inflacion: 8, pueblo: 3, campo: -4 },
@@ -187,6 +190,7 @@ export const CARTAS_ECONOMIA = [
     texto: 'Si vuelven a tocar las retenciones, no sembramos. No es una amenaza, es una cuenta que ya hicimos.',
     peso: 1.3,
     izq: {
+      siembra: { carta: 'siembra_caida', meses: [8,12] },
       rechaza: true,
       texto: 'Se suben igual',
       efectos: { caja: 13, campo: -15, pueblo: 6, inflacion: -1 },
@@ -194,6 +198,7 @@ export const CARTAS_ECONOMIA = [
       replica: 'Se sembró menos. El número exacto recién se supo en la cosecha siguiente.'
     },
     der: {
+      siembra: { carta: 'cosecha_record', meses: [8,12] },
       acepta: true,
       texto: 'Las bajamos',
       efectos: { caja: -10, campo: 14, pueblo: -5, inflacion: 1 },
@@ -337,6 +342,7 @@ export const CARTAS_ECONOMIA = [
       replica: 'Se fueron a poner la plata en otro lado. Mandaron un comunicado muy amable.'
     },
     der: {
+      siembra: { carta: 'fondo_llega', meses: [10,14] },
       acepta: true,
       texto: 'Se lo garantizamos',
       efectos: { caja: 12, campo: 9, pueblo: -7, rosca: -3 },

@@ -218,6 +218,7 @@ export const CARTAS_BASE = [
       replica: 'Se fue a un instituto en Alemania. Mandó una carta de agradecimiento impecablemente redactada.'
     },
     der: {
+      siembra: { carta: 'ciencia_rinde', meses: [14,20] },
       acepta: true,
       texto: 'Firmalo y arrancá',
       efectos: { caja: -5, pueblo: 4, campo: 3 },
@@ -258,6 +259,7 @@ export const CARTAS_BASE = [
       replica: 'El paro arrancó al otro día y duró tres semanas. Julio ya eran vacaciones.'
     },
     der: {
+      siembra: { carta: 'escuelas_gas', meses: [10,14] },
       acepta: true,
       texto: 'Se resuelve esta semana',
       efectos: { caja: -8, pueblo: 8, rosca: -2 },
@@ -401,6 +403,7 @@ export const CARTAS_BASE = [
     peso: 1,
     izq: { rechaza: true, texto: 'Guardalos para después', efectos: { rosca: -2, caja: 2, campo: 2 }, replica: 'Los guardó. Te lo recordó cada vez que vino a pedir algo, durante dos años.' },
     der: {
+      siembra: { carta: 'cuenta_micros', meses: [6,10] },
       acepta: true,
       texto: 'Que salgan el jueves',
       efectos: { pueblo: 6, rosca: 4, caja: -5 },
