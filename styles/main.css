@@ -154,19 +154,26 @@ input[type="text"]:focus { outline: none; border-color: var(--celeste); }
 .medidor.peligro .medidor-relleno { background: var(--rojo); }
 .medidor.exceso .medidor-relleno { background: var(--dorado); }
 
-/* Fantasma: adónde iría la barra si se elige la opción que se está arrastrando */
-.medidor-fantasma {
-  position: absolute; top: 0; height: 100%; width: 0; opacity: 0;
-  border-radius: 4px; background: var(--tinta-suave);
-  transition: left .12s ease, width .12s ease, opacity .12s ease, background .12s;
+/* Pista de impacto: una burbuja DEBAJO de la barra.
+   Nada de marcas sobre la barra. Cualquier marca puesta encima tiene una
+   posición, y una posición se lee como dirección: la parte que cae sobre el
+   relleno se confunde con el relleno y sólo se ve la que sobresale, así que
+   todo parece un aumento. La burbuja no tiene lado: sólo dice cuánto. */
+.medidor-pista { height: 18px; display: grid; place-items: center; margin-top: 5px; }
+.medidor-burbuja {
+  width: 0; height: 0; border-radius: 50%; opacity: 0;
+  background: var(--papel); box-sizing: border-box;
+  transition: width .14s ease, height .14s ease, opacity .14s ease, background .14s;
 }
-/* Un solo color para la banda: si fuera verde o roja diría la dirección,
-   y la gracia es que la dirección haya que leerla. */
-.medidor.toca .medidor-fantasma { background: var(--papel); }
-.medidor.fuerte .medidor-fantasma { background: var(--dorado); animation: parpadeo .8s infinite; }
+.medidor.fuerte .medidor-burbuja { background: var(--dorado); animation: latido .9s infinite; }
+/* Efecto con rango: la burbuja va hueca, porque ahí ni el juego sabe cuánto */
+.medidor.incierto .medidor-burbuja {
+  background: transparent; border: 2px solid var(--papel);
+}
+.medidor.incierto.fuerte .medidor-burbuja { border-color: var(--dorado); }
 .medidor.toca .medidor-icono { transform: scale(1.14); filter: grayscale(0); }
 .medidor.fuerte .medidor-nombre { color: var(--dorado); }
-@keyframes parpadeo { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
+@keyframes latido { 0%, 100% { transform: scale(1); } 50% { transform: scale(.78); } }
 .medidor-nombre { font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--tinta-suave); margin-top: 5px; }
 .medidor-delta {
   font-size: 11px; font-weight: 700; height: 13px; font-variant-numeric: tabular-nums;
@@ -174,20 +181,23 @@ input[type="text"]:focus { outline: none; border-color: var(--celeste); }
 }
 .medidor-delta.sube { color: var(--verde); opacity: 1; }
 .medidor-delta.baja { color: var(--rojo); opacity: 1; }
-.medidor-delta.previo { font-size: 13px; line-height: 13px; letter-spacing: .12em; opacity: 1; color: var(--papel); }
-.medidor-delta.previo.fuerte { color: var(--dorado); }
+
 
 .calendario {
   display: flex; justify-content: space-between; align-items: center;
   font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase;
   color: var(--tinta-suave); padding: 8px 2px 4px; border-top: 1px solid var(--borde);
 }
-.inflacion-caja { display: inline-flex; align-items: center; gap: 5px; }
+.inflacion-caja { display: inline-flex; align-items: center; gap: 7px; min-height: 16px; }
 .inflacion { color: var(--dorado); font-variant-numeric: tabular-nums; letter-spacing: .05em; }
-.inflacion-flecha { font-size: 12px; opacity: 0; transition: opacity .12s; min-width: 14px; }
-.inflacion-flecha { letter-spacing: .12em; }
-.inflacion-flecha.leve, .inflacion-flecha.medio { color: var(--papel); }
-.inflacion-flecha.fuerte { color: var(--dorado); }
+.burbuja-inflacion {
+  width: 0; height: 0; border-radius: 50%; opacity: 0; box-sizing: border-box;
+  background: var(--papel); display: inline-block;
+  transition: width .14s ease, height .14s ease, opacity .14s ease;
+}
+.burbuja-inflacion.fuerte { background: var(--dorado); animation: latido .9s infinite; }
+.burbuja-inflacion.incierto { background: transparent; border: 2px solid var(--papel); }
+.burbuja-inflacion.incierto.fuerte { border-color: var(--dorado); }
 .inflacion.alta { color: var(--rojo); animation: latir 1.4s infinite; }
 @keyframes latir { 0%,100% { opacity: 1; } 50% { opacity: .55; } }
 

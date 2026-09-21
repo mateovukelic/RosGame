@@ -160,8 +160,14 @@ carta requiera una flag que nadie pone nunca**.
 
 Al arrastrar, `Juego.pistaDeImpacto(lado)` devuelve, por cada medidor que se mueve,
 sólo tres cosas: **qué facción**, **qué tan fuerte** (`leve` / `medio` / `fuerte`)
-y si el efecto es un rango. Nada más. El HUD lo pinta como una banda centrada en el
-valor actual que se extiende **hacia los dos lados**, más `·` / `··` / `···`.
+y si el efecto es un rango. Nada más. El HUD lo pinta como una **burbuja debajo de
+cada medidor**: más grande, más fuerte el impacto. Hueca si el efecto es un rango,
+porque ahí ni el juego sabe cuánto va a salir.
+
+La burbuja va *debajo* de la barra y no sobre ella. Cualquier marca puesta encima
+tiene una posición, y una posición se lee como dirección: la parte que cae sobre el
+relleno se confunde con el relleno y sólo se ve la que sobresale, así que todo
+parece un aumento. Una burbuja aparte no tiene lado — sólo puede decir cuánto.
 
 Sin dirección a propósito, y es la regla más importante del juego: si las barras te
 dijeran si sube o baja, se podría jugar sin leer una sola carta, mirando sólo los

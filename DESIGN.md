@@ -127,14 +127,36 @@ decoración de un minijuego de barritas.
 La regla ahora es: **la pista dice dónde mirar, el personaje dice qué va a pasar.**
 
 Al arrastrar se muestra, por cada medidor afectado, sólo la facción y la fuerza
-(`leve` / `medio` / `fuerte`). La banda se dibuja **centrada en el valor actual y
-extendida hacia los dos lados**, porque una banda que creciera hacia donde va el
-medidor revelaría el signo con la sola posición. Dos consecuencias que valen:
+(`leve` / `medio` / `fuerte`), como una **burbuja debajo de la barra**: más grande,
+más fuerte. Hueca cuando el efecto es un rango.
+
+### Por qué la burbuja está debajo y no sobre la barra
+
+Este lugar costó dos intentos y el error del segundo es el más instructivo.
+
+El primero pintaba un segmento desde el valor actual hasta el proyectado. Decía la
+dirección con la posición, que es justamente lo que no había que decir.
+
+El segundo pareció la solución obvia: una banda **centrada** en el valor actual,
+extendida hacia los dos lados. Simétrica, sin dirección… en el papel. En pantalla
+se leía siempre como un aumento, y por un motivo que el razonamiento no anticipa:
+la mitad izquierda de la banda cae sobre el relleno azul de la barra y se confunde
+con él, mientras que la mitad derecha cae sobre la pista vacía y se recorta nítida.
+El jugador no ve una banda simétrica: ve algo que sobresale hacia la derecha.
+
+La lección general: **cualquier marca dibujada sobre la barra tiene una posición
+relativa al relleno, y esa posición se lee como dirección**, por más simétrica que
+sea la forma. No hay forma neutra sobre un fondo que no es neutro. La burbuja
+resuelve el problema quitándole el lado al indicador en vez de intentar equilibrarlo:
+está afuera de la barra, no tiene relación espacial con el valor, y su único grado
+de libertad es el tamaño — que es exactamente la única cosa que queremos comunicar.
+
+Dos consecuencias más que valen:
 
 - **Desaparecieron los avisos de "esto te mata".** Eran útiles, pero decirte que
   una opción es letal cuando estás en 92 de Campo equivale a decirte que sube.
-  Ahora el aviso es la fuerza: una banda dorada significa "esto mueve mucho", y si
-  estás en un borde, el problema es tuyo y de lo que sepas leer.
+  Ahora el aviso es la fuerza: una burbuja dorada significa "esto mueve mucho", y
+  si estás en un borde, el problema es tuyo y de lo que sepas leer.
 - **La fuerza sí pasa por tus decretos.** Si tenés Cadena Nacional, el golpe que se
   previsualiza ya viene amortiguado. Mentir sobre la magnitud sería gratuito.
 
