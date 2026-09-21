@@ -22,6 +22,9 @@ Abrí `http://localhost:8080` y asumí el cargo.
 
 **Controles:** arrastrá la carta, usá `←` / `→`, o tocá los botones.
 
+También hay una galería de retratos en `http://localhost:8080/galeria.html`, que
+sirve para revisar los personajes y probar combinaciones de partes al azar.
+
 ---
 
 ## Cómo funciona
@@ -77,7 +80,7 @@ El archivo del menú los va revelando.
 ## Desarrollo
 
 ```bash
-npm test        # 40 tests: motor, mazo, legado y balance
+npm test        # 51 tests: motor, mazo, retratos, legado y balance
 npm run validar # reporte de salud del mazo + 1000 corridas simuladas
 ```
 
@@ -100,9 +103,12 @@ src/
     cartas/         # base · economia · calle · rosca · folklore · crisis
     personajes.js decretos.js gabinetes.js finales.js
   ui/               # presentación (DOM)
+    retratos.js     # retratos SVG paramétricos (puro: se testea en Node)
+    carta.js hud.js dom.js
   main.js
 test/               # node:test, sin dependencias
 tools/validar-mazo.js
+galeria.html        # banco de pruebas de los retratos
 ```
 
 El motor **no sabe nada del DOM**: `new Juego({semilla}).elegir('izq')` funciona
@@ -134,6 +140,33 @@ Metela en el paquete que corresponda dentro de `src/data/cartas/`:
 respuestas entren en la carta, que las magnitudes sean razonables, y que **ninguna
 carta requiera una flag que nadie pone nunca**.
 
+### Agregar un personaje
+
+Los retratos no son imágenes: se arman combinando partes en `src/ui/retratos.js`.
+Un personaje nuevo es una receta en `src/data/personajes.js`:
+
+```js
+tachero_2: {
+  nombre: 'El Otro Tachero',
+  color: '#7f6f2f',                  // tiñe el fondo del retrato
+  bajada: 'Este sí sabe el camino.',
+  retrato: {
+    cara: 'cuadrada',                // ovalada · redonda · cuadrada · angosta
+    piel: 'media', pelo: 'canoso',
+    corte: 'entradas',               // 10 cortes
+    barba: 'bigote',                 // no · sombra · bigote · chivo · candado · tupida
+    ojos: 'entrecerrado', ceja: 'neutra', boca: 'mueca',
+    prenda: 'camisa', tela: '#8a7a3a',
+    accesorio: 'anteojos', accesorioColor: '#2a2620'
+  }
+}
+```
+
+Abrí `galeria.html` para verlo, y el botón 🎲 sortea combinaciones: sirve para
+encontrar partes que se pisan entre sí. Los tests dibujan **todas** las partes
+contra **todas** las formas de cara, así que una geometría rota falla el build
+aunque ningún personaje la use todavía.
+
 ### Tocar el balance
 
 Todo vive en `src/engine/constantes.js`. Después de cambiar algo:
@@ -152,8 +185,8 @@ las partidas.
 ## Estado
 
 Vertical slice jugable y completa: 116 cartas, 16 decretos, 6 gabinetes, 14 finales,
-25 personajes.
+25 personajes con retrato propio.
 
-**Lo próximo, en orden:** arte de personajes en lugar de emojis · sonido · más
-cadenas largas · eventos de elecciones de medio término · modo "provincia".
+**Lo próximo, en orden:** sonido · más cadenas largas · eventos de elecciones de
+medio término · expresión del retrato según el estado del país · modo "provincia".
 

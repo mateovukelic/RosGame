@@ -112,6 +112,41 @@ partidas**. Si uno domina, el mazo empuja demasiado en una dirección.
 Esas cuatro condiciones son tests (`test/balance.test.js`), no recomendaciones.
 Tocá `constantes.js` y te avisan.
 
+## Los retratos
+
+Podrían haber sido 25 SVG dibujados a mano. No lo son, por dos razones: a mano el
+estilo se va desparejando de a poco, y agregar el personaje 26 cuesta lo mismo que
+el primero.
+
+En cambio hay un **sistema de partes** (`src/ui/retratos.js`): forma de cara, corte,
+barba, ojos, cejas, boca, prenda y accesorio se combinan sobre una grilla fija de
+100×100 con la cabeza siempre en el mismo lugar. Un personaje es una receta de ocho
+palabras. El módulo es puro —devuelve un string— así que se testea en Node sin DOM,
+y la suite dibuja **el producto cartesiano de todas las partes contra todas las
+formas de cara**: si una geometría se rompe, falla el build aunque ningún personaje
+use esa combinación todavía.
+
+Reglas de estilo que sostienen la coherencia:
+
+- **Plano, sin contornos.** A 86px un contorno se empasta. El contraste lo hace el
+  color, no la línea.
+- **El fondo del retrato es el color del personaje**, el mismo que tiñe la carta.
+  Cada arquetipo se reconoce por su color antes de que leas el nombre.
+- **Los rasgos van en tinta cálida (`#2a2620`), no en negro.** Sobre papel crema el
+  negro puro se ve como un agujero.
+- **Orden de capas fijo:** fondo, pelo trasero, cuello, prenda, cabeza, orejas,
+  cejas, ojos, nariz, barba, boca, pelo delantero, accesorio. La boca va *después*
+  de la barba y las barbas recortan un óvalo de piel: si no, el candado se come la
+  boca y parece una mancha.
+
+`galeria.html` es la herramienta: muestra los 25 y sortea combinaciones al azar,
+que es como aparecieron los cuatro defectos de la primera versión (la visera de la
+gorra invisible, la colita pegada a la oreja, los ojos entrecerrados que parecían
+cerrados, y la barba tapando la boca).
+
+Los emojis originales se eliminaron del todo en vez de dejarlos como respaldo: un
+respaldo que nada usa es dato muerto que miente en la próxima lectura.
+
 ## Decisiones de tono
 
 - **Arquetipos, nunca personas reales.** Es mejor comedia y no es difamación.
@@ -123,8 +158,9 @@ Tocá `constantes.js` y te avisan.
 
 ## Pendiente
 
-- Arte de personajes (hoy son emojis con un color de fondo por personaje).
 - Sonido: un golpe por carta, algo feo cuando un medidor entra en zona roja.
+- Retratos que reaccionen: la misma receta con `ceja: 'enojada'` cuando el Pueblo
+  está en rojo, o `ojos: 'cansado'` pasados los tres años de mandato.
 - Elecciones de medio término como evento de mes 24 con consecuencias en Rosca.
 - Cadenas más largas (hoy la más larga tiene tres eslabones).
 - Modo "provincia": misma mecánica, escala municipal, medidores distintos.

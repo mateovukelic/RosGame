@@ -5,6 +5,7 @@ import { Legado } from './engine/legado.js';
 import { FASES, BALANCE } from './engine/constantes.js';
 import { semillaAlAzar } from './engine/rng.js';
 import { personaje } from './data/personajes.js';
+import { retratoSvg } from './ui/retratos.js';
 import { FINALES } from './data/finales.js';
 import { $, crear, mostrarPantalla } from './ui/dom.js';
 import { Hud, pintarInflacion } from './ui/hud.js';
@@ -111,7 +112,8 @@ function pintarEstado() {
 function pintarCarta(c) {
   if (!c) return;
   const p = personaje(c.personaje);
-  $('#carta-cara').textContent = p.cara;
+  $('#carta-retrato').innerHTML = retratoSvg(p.retrato, { fondo: p.color, uid: c.personaje });
+  $('#carta-retrato').setAttribute('aria-label', `Retrato de ${p.nombre}`);
   $('#carta').style.setProperty('--acento', p.color);
   $('#carta-personaje').textContent = p.nombre;
   $('#carta-bajada').textContent = p.bajada;

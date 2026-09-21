@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LA ROSCA · galería de retratos</title>
+<link rel="stylesheet" href="styles/main.css" />
+<style>
+  .app { max-width: 920px; }
+  .galeria { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+  .ficha { background: linear-gradient(170deg, var(--papel), var(--papel-sombra)); color: var(--tinta); border-radius: 14px; padding: 14px 10px; text-align: center; }
+  .ficha .marco { width: 92px; height: 92px; margin: 0 auto 10px; border-radius: 50%; overflow: hidden; box-shadow: inset 0 -4px 12px rgba(0,0,0,.25); }
+  .ficha b { display: block; font-size: 12.5px; font-family: var(--fuente-tit); line-height: 1.3; }
+  .ficha i { display: block; font-size: 10.5px; color: #6d6a5f; margin-top: 4px; }
+  .barra { display: flex; gap: 10px; align-items: center; margin-bottom: 18px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+<div class="app">
+  <section class="pantalla activa">
+    <header class="titulo chico"><h2>Galería de retratos</h2>
+      <p class="bajada">Herramienta de desarrollo: todos los personajes, y un banco de pruebas para las partes.</p></header>
+    <div class="barra">
+      <button id="btn-azar" class="btn-chico" type="button" title="Retratos al azar">🎲</button>
+      <span class="bajada" id="contador"></span>
+    </div>
+    <div id="galeria" class="galeria"></div>
+  </section>
+</div>
+<script type="module">
+  import { PERSONAJES } from './src/data/personajes.js';
+  import { retratoSvg, CATALOGOS } from './src/ui/retratos.js';
+
+  const galeria = document.getElementById('galeria');
+
+  function ficha(nombre, bajada, svg) {
+    const el = document.createElement('div');
+    el.className = 'ficha';
+    el.innerHTML = `<div class="marco">${svg}</div><b>${nombre}</b><i>${bajada}</i>`;
+    return el;
+  }
+
+  function pintarPersonajes() {
+    galeria.replaceChildren(
+      ...Object.entries(PERSONAJES).map(([id, p]) =>
+        ficha(p.nombre, id, retratoSvg(p.retrato, { fondo: p.color, uid: id }))
+      )
+    );
+    document.getElementById('contador').textContent = `${Object.keys(PERSONAJES).length} personajes`;
+  }
+
+  // Combinaciones al azar: sirve para encontrar partes que se pisan entre sí.
+  function alAzar() {
+    const elegir = (cat) => {
+      const claves = Object.keys(CATALOGOS[cat]);
+      return claves[Math.floor(Math.random() * claves.length)];
+    };
+    const tonos = ['#2f6f8f', '#8f3a2f', '#5a4a8f', '#4f7a3f', '#7f4f2f', '#3f5f7f'];
+    galeria.replaceChildren(
+      ...Array.from({ length: 24 }, (_, i) => {
+        const receta = {
+          cara: elegir('cara'), piel: elegir('piel'), pelo: elegir('pelo'),
+          corte: elegir('corte'), barba: elegir('barba'), ojos: elegir('ojos'),
+          ceja: elegir('ceja'), boca: elegir('boca'), prenda: elegir('prenda'),
+          tela: tonos[i % tonos.length], accesorio: elegir('accesorio')
+        };
+        return ficha(
+          `${receta.corte} · ${receta.barba}`,
+          `${receta.prenda} · ${receta.accesorio}`,
+          retratoSvg(receta, { fondo: tonos[(i + 3) % tonos.length], uid: `az${i}` })
+        );
+      })
+    );
+    document.getElementById('contador').textContent = '24 combinaciones al azar';
+  }
+
+  document.getElementById('btn-azar').addEventListener('click', alAzar);
+  pintarPersonajes();
+</script>
+</body>
+</html>
