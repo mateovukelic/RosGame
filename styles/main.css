@@ -202,7 +202,10 @@ input[type="text"]:focus { outline: none; border-color: var(--celeste); }
 @keyframes latir { 0%,100% { opacity: 1; } 50% { opacity: .55; } }
 
 /* ---------- Mesa y carta ---------- */
-.mesa { position: relative; flex: 1; display: flex; align-items: center; justify-content: center; min-height: 340px; padding: 10px 0; }
+.mesa {
+  position: relative; flex: 1; display: flex; align-items: center;
+  justify-content: center; min-height: 340px; padding: 10px 0 78px;
+}
 
 .carta {
   position: relative; width: 100%; max-width: 330px; min-height: 330px;
@@ -252,11 +255,15 @@ input[type="text"]:focus { outline: none; border-color: var(--celeste); }
 .pista.visible { opacity: .85; }
 
 .replica {
-  position: absolute; bottom: -4px; left: 0; right: 0; text-align: center;
-  font-size: 13px; font-style: italic; color: var(--dorado); opacity: 0;
-  transition: opacity .3s; padding: 0 12px; line-height: 1.5; pointer-events: none;
+  position: absolute; bottom: 0; left: 50%; transform: translate(-50%, 6px);
+  width: min(100%, 360px); text-align: center; font-size: 13.5px;
+  font-style: italic; color: var(--dorado); opacity: 0; line-height: 1.55;
+  padding: 11px 15px; border-radius: 12px; pointer-events: none;
+  background: rgba(20, 22, 27, .92); border: 1px solid var(--borde);
+  backdrop-filter: blur(3px);
+  transition: opacity .28s ease, transform .28s ease;
 }
-.replica.visible { opacity: 1; }
+.replica.visible { opacity: 1; transform: translate(-50%, 0); }
 
 /* ---------- Botonera ---------- */
 .botonera { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }

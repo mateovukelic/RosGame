@@ -146,6 +146,71 @@ test('los finales tienen id único y prioridad numérica', () => {
   }
 });
 
+// ---- El piso de calidad de la prosa ----
+// Estas no son reglas de estilo: son el mínimo por debajo del cual una carta
+// deja de ser una escena y vuelve a ser una planilla de efectos.
+test('toda opción tiene réplica: elegir siempre tiene que devolver algo', () => {
+  for (const carta of TODAS_LAS_CARTAS) {
+    for (const lado of ['izq', 'der']) {
+      assert.ok(
+        carta[lado].replica?.length > 25,
+        `${carta.id}.${lado}: sin réplica, el jugador elige y el juego se queda callado`
+      );
+    }
+  }
+});
+
+test('las réplicas dicen algo nuevo, no repiten la respuesta', () => {
+  for (const carta of TODAS_LAS_CARTAS) {
+    for (const lado of ['izq', 'der']) {
+      const opcion = carta[lado];
+      assert.notEqual(
+        opcion.replica.toLowerCase().trim(),
+        opcion.texto.toLowerCase().trim(),
+        `${carta.id}.${lado}: la réplica repite la respuesta`
+      );
+      assert.ok(
+        opcion.replica.length > opcion.texto.length,
+        `${carta.id}.${lado}: la réplica es más corta que la respuesta`
+      );
+    }
+  }
+});
+
+test('las dos réplicas de una carta cuentan cosas distintas', () => {
+  for (const carta of TODAS_LAS_CARTAS) {
+    assert.notEqual(
+      carta.izq.replica,
+      carta.der.replica,
+      `${carta.id}: las dos opciones terminan igual`
+    );
+  }
+});
+
+test('el texto de la carta tiene lugar para un detalle concreto', () => {
+  for (const carta of TODAS_LAS_CARTAS) {
+    assert.ok(carta.texto.length >= 60, `${carta.id}: el texto es demasiado escueto para tener escena`);
+    assert.ok(carta.texto.length <= 125, `${carta.id}: el texto no entra en la carta`);
+  }
+});
+
+test('las réplicas entran en el panel sin desbordarlo', () => {
+  for (const carta of TODAS_LAS_CARTAS) {
+    for (const lado of ['izq', 'der']) {
+      assert.ok(
+        carta[lado].replica.length <= 125,
+        `${carta.id}.${lado}: la réplica es demasiado larga para leerla entre carta y carta`
+      );
+    }
+  }
+});
+
+test('cada personaje tiene una regla de voz escrita', () => {
+  for (const [id, p] of Object.entries(PERSONAJES)) {
+    assert.ok(p.voz?.length > 40, `${id}: sin regla de voz, la próxima carta lo va a escribir cualquiera`);
+  }
+});
+
 // ---- La convención de lados ----
 // Cuando alguien viene a proponer algo, aceptar está SIEMPRE a la derecha y
 // rechazar SIEMPRE a la izquierda. Que el lado sea predecible es lo que deja

@@ -45,19 +45,49 @@ no te acuerdes de qué carta fue.
 
 ## Anatomía de una carta
 
-Una carta buena cumple tres cosas:
+Una carta buena cumple cuatro cosas:
 
 1. **Las dos opciones son defendibles.** Si una es obviamente correcta, no es una
    decisión, es un trámite. `npm run validar` marca las cartas cuyas dos opciones
    pesan casi lo mismo — eso no es un error, pero conviene revisarlas.
-2. **El personaje habla como habla ese personaje.** El Ministro dice "sendero" y
-   "trimestres". La Vecina dice el precio del asado. El texto es la mitad del juego.
-3. **Las consecuencias no se ven todas en el momento.** Las mejores cartas ponen
+2. **Tiene un detalle que no se puede inventar de memoria.** "Cuarenta escuelas sin
+   gas y estamos en junio" funciona; "hay problemas en educación" no. El detalle
+   concreto es lo único que separa una escena de una planilla de efectos. Por eso
+   el texto tiene un piso de sesenta caracteres, verificado por un test: no porque
+   más largo sea mejor, sino porque abajo de eso no entra un detalle.
+3. **El personaje habla como habla ese personaje.** Cada uno tiene su regla de voz
+   escrita en `personajes.js`, en el campo `voz`. El juego no la lee: la lee quien
+   escriba la carta siguiente, para que el Ministro no termine hablando como la
+   Vecina. El Ministro dice "sincerar"; la Vecina dice el precio del asado.
+4. **Las consecuencias no se ven todas en el momento.** Las mejores cartas ponen
    una *flag* y cobran ocho meses después (`obra_inaugurada` → `obra_derrumbe`,
    `empresario_favor` → `favor_cobrado`).
 
-**La réplica** (`replica`) es donde vive el humor. Se muestra después de elegir y
-casi siempre dice que la cosa salió peor de lo esperado, o bien de la peor manera.
+### La réplica es obligatoria
+
+**Las 232 opciones del mazo tienen réplica**, y hay un test que lo exige. Durante
+mucho tiempo sólo la tenía el 27%, y el efecto era peor de lo que parecía: en tres
+de cada cuatro decisiones el jugador elegía y el juego se quedaba mudo. Sin
+réplica, una carta es un botón que mueve números.
+
+Cuatro formas que funcionan, y conviene alternarlas para que no sea todo chiste:
+
+- **Salió bien, pero no como querías.** "Se conectaron treinta y una. Las otras
+  nueve estaban en zonas sin red de gas y nadie lo sabía."
+- **La factura llega después.** "El costo aparece dentro de noventa días, cuando
+  ya nadie lo asocie con esto."
+- **Un detalle humano que recontextualiza.** "No insistió. Se tomó el café,
+  agradeció y se fue. Eso fue peor que si hubiera insistido."
+- **El número que recién después significa algo.** "Doce minutos por día, por
+  doscientas mil personas."
+
+La réplica nunca repite la respuesta —hay un test— y nunca dice sólo que salió
+bien o mal: dice *qué pasó después*.
+
+Como las réplicas pasaron a medir ochenta caracteres en promedio, el tiempo que
+quedan en pantalla se calcula con el largo del texto en lugar de ser fijo, y
+cualquier toque o tecla adelanta la carta. El que ya leyó no espera; al que está
+leyendo no se le corta la frase.
 
 ## El mazo y sus pesos
 

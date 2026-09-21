@@ -215,6 +215,16 @@ function previsualizar(lado, fuerza = 1) {
   }
 }
 
+// Cuánto dura la réplica en pantalla. Se calcula con el largo del texto en vez
+// de usar un número fijo: las réplicas van de cuarenta a cien caracteres y con
+// un tiempo único o se corta la larga o se hace eterna la corta.
+function tiempoDeLectura(texto) {
+  if (!texto) return 620;
+  return Math.min(3600, Math.max(1500, 900 + texto.length * 28));
+}
+
+let saltarBeat = null;
+
 function resolver(lado) {
   const resultado = juego.elegir(lado);
   pintarEstado();
@@ -233,14 +243,31 @@ function resolver(lado) {
   const novedad = resultado.objetivos?.[0];
   if (novedad) mostrarAviso(novedad);
 
-  const espera = novedad ? 2200 : resultado.replica ? 1500 : 620;
+  const espera = Math.max(tiempoDeLectura(resultado.replica), novedad ? 2200 : 0);
 
-  setTimeout(() => {
+  const seguir = () => {
+    if (!saltarBeat) return;
+    saltarBeat();
     if (juego.estado.fase === FASES.FINAL) return mostrarFinal();
     if (juego.estado.fase === FASES.DECRETO) return mostrarDecretos();
     pintarCarta(juego.carta);
     carta.reponer();
-  }, espera);
+  };
+
+  const reloj = setTimeout(seguir, espera);
+  // El que ya leyó no espera: cualquier toque o tecla adelanta la carta.
+  const adelantar = () => seguir();
+  saltarBeat = () => {
+    clearTimeout(reloj);
+    document.removeEventListener('pointerdown', adelantar);
+    document.removeEventListener('keydown', adelantar);
+    saltarBeat = null;
+  };
+  setTimeout(() => {
+    if (!saltarBeat) return;
+    document.addEventListener('pointerdown', adelantar);
+    document.addEventListener('keydown', adelantar);
+  }, 260);
 }
 
 // ---------------------------------------------------------------- DECRETOS

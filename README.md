@@ -88,7 +88,7 @@ El archivo del menú los va revelando.
 ## Desarrollo
 
 ```bash
-npm test        # 79 tests: motor, mazo, objetivos, retratos, legado y balance
+npm test        # 85 tests: motor, mazo, prosa, objetivos, retratos, legado y balance
 npm run validar # reporte de salud del mazo + 1000 corridas simuladas
 npm run demo    # arma dist/demo.html, la versión de una sola página
 ```
@@ -155,6 +155,16 @@ Metela en el paquete que corresponda dentro de `src/data/cartas/`:
 `npm test` valida sola que el id sea único, que el personaje exista, que las
 respuestas entren en la carta, que las magnitudes sean razonables, y que **ninguna
 carta requiera una flag que nadie pone nunca**.
+
+También sostiene el piso de la prosa: **las dos opciones tienen que tener réplica**
+(las 232 del mazo la tienen), la réplica no puede repetir la respuesta ni ser más
+corta que ella, las dos réplicas de una carta tienen que contar cosas distintas, y
+el texto necesita al menos sesenta caracteres — no porque largo sea mejor, sino
+porque abajo de eso no entra un detalle concreto, que es lo único que separa una
+escena de una planilla de efectos.
+
+Cada personaje tiene su regla de voz en `personajes.js`, campo `voz`. El juego no
+la lee: la lee quien escriba la próxima carta.
 
 ### La pista de impacto (y por qué no dice la dirección)
 
