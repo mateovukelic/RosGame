@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+<meta name="description" content="LA ROSCA — juego de gestión política con toques roguelike. Cuatro años, un país, dos opciones por vez." />
+<meta name="theme-color" content="#14161b" />
+<title>LA ROSCA</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎩</text></svg>" />
+<link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+<div id="app" class="app">
+
+  <!-- ============ MENÚ ============ -->
+  <section id="pantalla-menu" class="pantalla activa">
+    <header class="titulo">
+      <h1>LA ROSCA</h1>
+      <p class="subtitulo">Crónicas de un mandato</p>
+      <p class="bajada">Cuatro años. Un país. Dos opciones por vez.</p>
+    </header>
+
+    <div class="bloque">
+      <h2 class="bloque-tit">Elegí tu gabinete</h2>
+      <div id="lista-gabinetes" class="gabinetes"></div>
+    </div>
+
+    <div class="bloque">
+      <label class="campo">
+        <span>Semilla</span>
+        <div class="campo-fila">
+          <input id="input-semilla" type="text" autocomplete="off" spellcheck="false" />
+          <button id="btn-semilla" class="btn-chico" type="button" title="Semilla al azar">🎲</button>
+        </div>
+      </label>
+    </div>
+
+    <button id="btn-jugar" class="btn-principal" type="button">Asumir el cargo</button>
+
+    <div class="bloque legado">
+      <h2 class="bloque-tit">Legado</h2>
+      <div id="progreso" class="progreso"></div>
+      <details class="archivo">
+        <summary>Archivo de finales</summary>
+        <div id="lista-finales" class="finales"></div>
+      </details>
+      <button id="btn-borrar" class="btn-texto" type="button">Borrar legado</button>
+    </div>
+
+    <footer class="pie">
+      <p>Todos los personajes son arquetipos. Cualquier parecido con la realidad es culpa de la realidad.</p>
+    </footer>
+  </section>
+
+  <!-- ============ JUEGO ============ -->
+  <section id="pantalla-juego" class="pantalla">
+    <div id="hud" class="hud"></div>
+
+    <div class="calendario">
+      <span id="calendario-texto">Mandato 1 · Año 1 · Mes 1</span>
+      <span id="inflacion-texto" class="inflacion">🔥 30%</span>
+    </div>
+
+    <div class="mesa">
+      <div id="pista-izq" class="pista pista-izq"></div>
+      <div id="pista-der" class="pista pista-der"></div>
+
+      <article id="carta" class="carta" tabindex="0" role="group" aria-live="polite">
+        <div class="carta-retrato">
+          <span id="carta-cara" class="carta-cara">👤</span>
+        </div>
+        <div class="carta-cuerpo">
+          <h3 id="carta-personaje" class="carta-personaje"></h3>
+          <p id="carta-bajada" class="carta-bajada"></p>
+          <p id="carta-texto" class="carta-texto"></p>
+        </div>
+        <div class="carta-respuesta carta-respuesta-izq"><span id="resp-izq"></span></div>
+        <div class="carta-respuesta carta-respuesta-der"><span id="resp-der"></span></div>
+      </article>
+
+      <div id="replica" class="replica" aria-live="polite"></div>
+    </div>
+
+    <div class="botonera">
+      <button id="btn-izq" class="btn-opcion" type="button"><span class="flecha">←</span><span id="btn-izq-txt"></span></button>
+      <button id="btn-der" class="btn-opcion" type="button"><span id="btn-der-txt"></span><span class="flecha">→</span></button>
+    </div>
+
+    <p class="ayuda">Arrastrá la carta, usá las flechas ← → o tocá los botones.</p>
+    <button id="btn-abandonar" class="btn-texto" type="button">Renunciar</button>
+  </section>
+
+  <!-- ============ DECRETO ============ -->
+  <section id="pantalla-decreto" class="pantalla">
+    <header class="titulo chico">
+      <h2>Decreto de Necesidad y Urgencia</h2>
+      <p class="bajada">Elegí uno. Te acompaña hasta el final del mandato.</p>
+    </header>
+    <div id="lista-decretos" class="decretos"></div>
+  </section>
+
+  <!-- ============ FINAL ============ -->
+  <section id="pantalla-final" class="pantalla">
+    <div class="final-caja">
+      <p id="final-tipo" class="final-tipo"></p>
+      <h2 id="final-titulo" class="final-titulo"></h2>
+      <p id="final-epigrafe" class="final-epigrafe"></p>
+      <p id="final-texto" class="final-texto"></p>
+      <div id="final-resumen" class="final-resumen"></div>
+      <div class="final-botones">
+        <button id="btn-continuar" class="btn-principal" type="button">Seguir gobernando</button>
+        <button id="btn-revancha" class="btn-principal" type="button">Otra corrida</button>
+        <button id="btn-menu" class="btn-texto" type="button">Volver al menú</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

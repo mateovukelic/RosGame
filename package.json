@@ -1,0 +1,13 @@
+{
+  "name": "la-rosca",
+  "version": "0.1.0",
+  "description": "LA ROSCA — juego de gestión política con toques roguelike, bien criollo. Inspirado en Reigns.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "start": "python3 -m http.server 8080",
+    "validar": "node tools/validar-mazo.js"
+  },
+  "license": "MIT"
+}
