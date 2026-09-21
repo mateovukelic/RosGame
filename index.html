@@ -52,6 +52,21 @@
     </footer>
   </section>
 
+  <!-- ============ PRÓLOGO ============ -->
+  <section id="pantalla-prologo" class="pantalla">
+    <div class="prologo-caja">
+      <p id="prologo-fecha" class="prologo-fecha"></p>
+      <h2 id="prologo-titulo" class="prologo-titulo"></h2>
+      <p id="prologo-texto" class="prologo-texto"></p>
+
+      <h3 class="bloque-tit">Objetivos del mandato</h3>
+      <div id="prologo-objetivos" class="objetivos-lista"></div>
+
+      <button id="btn-empezar" class="btn-principal" type="button">Jurar el cargo</button>
+      <button id="btn-volver-menu" class="btn-texto" type="button">Elegir otro gabinete</button>
+    </div>
+  </section>
+
   <!-- ============ JUEGO ============ -->
   <section id="pantalla-juego" class="pantalla">
     <div id="hud" class="hud"></div>
@@ -61,7 +76,10 @@
       <span class="inflacion-caja"><span id="inflacion-texto" class="inflacion">🔥 30%</span><span id="inflacion-flecha" class="inflacion-flecha"></span></span>
     </div>
 
+    <button id="objetivos" class="objetivos" type="button" aria-expanded="false"></button>
+
     <div class="mesa">
+      <div id="aviso" class="aviso" aria-live="polite"></div>
       <div id="pista-izq" class="pista pista-izq"></div>
       <div id="pista-der" class="pista pista-der"></div>
 
@@ -104,6 +122,13 @@
       <h2 id="final-titulo" class="final-titulo"></h2>
       <p id="final-epigrafe" class="final-epigrafe"></p>
       <p id="final-texto" class="final-texto"></p>
+
+      <h3 class="bloque-tit">Lo que se va a recordar</h3>
+      <div id="final-cronica" class="cronica"></div>
+
+      <h3 class="bloque-tit">Objetivos</h3>
+      <div id="final-objetivos" class="objetivos-lista"></div>
+
       <div id="final-resumen" class="final-resumen"></div>
       <div class="final-botones">
         <button id="btn-continuar" class="btn-principal" type="button">Seguir gobernando</button>

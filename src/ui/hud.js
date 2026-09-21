@@ -1,9 +1,15 @@
 import { STATS, META_STATS, META_INFLACION } from '../engine/constantes.js';
 import { crear, $ } from './dom.js';
 
+// Medio ancho de la banda, en puntos de barra. No es la magnitud real: es la
+// categoría, para no filtrar el número exacto junto con el tamaño.
+const ANCHO_PISTA = { leve: 3, medio: 7, fuerte: 13 };
+const PUNTOS = { leve: '·', medio: '··', fuerte: '···' };
+
 export class Hud {
   constructor(contenedor) {
     this.contenedor = contenedor;
+    this.valores = {};
     this.medidores = {};
     for (const stat of STATS) {
       const meta = META_STATS[stat];
@@ -22,6 +28,7 @@ export class Hud {
   }
 
   pintar(valores) {
+    this.valores = valores;
     for (const stat of STATS) {
       const valor = valores[stat];
       const { raiz, relleno } = this.medidores[stat];
@@ -64,19 +71,25 @@ export class Hud {
   }
 
   /**
-   * Muestra sobre las barras a dónde iría cada medidor si se elige esta opción.
-   * @param {Array}  impactos  lo que devuelve Juego.previsualizar(lado)
-   * @param {number} fuerza    0..1 — qué tan cerca está el arrastre del umbral
+   * Pinta la pista de impacto mientras se arrastra la carta.
+   *
+   * Muestra QUÉ facción se toca y CUÁNTO, nunca hacia dónde: la banda se
+   * extiende hacia los dos lados desde el valor actual, así que se lee como
+   * "acá va a haber movimiento de este tamaño". Para saber si es para arriba
+   * o para abajo hay que leer lo que dice el personaje.
+   *
+   * @param {Array}  pistas  lo que devuelve Juego.pistaDeImpacto(lado)
+   * @param {number} avance  0..1 — qué tan cerca está el arrastre del umbral
    */
-  previsualizar(impactos, fuerza = 1) {
-    const porClave = new Map((impactos || []).map((i) => [i.clave, i]));
+  previsualizar(pistas, avance = 1) {
+    const porClave = new Map((pistas || []).map((p) => [p.clave, p]));
 
     for (const stat of STATS) {
       const { raiz, fantasma, delta } = this.medidores[stat];
-      const impacto = porClave.get(stat);
+      const pista = porClave.get(stat);
 
-      raiz.classList.remove('sube', 'baja', 'alerta');
-      if (!impacto || fuerza <= 0) {
+      raiz.classList.remove('toca', 'leve', 'medio', 'fuerte');
+      if (!pista || avance <= 0) {
         fantasma.style.opacity = '0';
         fantasma.style.width = '0%';
         if (delta.dataset.modo === 'previo') {
@@ -87,25 +100,20 @@ export class Hud {
         continue;
       }
 
-      const desde = Math.min(impacto.actual, impacto.proyectado);
-      const hasta = Math.max(impacto.actual, impacto.proyectado);
-      fantasma.style.left = `${desde}%`;
-      // Un cambio de 3 puntos son 3px de barra: sin un mínimo no se ve nada.
-      fantasma.style.width = `${Math.max(2, hasta - desde)}%`;
-      fantasma.style.opacity = String(0.35 + 0.65 * fuerza);
-      raiz.classList.add(impacto.delta > 0 ? 'sube' : 'baja');
-      if (impacto.letal) raiz.classList.add('alerta');
+      const valor = this.valores[stat] ?? 50;
+      const radio = ANCHO_PISTA[pista.fuerza];
+      fantasma.style.left = `${Math.max(0, valor - radio)}%`;
+      fantasma.style.width = `${Math.min(100, valor + radio) - Math.max(0, valor - radio)}%`;
+      fantasma.style.opacity = String(0.3 + 0.7 * avance);
+      raiz.classList.add('toca', pista.fuerza);
 
-      // La flecha dice la dirección aunque el fantasma sea de dos píxeles.
-      // El signo de interrogación marca los efectos que son un rango.
       delta.dataset.modo = 'previo';
-      delta.textContent = (impacto.delta > 0 ? '▲' : '▼') + (impacto.incierto ? '?' : '');
-      delta.className = `medidor-delta previo ${impacto.delta > 0 ? 'sube' : 'baja'}`;
-      delta.style.opacity = String(0.45 + 0.55 * fuerza);
+      delta.textContent = PUNTOS[pista.fuerza] + (pista.incierto ? '?' : '');
+      delta.className = `medidor-delta previo ${pista.fuerza}`;
+      delta.style.opacity = String(0.45 + 0.55 * avance);
     }
 
-    const inflacion = porClave.get('inflacion');
-    pintarFlechaInflacion(inflacion, fuerza);
+    pintarPistaInflacion(porClave.get('inflacion'), avance);
   }
 
   limpiarPrevisualizacion() {
@@ -113,17 +121,17 @@ export class Hud {
   }
 }
 
-function pintarFlechaInflacion(impacto, fuerza) {
+function pintarPistaInflacion(pista, avance) {
   const nodo = $('#inflacion-flecha');
   if (!nodo) return;
-  if (!impacto || fuerza <= 0) {
+  if (!pista || avance <= 0) {
     nodo.textContent = '';
     nodo.className = 'inflacion-flecha';
     return;
   }
-  nodo.textContent = impacto.delta > 0 ? '▲' : '▼';
-  nodo.className = `inflacion-flecha ${impacto.delta > 0 ? 'sube' : 'baja'}`;
-  nodo.style.opacity = String(0.4 + 0.6 * fuerza);
+  nodo.textContent = PUNTOS[pista.fuerza] + (pista.incierto ? '?' : '');
+  nodo.className = `inflacion-flecha ${pista.fuerza}`;
+  nodo.style.opacity = String(0.4 + 0.6 * avance);
 }
 
 export function pintarInflacion(valor) {

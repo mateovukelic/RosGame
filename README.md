@@ -21,10 +21,10 @@ python3 -m http.server 8080
 
 Abrí `http://localhost:8080` y asumí el cargo.
 
-**Controles:** arrastrá la carta hacia un lado y las barras te muestran a dónde
-iría cada medidor si soltás ahí; soltá pasando el umbral para confirmar, o volvé
-al centro para cancelar. También andan `←` / `→` y los botones (apuntarlos con el
-mouse o con el tab previsualiza igual).
+**Controles:** arrastrá la carta hacia un lado y las barras te muestran **qué
+facciones toca esa opción y con cuánta fuerza** — nunca en qué dirección. Soltá
+pasando el umbral para confirmar, o volvé al centro para cancelar. También andan
+`←` / `→` y los botones (apuntarlos con el mouse o con el tab da la misma pista).
 
 También hay una galería de retratos en `http://localhost:8080/galeria.html`, que
 sirve para revisar los personajes y probar combinaciones de partes al azar.
@@ -84,7 +84,7 @@ El archivo del menú los va revelando.
 ## Desarrollo
 
 ```bash
-npm test        # 55 tests: motor, mazo, retratos, legado y balance
+npm test        # 72 tests: motor, mazo, objetivos, retratos, legado y balance
 npm run validar # reporte de salud del mazo + 1000 corridas simuladas
 npm run demo    # arma dist/demo.html, la versión de una sola página
 ```
@@ -100,13 +100,14 @@ src/
     mazo.js         # qué carta sale cada mes
     efectos.js      # efectos, condiciones, emisión
     finales.js      # evaluación de finales
+    objetivos.js    # sorteo y resolución de los objetivos del mandato
     legado.js       # progresión entre corridas
     simulador.js    # IA de prueba para balancear
     rng.js          # random determinístico por semilla
     constantes.js   # ⚙️ todo el balance en un solo lugar
   data/             # contenido
     cartas/         # base · economia · calle · rosca · folklore · crisis
-    personajes.js decretos.js gabinetes.js finales.js
+    personajes.js decretos.js gabinetes.js finales.js objetivos.js
   ui/               # presentación (DOM)
     retratos.js     # retratos SVG paramétricos (puro: se testea en Node)
     carta.js hud.js dom.js
@@ -145,18 +146,35 @@ Metela en el paquete que corresponda dentro de `src/data/cartas/`:
 respuestas entren en la carta, que las magnitudes sean razonables, y que **ninguna
 carta requiera una flag que nadie pone nunca**.
 
-### La previsualización de impacto
+### La pista de impacto (y por qué no dice la dirección)
 
-Mientras arrastrás, `Juego.previsualizar(lado)` devuelve, por cada medidor que se
-mueve, la dirección, la magnitud estimada **ya pasada por tus decretos activos**,
-el valor proyectado y si esa opción te deja en zona de final. El HUD lo pinta como
-un segmento fantasma sobre la barra más una flecha ▲/▼; en dorado y parpadeando si
-esa elección termina la partida.
+Al arrastrar, `Juego.pistaDeImpacto(lado)` devuelve, por cada medidor que se mueve,
+sólo tres cosas: **qué facción**, **qué tan fuerte** (`leve` / `medio` / `fuerte`)
+y si el efecto es un rango. Nada más. El HUD lo pinta como una banda centrada en el
+valor actual que se extiende **hacia los dos lados**, más `·` / `··` / `···`.
 
-A propósito **no muestra números**: se ve la dirección y el tamaño relativo, no el
-`-8`. Con los números exactos la partida se vuelve una cuenta y se pierde la
-tensión que hace funcionar a Reigns. Los efectos que son un rango se marcan con
-`▲?`, porque ahí ni el juego sabe cuánto va a salir.
+Sin dirección a propósito, y es la regla más importante del juego: si las barras te
+dijeran si sube o baja, se podría jugar sin leer una sola carta, mirando sólo los
+medidores. El texto pasaría a ser decoración. Así, la pista te dice *dónde mirar* y
+el personaje te dice *qué va a pasar* — y hay que juntar las dos cosas.
+
+Hay un `Juego.previsualizar(lado)` que sí devuelve dirección, magnitud y valor
+proyectado, pero es de uso interno (tests, balance, un eventual modo asistido): la
+interfaz de juego nunca lo llama. Un test verifica que subir 9 y bajar 9 produzcan
+pistas byte por byte idénticas, así que el día que alguien filtre el signo, falla.
+
+### Objetivos, prólogo y crónica
+
+Cada mandato sortea **dos objetivos**: uno de plazo corto y uno largo. Se muestran
+en el prólogo, viven en una tira arriba de la carta (se toca para ver el detalle) y
+se resuelven solos al vencer. Cumplirlos paga; algunos regalan una elección de
+decreto fuera de horario. Unos pocos castigan si se pierden — la mayoría no, porque
+no cobrar el premio ya es costo suficiente.
+
+El **prólogo** es la escena de apertura, distinta por gabinete, y los mandatos
+siguientes tienen la suya. Al terminar, la **crónica** rescata las tres decisiones
+que más movieron el país: un mandato son cuarenta y ocho elecciones, y sólo unas
+pocas se recuerdan.
 
 ### Agregar un personaje
 
@@ -213,9 +231,10 @@ en vez de mantenerse a mano, para que no se desincronice.
 
 ## Estado
 
-Vertical slice jugable y completa: 116 cartas, 16 decretos, 6 gabinetes, 14 finales,
-25 personajes con retrato propio.
+Vertical slice jugable y completa: 116 cartas, 16 decretos, 14 objetivos,
+6 gabinetes, 14 finales, 25 personajes con retrato propio.
 
-**Lo próximo, en orden:** sonido · más cadenas largas · eventos de elecciones de
-medio término · expresión del retrato según el estado del país · modo "provincia".
+**Lo próximo, en orden:** sonido · un hilo narrativo que cruce corridas (que lo que
+hiciste en el mandato anterior aparezca en el siguiente) · más cadenas largas ·
+expresión del retrato según el estado del país · modo "provincia".
 

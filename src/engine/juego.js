@@ -10,6 +10,8 @@ import { TODAS_LAS_CARTAS } from '../data/cartas/index.js';
 import { DECRETOS } from '../data/decretos.js';
 import { GABINETES, gabinetePorId } from '../data/gabinetes.js';
 import { FINALES } from '../data/finales.js';
+import { OBJETIVOS } from '../data/objetivos.js';
+import { asignarObjetivos, evaluarObjetivos, ESTADO_OBJETIVO } from './objetivos.js';
 
 export class Juego {
   constructor(opciones = {}) {
@@ -19,6 +21,7 @@ export class Juego {
       cartas = TODAS_LAS_CARTAS,
       decretos = DECRETOS,
       finales = FINALES,
+      objetivos = OBJETIVOS,
       cartasDesbloqueadas = null
     } = opciones;
 
@@ -26,6 +29,7 @@ export class Juego {
     this.rng = crearRng(this.semilla);
     this.catalogoDecretos = decretos;
     this.catalogoFinales = finales;
+    this.catalogoObjetivos = objetivos;
     this.gabinete = gabinetePorId(gabinete) || GABINETES[0];
 
     this.mazo = new Mazo(cartas, this.rng, { desbloqueadas: cartasDesbloqueadas });
@@ -43,6 +47,7 @@ export class Juego {
         .map((id) => decretos.find((d) => d.id === id))
         .filter(Boolean),
       fase: FASES.CARTA,
+      objetivos: [],
       carta: null,
       ultimo: null,
       final: null,
@@ -54,6 +59,7 @@ export class Juego {
       (decreto.pone || []).forEach((f) => this.estado.flags.add(f));
     }
 
+    this.estado.objetivos = asignarObjetivos(this.rng, this.catalogoObjetivos);
     this.mazo.encolar('asuncion');
     this.estado.carta = this.mazo.robar(this.estado);
   }
@@ -80,6 +86,25 @@ export class Juego {
     return { anio, mesDelAnio };
   }
 
+  /**
+   * Lo ÚNICO que ve el jugador al arrastrar: qué facción se toca y cuán fuerte.
+   * Deliberadamente sin signo. Si la interfaz supiera la dirección, se podría
+   * jugar mirando las barras en vez de leyendo la carta, y el texto —que es
+   * la mitad del juego— pasaría a ser decoración.
+   */
+  pistaDeImpacto(lado) {
+    return this.previsualizar(lado).map(({ clave, delta, incierto }) => {
+      const magnitud = Math.abs(delta);
+      return {
+        clave,
+        incierto,
+        fuerza: magnitud >= BALANCE.impactoFuerte ? 'fuerte' : magnitud >= BALANCE.impactoMedio ? 'medio' : 'leve'
+      };
+    });
+  }
+
+  // Proyección completa, CON dirección. Es de uso interno (tests, balance y un
+  // eventual modo asistido): la interfaz de juego no la consume.
   // Impacto estimado de una opción: qué medidor se mueve, en qué dirección,
   // cuánto (aproximado, ya modulado por los decretos activos) y si además
   // deja el país en zona de final. Se usa para el arrastre de la carta.
@@ -147,6 +172,9 @@ export class Juego {
     const eventosMes = this.tickMensual();
     resultado.eventos.push(...eventosMes);
 
+    // --- objetivos del mandato ---
+    resultado.objetivos = this.resolverObjetivos();
+
     // --- fin de mandato ---
     if (this.estado.mes > BALANCE.mesesPorMandato) {
       this.estado.mandato += 1;
@@ -179,6 +207,28 @@ export class Juego {
     resultado.siguiente = this.estado.carta;
     this.estado.ultimo = resultado;
     return resultado;
+  }
+
+  // ---------- Objetivos ----------
+  resolverObjetivos() {
+    const novedades = evaluarObjetivos(this.estado);
+    let decretoExtra = false;
+
+    for (const objetivo of novedades) {
+      const premio =
+        objetivo.resultado === ESTADO_OBJETIVO.CUMPLIDO ? objetivo.premio : objetivo.castigo;
+      if (!premio) continue;
+      if (premio.decretoExtra) decretoExtra = true;
+      const deltas = calcularEfectos(premio, [], this.rng);
+      aplicarDeltas(this.estado, deltas);
+    }
+
+    if (decretoExtra) this.estado.decretoPendiente = true;
+    return novedades;
+  }
+
+  objetivosActivos() {
+    return this.estado.objetivos.filter((o) => o.resultado === ESTADO_OBJETIVO.ACTIVO);
   }
 
   // ---------- Paso mensual: inflación y decretos ----------
@@ -242,6 +292,7 @@ export class Juego {
 
   // ---------- Decretos ----------
   tocaDecreto() {
+    if (this.estado.decretoPendiente) return true;
     return this.estado.mes > 1 && (this.estado.mes - 1) % BALANCE.mesesPorDecreto === 0;
   }
 
@@ -261,6 +312,7 @@ export class Juego {
     this.estado.decretos.push(decreto);
     (decreto.pone || []).forEach((f) => this.estado.flags.add(f));
     this.estado.ofertaDecretos = [];
+    this.estado.decretoPendiente = false;
     this.estado.fase = FASES.CARTA;
     this.estado.carta = this.mazo.robar(this.estado);
     return decreto;
@@ -282,6 +334,7 @@ export class Juego {
     // Cada mandato nuevo arranca más caliente: el país no se resetea.
     this.estado.inflacion = limitar(this.estado.inflacion + 6, 0, BALANCE.inflacionMax);
     this.estado.flags.add(`mandato_${this.estado.mandato}`);
+    this.estado.objetivos = asignarObjetivos(this.rng, this.catalogoObjetivos);
     this.estado.carta = this.mazo.robar(this.estado);
     return this.estado.carta;
   }
@@ -299,7 +352,37 @@ export class Juego {
       flags: [...this.estado.flags],
       final: this.estado.final?.id ?? null,
       tipoFinal: this.estado.final?.tipo ?? null,
-      decisiones: this.estado.historia.length
+      decisiones: this.estado.historia.length,
+      objetivos: this.estado.objetivos.map((o) => ({ id: o.id, titulo: o.titulo, resultado: o.resultado })),
+      objetivosCumplidos: this.estado.objetivos.filter((o) => o.resultado === ESTADO_OBJETIVO.CUMPLIDO).length,
+      cronica: this.cronica()
     };
+  }
+
+  /**
+   * Las tres decisiones que más movieron el país, para contar el mandato al
+   * final. Un mandato son cuarenta y ocho elecciones; sólo unas pocas se
+   * recuerdan.
+   */
+  cronica(cuantas = 3) {
+    const peso = (h) =>
+      Object.entries(h.deltas)
+        .filter(([k]) => k !== 'emision')
+        .reduce((total, [, v]) => total + Math.abs(v || 0), 0);
+
+    return this.estado.historia
+      .map((h) => ({ ...h, peso: peso(h) }))
+      .sort((a, b) => b.peso - a.peso)
+      .slice(0, cuantas)
+      .sort((a, b) => a.mandato - b.mandato || a.mes - b.mes)
+      .map((h) => {
+        const carta = this.mazo.carta(h.carta);
+        return {
+          mes: h.mes,
+          mandato: h.mandato,
+          personaje: carta?.personaje ?? null,
+          eleccion: carta?.[h.lado]?.texto ?? '—'
+        };
+      });
   }
 }

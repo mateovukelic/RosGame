@@ -59,6 +59,12 @@ export const BALANCE = {
   dolorInflacionPueblo: 0.14,
   dolorInflacionCaja: 0.08,
 
+  // Cortes para clasificar el impacto de una opción en leve / medio / fuerte.
+  // El jugador ve la fuerza, nunca el signo: para saber si sube o baja hay que
+  // leer la carta.
+  impactoMedio: 5,
+  impactoFuerte: 10,
+
   // Cuántas cartas recientes no se pueden repetir (anti-loop)
   memoriaAntiRepeticion: 14,
 

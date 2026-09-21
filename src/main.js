@@ -5,6 +5,7 @@ import { Legado } from './engine/legado.js';
 import { FASES, BALANCE } from './engine/constantes.js';
 import { semillaAlAzar } from './engine/rng.js';
 import { personaje } from './data/personajes.js';
+import { ESTADO_OBJETIVO } from './engine/objetivos.js';
 import { retratoSvg } from './ui/retratos.js';
 import { FINALES } from './data/finales.js';
 import { $, crear, mostrarPantalla } from './ui/dom.js';
@@ -84,6 +85,46 @@ function pintarMenu() {
   );
 }
 
+// ---------------------------------------------------------------- PRÓLOGO
+const MARCA = { cumplido: '✓', fallido: '✕', activo: '◦' };
+
+function fichaObjetivo(objetivo, { conDesc = true } = {}) {
+  return crear('div', { clase: `objetivo ${objetivo.resultado || 'activo'}` }, [
+    crear('span', { clase: 'objetivo-marca', texto: MARCA[objetivo.resultado || 'activo'] }),
+    crear('div', { clase: 'objetivo-cuerpo' }, [
+      crear('div', { clase: 'objetivo-tit', texto: objetivo.titulo }),
+      conDesc ? crear('div', { clase: 'objetivo-desc', texto: objetivo.desc }) : null
+    ]),
+    crear('span', { clase: 'objetivo-plazo', texto: `mes ${objetivo.vence}` })
+  ]);
+}
+
+// Los mandatos siguientes no repiten el prólogo del gabinete: ya no sos el que
+// asumió, sos el que sobrevivió.
+const PROLOGOS_REELECCION = [
+  {
+    titulo: 'Otra vez',
+    texto:
+      'Ganaste. Por poco, con la mitad del país en contra y la otra mitad bancándote por cansancio, pero ganaste.\n\nEsta vez nadie te va a explicar cómo funciona: ya sabés. El problema es que ellos también saben cómo funcionás vos.'
+  },
+  {
+    titulo: 'El tercero',
+    texto:
+      'Tres mandatos. A esta altura sos parte del paisaje: hay gente que votó por primera vez y no conoce otro presidente.\n\nEso que sentís no es poder. Es que ya no queda nadie para echarte la culpa.'
+  }
+];
+
+function mostrarPrologo() {
+  const g = juego.gabinete;
+  const reeleccion = PROLOGOS_REELECCION[juego.estado.mandato - 2];
+
+  $('#prologo-fecha').textContent = `Mandato ${juego.estado.mandato} · ${g.nombre}`;
+  $('#prologo-titulo').textContent = reeleccion ? reeleccion.titulo : 'El primer día';
+  $('#prologo-texto').textContent = reeleccion ? reeleccion.texto : g.prologo || '';
+  $('#prologo-objetivos').replaceChildren(...juego.estado.objetivos.map((o) => fichaObjetivo(o)));
+  mostrarPantalla('pantalla-prologo');
+}
+
 // ---------------------------------------------------------------- JUEGO
 function empezar(semilla, gabinete) {
   juego = new Juego({ semilla, gabinete });
@@ -94,6 +135,10 @@ function empezar(semilla, gabinete) {
       alMover: (lado, fuerza) => previsualizar(lado, fuerza)
     });
   }
+  mostrarPrologo();
+}
+
+function entrarALaCancha() {
   mostrarPantalla('pantalla-juego');
   pintarEstado();
   pintarCarta(juego.carta);
@@ -107,6 +152,23 @@ function pintarEstado() {
   const { anio, mesDelAnio } = juego.anioMes();
   $('#calendario-texto').textContent =
     `Mandato ${juego.estado.mandato} · Año ${anio} · Mes ${mesDelAnio}`;
+  pintarObjetivos();
+}
+
+function pintarObjetivos() {
+  const activos = juego.objetivosActivos();
+  $('#objetivos').replaceChildren(...activos.map((o) => fichaObjetivo(o)));
+}
+
+// Aviso breve cuando un objetivo se resuelve.
+let relojAviso = null;
+function mostrarAviso(objetivo) {
+  const nodo = $('#aviso');
+  const cumplido = objetivo.resultado === ESTADO_OBJETIVO.CUMPLIDO;
+  nodo.textContent = `${cumplido ? '✓ Objetivo cumplido' : '✕ Objetivo perdido'} — ${objetivo.titulo}`;
+  nodo.className = `aviso visible ${objetivo.resultado}`;
+  clearTimeout(relojAviso);
+  relojAviso = setTimeout(() => nodo.classList.remove('visible'), 2600);
 }
 
 function pintarCarta(c) {
@@ -131,8 +193,9 @@ function pintarCarta(c) {
 function previsualizar(lado, fuerza = 1) {
   if (!juego || juego.estado.fase !== FASES.CARTA) return;
 
-  const impactos = lado ? juego.previsualizar(lado) : [];
-  hud.previsualizar(impactos, lado ? fuerza : 0);
+  // Sólo la pista sin dirección: la interfaz no llega a saber el signo.
+  const pistas = lado ? juego.pistaDeImpacto(lado) : [];
+  hud.previsualizar(pistas, lado ? fuerza : 0);
 
   for (const [id, clave] of [['#pista-izq', 'izq'], ['#pista-der', 'der']]) {
     const nodo = $(id);
@@ -141,7 +204,7 @@ function previsualizar(lado, fuerza = 1) {
       nodo.replaceChildren();
       continue;
     }
-    nodo.replaceChildren(...hud.pistas(impactos).map((icono) => crear('span', { texto: icono })));
+    nodo.replaceChildren(...hud.pistas(pistas).map((icono) => crear('span', { texto: icono })));
     nodo.classList.add('visible');
   }
 }
@@ -159,7 +222,12 @@ function resolver(lado) {
     nodo.classList.add('visible');
   }
 
-  const espera = resultado.replica ? 1500 : 620;
+  // Si se resolvió un objetivo, el aviso se lleva el turno: es información que
+  // el jugador tiene que registrar antes de la carta siguiente.
+  const novedad = resultado.objetivos?.[0];
+  if (novedad) mostrarAviso(novedad);
+
+  const espera = novedad ? 2200 : resultado.replica ? 1500 : 620;
 
   setTimeout(() => {
     if (juego.estado.fase === FASES.FINAL) return mostrarFinal();
@@ -215,10 +283,30 @@ function mostrarFinal() {
   $('#final-epigrafe').textContent = final.epigrafe;
   $('#final-texto').textContent = final.texto;
 
+  $('#final-cronica').replaceChildren(
+    ...resumen.cronica.map((c) => {
+      const p = personaje(c.personaje);
+      return crear('div', { clase: 'cronica-item' }, [
+        crear('div', {
+          clase: 'cronica-retrato',
+          html: retratoSvg(p.retrato, { fondo: p.color, uid: `cr${c.mandato}-${c.mes}` })
+        }),
+        crear('div', { clase: 'cronica-texto' }, [
+          crear('span', { clase: 'cronica-mes', texto: `Mandato ${c.mandato} · Mes ${c.mes}` }),
+          crear('span', { html: `${p.nombre} — <b>«${c.eleccion}»</b>` })
+        ])
+      ]);
+    })
+  );
+
+  $('#final-objetivos').replaceChildren(
+    ...juego.estado.objetivos.map((o) => fichaObjetivo(o, { conDesc: false }))
+  );
+
   $('#final-resumen').replaceChildren(
     ...[
       ['Meses', resumen.mesesTotales],
-      ['Decisiones', resumen.decisiones],
+      ['Objetivos', `${resumen.objetivosCumplidos}/${resumen.objetivos.length}`],
       ['Decretos', resumen.decretos.length],
       ['Semilla', resumen.semilla]
     ].map(([nombre, valor]) =>
@@ -277,6 +365,18 @@ function cablear() {
     empezar(semilla, gabineteElegido);
   });
 
+  $('#btn-empezar').addEventListener('click', entrarALaCancha);
+  $('#btn-volver-menu').addEventListener('click', () => {
+    mostrarPantalla('pantalla-menu');
+    pintarMenu();
+  });
+
+  // La tira de objetivos se toca para ver de qué se trata cada uno.
+  $('#objetivos').addEventListener('click', (e) => {
+    const tira = e.currentTarget;
+    tira.setAttribute('aria-expanded', tira.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');
+  });
+
   for (const [selector, lado] of [['#btn-izq', 'izq'], ['#btn-der', 'der']]) {
     const boton = $(selector);
     boton.addEventListener('click', () => carta.confirmar(lado));
@@ -294,10 +394,8 @@ function cablear() {
 
   $('#btn-continuar').addEventListener('click', () => {
     juego.continuarMandato();
-    mostrarPantalla('pantalla-juego');
-    pintarEstado();
-    pintarCarta(juego.carta);
-    carta.reponer();
+    // Mandato nuevo, objetivos nuevos: se vuelve a pasar por el prólogo.
+    mostrarPrologo();
   });
 
   $('#btn-revancha').addEventListener('click', () => {

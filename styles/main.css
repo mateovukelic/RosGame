@@ -160,12 +160,13 @@ input[type="text"]:focus { outline: none; border-color: var(--celeste); }
   border-radius: 4px; background: var(--tinta-suave);
   transition: left .12s ease, width .12s ease, opacity .12s ease, background .12s;
 }
-.medidor.sube .medidor-fantasma { background: var(--verde); }
-.medidor.baja .medidor-fantasma { background: var(--rojo); }
-.medidor.alerta .medidor-fantasma { background: var(--dorado); animation: parpadeo .7s infinite; }
-.medidor.sube .medidor-icono, .medidor.baja .medidor-icono { transform: scale(1.18); filter: grayscale(0); }
-.medidor.alerta .medidor-nombre { color: var(--dorado); }
-@keyframes parpadeo { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+/* Un solo color para la banda: si fuera verde o roja diría la dirección,
+   y la gracia es que la dirección haya que leerla. */
+.medidor.toca .medidor-fantasma { background: var(--papel); }
+.medidor.fuerte .medidor-fantasma { background: var(--dorado); animation: parpadeo .8s infinite; }
+.medidor.toca .medidor-icono { transform: scale(1.14); filter: grayscale(0); }
+.medidor.fuerte .medidor-nombre { color: var(--dorado); }
+@keyframes parpadeo { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
 .medidor-nombre { font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--tinta-suave); margin-top: 5px; }
 .medidor-delta {
   font-size: 11px; font-weight: 700; height: 13px; font-variant-numeric: tabular-nums;
@@ -173,8 +174,8 @@ input[type="text"]:focus { outline: none; border-color: var(--celeste); }
 }
 .medidor-delta.sube { color: var(--verde); opacity: 1; }
 .medidor-delta.baja { color: var(--rojo); opacity: 1; }
-.medidor-delta.previo { font-size: 9px; letter-spacing: .06em; }
-.medidor.alerta .medidor-delta.previo { color: var(--dorado); }
+.medidor-delta.previo { font-size: 13px; line-height: 13px; letter-spacing: .12em; opacity: 1; color: var(--papel); }
+.medidor-delta.previo.fuerte { color: var(--dorado); }
 
 .calendario {
   display: flex; justify-content: space-between; align-items: center;
@@ -183,9 +184,10 @@ input[type="text"]:focus { outline: none; border-color: var(--celeste); }
 }
 .inflacion-caja { display: inline-flex; align-items: center; gap: 5px; }
 .inflacion { color: var(--dorado); font-variant-numeric: tabular-nums; letter-spacing: .05em; }
-.inflacion-flecha { font-size: 10px; opacity: 0; transition: opacity .12s; width: 9px; }
-.inflacion-flecha.sube { color: var(--rojo); }   /* más inflación siempre es peor */
-.inflacion-flecha.baja { color: var(--verde); }
+.inflacion-flecha { font-size: 12px; opacity: 0; transition: opacity .12s; min-width: 14px; }
+.inflacion-flecha { letter-spacing: .12em; }
+.inflacion-flecha.leve, .inflacion-flecha.medio { color: var(--papel); }
+.inflacion-flecha.fuerte { color: var(--dorado); }
 .inflacion.alta { color: var(--rojo); animation: latir 1.4s infinite; }
 @keyframes latir { 0%,100% { opacity: 1; } 50% { opacity: .55; } }
 
@@ -292,3 +294,81 @@ input[type="text"]:focus { outline: none; border-color: var(--celeste); }
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition-duration: .01ms !important; }
 }
+
+
+/* ---------- Prólogo ---------- */
+.prologo-caja { margin: auto 0; animation: entrar .45s ease both; }
+.prologo-fecha {
+  font-size: 11px; letter-spacing: .26em; text-transform: uppercase;
+  color: var(--celeste); margin: 0 0 8px;
+}
+.prologo-titulo {
+  font-family: var(--fuente-tit); font-size: clamp(26px, 8vw, 34px);
+  margin: 0 0 18px; letter-spacing: .03em; text-wrap: balance;
+}
+.prologo-texto {
+  font-size: 15.5px; line-height: 1.7; color: #bdb8a9;
+  white-space: pre-line; margin: 0 0 26px; max-width: 46ch;
+}
+.prologo-caja .bloque-tit { margin-top: 24px; }
+.prologo-caja .btn-principal { margin-top: 22px; }
+
+/* ---------- Objetivos ---------- */
+.objetivos-lista { display: grid; gap: 8px; }
+.objetivo {
+  display: flex; gap: 10px; align-items: baseline;
+  background: var(--fondo-2); border: 1px solid var(--borde);
+  border-left-width: 3px; border-radius: 10px; padding: 11px 13px; text-align: left;
+}
+.objetivo.cumplido { border-left-color: var(--verde); }
+.objetivo.fallido { border-left-color: var(--rojo); opacity: .6; }
+.objetivo.activo { border-left-color: var(--dorado); }
+.objetivo-cuerpo { flex: 1; }
+.objetivo-tit { font-weight: 700; font-size: 14px; }
+.objetivo-desc { font-size: 12.5px; color: #a6a294; margin-top: 4px; line-height: 1.45; }
+.objetivo-plazo {
+  font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--tinta-suave); white-space: nowrap; font-variant-numeric: tabular-nums;
+}
+.objetivo-marca { font-size: 14px; }
+
+/* Tira compacta durante la partida: se toca para ver el detalle */
+.objetivos {
+  display: grid; gap: 5px; width: 100%; text-align: left; cursor: pointer;
+  background: none; border: none; color: inherit; font: inherit; padding: 8px 2px 2px;
+}
+.objetivos:empty { display: none; }
+.objetivos .objetivo { padding: 8px 11px; border-radius: 8px; }
+.objetivos .objetivo-desc { display: none; }
+.objetivos[aria-expanded="true"] .objetivo-desc { display: block; }
+.objetivos .objetivo-tit { font-size: 12.5px; font-weight: 600; }
+
+/* Aviso cuando un objetivo se resuelve */
+.aviso {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 3;
+  text-align: center; font-size: 13px; font-weight: 700; padding: 11px 14px;
+  border-radius: 10px; opacity: 0; transform: translateY(-8px);
+  transition: opacity .3s, transform .3s; pointer-events: none;
+  background: var(--fondo-2); border: 1px solid var(--borde);
+}
+.aviso.visible { opacity: 1; transform: none; }
+.aviso.cumplido { border-color: var(--verde); color: var(--verde); }
+.aviso.fallido { border-color: var(--rojo); color: var(--rojo); }
+
+/* ---------- Crónica del final ---------- */
+.cronica { display: grid; gap: 7px; margin-bottom: 8px; text-align: left; }
+.cronica-item {
+  display: flex; gap: 10px; align-items: center;
+  background: var(--fondo-2); border-radius: 9px; padding: 9px 12px;
+}
+.cronica-retrato {
+  width: 34px; height: 34px; border-radius: 50%; overflow: hidden; flex: none;
+  background: var(--borde);
+}
+.cronica-texto { font-size: 13px; line-height: 1.4; }
+.cronica-texto b { color: var(--papel); }
+.cronica-mes {
+  font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--tinta-suave); display: block; margin-bottom: 2px;
+}
+.final-caja .bloque-tit { margin-top: 20px; text-align: left; }

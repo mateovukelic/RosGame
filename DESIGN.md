@@ -114,29 +114,73 @@ Tocá `constantes.js` y te avisan.
 
 ## Cuánto mostrar antes de elegir
 
-Reigns no te dice nada: arrastrás y ves qué pasó. Eso genera tensión, pero también
-genera muertes que se sienten arbitrarias — perdiste por un medidor que no estabas
-mirando.
+Esta es la decisión de diseño más importante del juego, y la primera versión la
+tuvo mal.
 
-El término medio que usa este juego: mientras arrastrás, cada barra muestra un
-**segmento fantasma** hacia dónde iría, más una flecha de dirección. Dirección y
-tamaño relativo, nunca el número. Tres reglas lo sostienen:
+Reigns no te muestra nada: arrastrás y ves qué pasó. Eso genera tensión, pero
+también genera muertes que se sienten arbitrarias. La primera versión de acá se fue
+al otro extremo: barras verdes y rojas con flechas ▲/▼ diciendo exactamente a dónde
+iba cada medidor. Se podía jugar **sin leer una sola carta**, mirando los colores.
+Las cartas —que son la mitad del juego, el humor, el país entero— quedaban como
+decoración de un minijuego de barritas.
 
-- **La estimación pasa por tus decretos.** Si tenés Cadena Nacional, el golpe al
-  Pueblo que se previsualiza ya viene amortiguado. Mostrar el efecto pelado de la
-  carta sería mentir.
-- **Los rangos se marcan con `?`.** Hay cartas cuyo efecto es `[-30, 35]`. Ahí ni
-  el juego sabe, y el jugador tiene que saber que no sabe.
-- **Lo letal se avisa en dorado.** Si la opción te lleva un medidor a 0 o a 100,
-  la barra parpadea. Esto enseña la regla de que el exceso mata, que es la menos
-  intuitiva del juego y la que más frustra cuando te agarra de sorpresa.
+La regla ahora es: **la pista dice dónde mirar, el personaje dice qué va a pasar.**
 
-La Caja es la excepción: llevarla a 0 no avisa, porque no es un final — se emite.
-Esa asimetría es justamente lo que el jugador tiene que internalizar.
+Al arrastrar se muestra, por cada medidor afectado, sólo la facción y la fuerza
+(`leve` / `medio` / `fuerte`). La banda se dibuja **centrada en el valor actual y
+extendida hacia los dos lados**, porque una banda que creciera hacia donde va el
+medidor revelaría el signo con la sola posición. Dos consecuencias que valen:
 
-Cancelar es parte del diseño: si volvés la carta al centro no pasa nada, así que la
-previsualización se puede consultar gratis. El costo de mirar tiene que ser cero
-para que valga la pena mirar.
+- **Desaparecieron los avisos de "esto te mata".** Eran útiles, pero decirte que
+  una opción es letal cuando estás en 92 de Campo equivale a decirte que sube.
+  Ahora el aviso es la fuerza: una banda dorada significa "esto mueve mucho", y si
+  estás en un borde, el problema es tuyo y de lo que sepas leer.
+- **La fuerza sí pasa por tus decretos.** Si tenés Cadena Nacional, el golpe que se
+  previsualiza ya viene amortiguado. Mentir sobre la magnitud sería gratuito.
+
+En el motor conviven dos métodos y la separación es deliberada: `previsualizar()`
+devuelve la proyección completa con signo, y la usan los tests, el simulador y un
+eventual modo asistido; `pistaDeImpacto()` devuelve sólo `{ clave, fuerza,
+incierto }` y es lo único que la interfaz puede ver. Un test comprueba que subir 9
+y bajar 9 den pistas idénticas y que el objeto no tenga ningún campo con dirección,
+así que el día que alguien filtre el signo por comodidad, el build falla.
+
+Cancelar sigue siendo gratis: volver la carta al centro no hace nada. Mirar tiene
+que salir cero para que valga la pena mirar.
+
+## Historia y objetivos
+
+Reigns tiene un reino que persiste, una maldición de fondo y misiones. Sin nada de
+eso, un roguelike de cartas es un ejercicio de equilibrio: sobrevivís o no, y todas
+las corridas se parecen. Lo que se agregó, en orden de cuánto cambia la partida:
+
+**Los objetivos** son lo que más pesa. Dos por mandato, uno corto y uno largo, para
+que el mandato tenga dos tiempos: algo que te ocupa el primer año y algo que te
+acompaña hasta el final. Le dan a la corrida una intención además de "no morirse",
+y sobre todo le dan forma a las decisiones: la misma carta se elige distinto si
+estás persiguiendo *Domar la bestia* que si perseguís *Sin tutela*.
+
+Tres detalles de balance:
+
+- Algunos objetivos pagan con una **elección de decreto fuera de horario**. Es el
+  premio más fuerte que hay, porque cambia la corrida y no sólo los números.
+- La mayoría **no castiga al fallar**. No cobrar el premio ya es el costo; encima
+  castigar convierte el objetivo en una trampa.
+- Unos pocos tienen `falla()`, que los da por perdidos apenas se vuelven
+  imposibles, en vez de dejarte esperando treinta meses a un veredicto cantado.
+
+**El prólogo** existe para que el gabinete elegido signifique algo antes de la
+primera carta. Un párrafo de escena y los dos objetivos: sirve de apertura y de
+briefing a la vez, que es más barato que dos pantallas.
+
+**La crónica** cierra el círculo. Al terminar, se rescatan las tres decisiones con
+mayor impacto acumulado y se muestran en orden cronológico, con el retrato de quien
+te las trajo. No es una estadística: es que un mandato son cuarenta y ocho
+elecciones y sólo unas pocas se recuerdan. El final ya contaba cómo caíste; la
+crónica cuenta por qué.
+
+Lo que falta para tener de verdad el "reino que persiste" de Reigns: que una corrida
+deje marcas en la siguiente. Hoy el legado sólo desbloquea cosas.
 
 ## Los retratos
 
@@ -185,8 +229,10 @@ respaldo que nada usa es dato muerto que miente en la próxima lectura.
 ## Pendiente
 
 - Sonido: un golpe por carta, algo feo cuando un medidor entra en zona roja.
-- Un modo "a ciegas" que apague la previsualización, para quien quiera el Reigns
-  puro. Hoy la decisión está tomada por el juego, no por el jugador.
+- Un modo "a ciegas" que apague hasta la pista de facción, para quien quiera el
+  Reigns puro.
+- Que una corrida deje marcas en la siguiente: el país que heredás debería
+  acordarse de lo que hizo el anterior, que además eras vos.
 - Retratos que reaccionen: la misma receta con `ceja: 'enojada'` cuando el Pueblo
   está en rojo, o `ojos: 'cansado'` pasados los tres años de mandato.
 - Elecciones de medio término como evento de mes 24 con consecuencias en Rosca.
