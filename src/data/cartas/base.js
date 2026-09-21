@@ -382,7 +382,7 @@ export const CARTAS_BASE = [
     id: 'barra_pibes',
     forma: 'propuesta',
     personaje: 'barra',
-    texto: 'Venimos a hablar de laburo para los pibes. Después hablamos de las entradas. Y de los micros.',
+    texto: 'Venimos por los pibes del barrio: hay doce sin laburo desde que cerró el frigorífico. Después hablamos de micros.',
     peso: 1,
     izq: { rechaza: true, texto: 'Con ustedes no negocio', efectos: { pueblo: -4, rosca: -3, campo: 3 }, replica: 'Se levantaron sin dar la mano. El domingo apareció un trapo con tu apellido en la popular.' },
     der: {

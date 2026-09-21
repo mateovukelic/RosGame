@@ -4,7 +4,7 @@ export const CARTAS_ECONOMIA = [
     id: 'ministro_plan',
     forma: 'dilema',
     personaje: 'ministro',
-    texto: 'Hay dos caminos: de una o de a poco. Los dos terminan mal. Cambia quién se entera primero.',
+    texto: 'Le traigo dos carpetas. La roja corrige todo en noventa días. La azul, en tres años. El total es idéntico.',
     peso: 1.4,
     requiere: { mesMax: 6 },
     izq: {
@@ -227,7 +227,7 @@ export const CARTAS_ECONOMIA = [
     id: 'precios',
     forma: 'propuesta',
     personaje: 'empresario',
-    texto: 'El acuerdo de precios no se cumple porque no se puede cumplir. Usted lo sabe mejor que yo.',
+    texto: 'Su lista de precios cuidados tiene ciento treinta productos. En la góndola quedan once, y son los feos.',
     peso: 1.1,
     urgeSi: { inflacion: { min: 50 } },
     izq: {
@@ -368,7 +368,7 @@ export const CARTAS_ECONOMIA = [
     id: 'impuesto_riqueza',
     forma: 'propuesta',
     personaje: 'ministro',
-    texto: 'Un aporte extraordinario a las grandes fortunas. Por única vez, como todos los aportes extraordinarios.',
+    texto: 'Ochocientas personas declaran más patrimonio que el presupuesto de tres provincias juntas. Tengo el proyecto.',
     peso: 1.1,
     izq: {
       rechaza: true,

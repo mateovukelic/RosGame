@@ -4,7 +4,7 @@ export const CARTAS_CRISIS = [
     id: 'crisis_confianza',
     forma: 'propuesta',
     personaje: 'ministro',
-    texto: 'Nadie cree en el programa. No lo creen afuera, no lo creen adentro, y hace dos semanas que no lo creo yo.',
+    texto: 'Hoy el bono a diez años cotizó a treinta centavos. Un inversor me preguntó si el plan sigue en pie y no supe.',
     peso: 0.8,
     urgeSi: { caja: { max: 30 } },
     urgeMult: 5,

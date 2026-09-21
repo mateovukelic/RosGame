@@ -155,7 +155,7 @@ export const CARTAS_ROSCA = [
     id: 'medios_pauta',
     forma: 'propuesta',
     personaje: 'periodista',
-    texto: 'La pauta oficial se reparte de una forma bastante creativa. Tengo la planilla, si la quiere ver.',
+    texto: 'Cuatro medios se llevaron el sesenta por ciento de la pauta oficial. Tres son del mismo dueño. Tengo la planilla.',
     peso: 1.1,
     izq: {
       rechaza: true,

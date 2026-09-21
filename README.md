@@ -88,7 +88,7 @@ El archivo del menú los va revelando.
 ## Desarrollo
 
 ```bash
-npm test        # 85 tests: motor, mazo, prosa, objetivos, retratos, legado y balance
+npm test        # 86 tests: motor, mazo, prosa, objetivos, retratos, legado y balance
 npm run validar # reporte de salud del mazo + 1000 corridas simuladas
 npm run demo    # arma dist/demo.html, la versión de una sola página
 ```
@@ -110,7 +110,7 @@ src/
     rng.js          # random determinístico por semilla
     constantes.js   # ⚙️ todo el balance en un solo lugar
   data/             # contenido
-    cartas/         # base · economia · calle · rosca · folklore · crisis
+    cartas/         # base · economia · calle · rosca · folklore · crisis · eventos
     personajes.js decretos.js gabinetes.js finales.js objetivos.js
   ui/               # presentación (DOM)
     retratos.js     # retratos SVG paramétricos (puro: se testea en Node)
@@ -191,7 +191,7 @@ pistas byte por byte idénticas, así que el día que alguien filtre el signo, f
 
 ### La convención de lados
 
-De las 116 cartas, **89 son propuestas** (alguien pide algo) y **27 son dilemas**
+De las 138 cartas, **97 son propuestas** (alguien pide algo) y **41 son dilemas**
 (dos caminos, ningún sí). Cada carta lo declara en `forma`, y las propuestas marcan
 `der: { acepta: true }` / `izq: { rechaza: true }`. Cuatro tests lo verifican, así
 que no se puede colar una carta con el sí a la izquierda.
@@ -202,6 +202,23 @@ estrategia— y por eso hay dos tests que lo miden: aceptar todo y rechazar todo
 tienen que rendir *peor* que jugar al azar, y tienen que morir de formas distintas.
 Hoy dan 23 y 21 meses de mediana contra 29 al azar; aceptar todo termina en *La
 patria contratista* y rechazar todo en *Que se vayan todos*.
+
+### Peticiones y hechos consumados
+
+El mazo tiene dos clases de carta y la diferencia importa más de lo que parece.
+
+La mayoría son **peticiones**: alguien entra al despacho y quiere algo. Están
+repartidas en los paquetes `base`, `economia`, `calle`, `rosca` y `folklore`.
+
+El paquete `eventos` es lo otro: **cosas que pasan**. El apagón del domingo a la
+mañana, la ballena varada en la playa más turística, el granizo sobre la zona
+núcleo, el traductor que en la cumbre tradujo mal, el contenedor que apareció en
+el puerto y no figura en ningún papel. Nadie las pidió y no hay un sí ni un no:
+hay dos maneras de pararse frente a un hecho consumado. Por eso casi todas son
+dilemas.
+
+Un test exige que **al menos una cuarta parte del mazo sean dilemas**. Si todo
+fuera gente pidiendo cosas, gobernar sería atender un mostrador.
 
 ### Objetivos, prólogo y crónica
 
@@ -271,7 +288,7 @@ en vez de mantenerse a mano, para que no se desincronice.
 
 ## Estado
 
-Vertical slice jugable y completa: 116 cartas, 16 decretos, 14 objetivos,
+Vertical slice jugable y completa: 138 cartas, 16 decretos, 14 objetivos,
 6 gabinetes, 14 finales, 25 personajes con retrato propio.
 
 **Lo próximo, en orden:** sonido · un hilo narrativo que cruce corridas (que lo que

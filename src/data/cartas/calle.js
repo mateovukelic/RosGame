@@ -4,7 +4,7 @@ export const CARTAS_CALLE = [
     id: 'paro_general',
     forma: 'propuesta',
     personaje: 'sindicalista',
-    texto: 'Si el lunes no hay respuesta, el martes no hay país. No lo digo de vivo: lo digo para que lo anote.',
+    texto: 'El plenario votó el paro anoche por unanimidad. Si el lunes no hay respuesta, el martes no hay país.',
     peso: 1.3,
     urgeSi: { pueblo: { max: 35 } },
     izq: {
@@ -151,7 +151,7 @@ export const CARTAS_CALLE = [
     id: 'trenes',
     forma: 'propuesta',
     personaje: 'pibe',
-    texto: 'Hace tres meses que el tren tarda el doble. Salgo a las cinco y llego tarde igual, todos los días.',
+    texto: 'Ayer el tren quedó clavado dos horas arriba de un puente. La gente abrió las puertas y bajó a las vías.',
     peso: 1.1,
     izq: {
       rechaza: true,
@@ -170,7 +170,7 @@ export const CARTAS_CALLE = [
     id: 'colectivo_boleto',
     forma: 'propuesta',
     personaje: 'pibe',
-    texto: 'Si sube el boleto, en mi barrio la mitad deja de ir a estudiar. No es una opinión, es lo que va a pasar.',
+    texto: 'Si el boleto sube lo que dicen, a mi vieja el viaje al laburo le come un día de sueldo por semana.',
     peso: 1.1,
     izq: {
       rechaza: true,
@@ -231,7 +231,7 @@ export const CARTAS_CALLE = [
     id: 'sindicato_caja',
     forma: 'propuesta',
     personaje: 'sindicalista',
-    texto: 'La obra social del gremio está fundida y hay afiliados sin tratamiento. Necesitamos una mano del Estado.',
+    texto: 'La obra social suspendió las diálisis en cuatro centros. Son ciento diez afiliados que no pueden esperar.',
     peso: 1.2,
     izq: {
       rechaza: true,
@@ -272,7 +272,7 @@ export const CARTAS_CALLE = [
     id: 'villa_urbanizacion',
     forma: 'propuesta',
     personaje: 'cura',
-    texto: 'El barrio necesita cloacas antes que discursos. El proyecto está hecho y cuesta menos de lo que pensás.',
+    texto: 'Se inundó otra vez la manzana ocho, la cuarta vez este año. El proyecto de cloacas está hecho hace seis años.',
     peso: 1,
     izq: { rechaza: true, texto: 'Ahora no se puede', efectos: { caja: 4, pueblo: -6 }, replica: 'No se pudo ese año ni el siguiente. El proyecto sigue en una carpeta, impecable.' },
     der: { acepta: true, texto: 'Se hace', efectos: { caja: -10, pueblo: 10, rosca: 2 }, replica: 'Se hizo en catorce meses. Nadie cortó ninguna cinta porque no había nada que mostrar arriba de la tierra.' }

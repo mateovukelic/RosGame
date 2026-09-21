@@ -120,7 +120,7 @@ export const CARTAS_FOLKLORE = [
     id: 'verano_costa',
     forma: 'propuesta',
     personaje: 'intendente',
-    texto: 'Arranca la temporada. Si la gente no puede veranear, eso te aparece en las encuestas de marzo.',
+    texto: 'Faltan tres semanas para enero y los hoteles de la costa tienen un quinto de las reservas de siempre.',
     peso: 1,
     requiere: { mesMin: 10 },
     izq: {

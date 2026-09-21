@@ -200,6 +200,47 @@ así que el día que alguien filtre el signo por comodidad, el build falla.
 Cancelar sigue siendo gratis: volver la carta al centro no hace nada. Mirar tiene
 que salir cero para que valga la pena mirar.
 
+## Lo que pide y lo que pasa
+
+El mazo arrancó siendo, sin que nadie lo decidiera, un mostrador: ciento dieciséis
+cartas de las cuales casi noventa eran alguien entrando al despacho a pedir algo.
+Cada carta estaba bien por separado y el conjunto era monótono, porque la *forma*
+de la situación era siempre la misma. Cambiaba quién pedía; no cambiaba qué clase
+de cosa te estaba pasando.
+
+Y había un segundo problema, más difícil de ver: muchas cartas contaban una
+**categoría de problema** en vez de un hecho. "El tren anda mal" es una categoría.
+No tiene cuándo, no tiene quién, no tiene una imagen. Se puede escribir sin saber
+nada del tema. "Ayer el tren quedó clavado dos horas arriba de un puente y la
+gente abrió las puertas y bajó a las vías" es un hecho: tiene hora, tiene gente y
+tiene una imagen que cualquiera puede ver.
+
+Las dos correcciones:
+
+**El paquete `eventos`.** Veintidós cartas de cosas que simplemente pasan: el
+apagón nacional de un domingo a la mañana, la ballena varada en la playa más
+turística, el granizo sobre la zona núcleo, el traductor que en la cumbre le puso
+"ingobernable" a una frase tuya, el contenedor que apareció en el puerto y no
+figura en ningún papel, la transmisión que se cortó justo en el gol. Nadie las
+pidió. No hay un sí ni un no: hay dos maneras de pararse frente a algo que ya
+ocurrió, y por eso casi todas son dilemas.
+
+Eso también arregló un desbalance de forma: los dilemas pasaron del 23% al 30% del
+mazo, y hay un test que exige un piso del 25%. Si todo fuera gente pidiendo cosas,
+gobernar sería atender un mostrador.
+
+**Anclar las cartas abstractas en un incidente.** Doce cartas que describían un
+estado de las cosas pasaron a describir algo que pasó: la obra social que suspendió
+las diálisis en cuatro centros, los cuatro medios que se llevaron el sesenta por
+ciento de la pauta y tres son del mismo dueño, las ciento treinta posiciones de la
+lista de precios de las que en la góndola quedan once. El efecto mecánico es cero
+—no se tocó un solo número— y el efecto de lectura es que la carta ahora se puede
+ver.
+
+La regla que quedó: **una carta necesita un cuándo, un cuánto o un quién**. Si se
+puede escribir sin ninguno de los tres, es una categoría y hay que volver a
+escribirla.
+
 ## De qué lado está el sí
 
 Reigns mezcla los lados a propósito: parte del desafío es leer rápido y no

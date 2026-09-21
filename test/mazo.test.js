@@ -260,6 +260,17 @@ test('la mayoría del mazo son propuestas, no dilemas', () => {
   );
 });
 
+test('una parte del mazo son hechos consumados, no peticiones', () => {
+  // Si todo fuera "alguien entra y pide algo", gobernar sería atender un
+  // mostrador. Una cuarta parte del mazo tiene que ser cosas que simplemente
+  // pasan: la tormenta, el papelón, el apagón.
+  const dilemas = TODAS_LAS_CARTAS.filter((c) => c.forma === 'dilema').length;
+  assert.ok(
+    dilemas >= TODAS_LAS_CARTAS.length * 0.25,
+    `sólo ${dilemas} de ${TODAS_LAS_CARTAS.length} cartas son dilemas: el mazo es un mostrador`
+  );
+});
+
 test('el mazo tiene volumen suficiente en cada paquete', () => {
   assert.ok(TODAS_LAS_CARTAS.length >= 100, 'el mazo es chico para una corrida de 48 meses');
   for (const [nombre, cartas] of Object.entries(PAQUETES)) {
