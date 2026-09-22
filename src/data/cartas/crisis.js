@@ -223,6 +223,11 @@ export const CARTAS_CRISIS = [
   // El urgeMult es deliberadamente enorme. Con un multiplicador normal el aviso
   // pesaba 6 contra 107 del resto del mazo: llegaba tarde o no llegaba, que para
   // una carta cuyo único trabajo es avisar equivale a no existir.
+  //
+  // La salida del borde alterna de lado entre las cuatro. Cuando estaban todas
+  // a la derecha, "aceptar todo" se salvaba sola de los cuatro techos y dejaba
+  // de ser una mala estrategia. Son dilemas: no hay convención que respetar y
+  // no tiene que haber un lado que siempre convenga.
   {
     id: 'aviso_pueblo',
     forma: 'dilema',
@@ -233,14 +238,14 @@ export const CARTAS_CRISIS = [
     urgeMult: 200,
     requiere: { mesMin: 8, stats: { pueblo: { min: 80 } } },
     izq: {
-      texto: 'Que sigan cajoneadas',
-      efectos: { pueblo: 6, caja: -7, campo: -6 },
-      replica: 'Siguieron cajoneadas. La aprobación subió otros dos puntos y las tres cosas empeoraron en silencio.'
-    },
-    der: {
       texto: 'Firmo las tres hoy',
       efectos: { pueblo: -14, caja: 9, campo: 8, rosca: 4 },
       replica: 'Gastaste catorce puntos de imagen en una tarde. Fue la decisión más cara y más sensata del mandato.'
+    },
+    der: {
+      texto: 'Que sigan cajoneadas',
+      efectos: { pueblo: 6, caja: -7, campo: -6 },
+      replica: 'Siguieron cajoneadas. La aprobación subió otros dos puntos y las tres cosas empeoraron en silencio.'
     }
   },
   {
@@ -293,14 +298,14 @@ export const CARTAS_CRISIS = [
     urgeMult: 200,
     requiere: { mesMin: 8, stats: { caja: { min: 80 } } },
     izq: {
-      texto: 'Primero ordenar la casa',
-      efectos: { caja: 5, pueblo: -8, rosca: -3 },
-      replica: 'La casa quedó ordenadísima. Al comedor le llegó, tres meses después, una carta de reconocimiento.'
-    },
-    der: {
       texto: 'Se usa parte del superávit',
       efectos: { caja: -13, pueblo: 11, rosca: 4 },
       replica: 'Se usó una parte. El número dejó de ser récord y once mil personas comieron. Las dos cosas son ciertas.'
+    },
+    der: {
+      texto: 'Primero ordenar la casa',
+      efectos: { caja: 5, pueblo: -8, rosca: -3 },
+      replica: 'La casa quedó ordenadísima. Al comedor le llegó, tres meses después, una carta de reconocimiento.'
     }
   }
 ];

@@ -11,7 +11,9 @@ import { DECRETOS } from '../data/decretos.js';
 import { GABINETES, gabinetePorId } from '../data/gabinetes.js';
 import { FINALES } from '../data/finales.js';
 import { OBJETIVOS } from '../data/objetivos.js';
-import { asignarObjetivos, evaluarObjetivos, ESTADO_OBJETIVO } from './objetivos.js';
+import {
+  asignarObjetivos, evaluarObjetivos, objetivosActivos, contarCumplidos, ESTADO_OBJETIVO
+} from './objetivos.js';
 
 export class Juego {
   constructor(opciones = {}) {
@@ -236,7 +238,7 @@ export class Juego {
   }
 
   objetivosActivos() {
-    return this.estado.objetivos.filter((o) => o.resultado === ESTADO_OBJETIVO.ACTIVO);
+    return objetivosActivos(this.estado);
   }
 
   // ---------- Paso mensual: inflación y decretos ----------
@@ -363,7 +365,7 @@ export class Juego {
       decisiones: this.estado.historia.length,
       facturasPendientes: this.mazo.pendientes().length,
       objetivos: this.estado.objetivos.map((o) => ({ id: o.id, titulo: o.titulo, resultado: o.resultado })),
-      objetivosCumplidos: this.estado.objetivos.filter((o) => o.resultado === ESTADO_OBJETIVO.CUMPLIDO).length,
+      objetivosCumplidos: contarCumplidos(this.estado),
       cronica: this.cronica()
     };
   }

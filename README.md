@@ -97,7 +97,8 @@ El archivo del menú los va revelando.
 ```bash
 npm test        # 97 tests: motor, mazo, siembra, prosa, objetivos, retratos y balance
 npm run validar # reporte de salud del mazo + 1000 corridas simuladas
-npm run demo    # arma dist/demo.html, la versión de una sola página
+npm run demo    # arma dist/demo.html, para hosts que ponen su propio esqueleto
+npm run exportar # arma dist/la-rosca.html, un archivo para mandar por mensaje
 ```
 
 ### Estructura
@@ -199,7 +200,7 @@ pistas byte por byte idénticas, así que el día que alguien filtre el signo, f
 
 ### La convención de lados
 
-De las 138 cartas, **97 son propuestas** (alguien pide algo) y **41 son dilemas**
+De las 158 cartas, **104 son propuestas** (alguien pide algo) y **54 son dilemas**
 (dos caminos, ningún sí). Cada carta lo declara en `forma`, y las propuestas marcan
 `der: { acepta: true }` / `izq: { rechaza: true }`. Cuatro tests lo verifican, así
 que no se puede colar una carta con el sí a la izquierda.
@@ -208,8 +209,9 @@ La idea es que la dificultad esté en **decidir**, no en descifrar de qué lado 
 el sí. Eso abre un riesgo obvio —que decirle que sí a todo el mundo se vuelva una
 estrategia— y por eso hay dos tests que lo miden: aceptar todo y rechazar todo
 tienen que rendir *peor* que jugar al azar, y tienen que morir de formas distintas.
-Hoy dan 23 y 21 meses de mediana contra 29 al azar; aceptar todo termina en *La
-patria contratista* y rechazar todo en *Que se vayan todos*.
+Hoy dan 25 y 26 meses de mediana contra 30 al azar, y mueren de formas opuestas:
+aceptar todo termina en *Rehén de la plaza* y rechazar todo en *Que se vayan
+todos*.
 
 ### La factura vuelve: consecuencias con fecha
 
@@ -310,6 +312,22 @@ falla si el juego se vuelve imposible, trivial, o si un solo final se come todas
 las partidas.
 
 ---
+
+## Pasársela a alguien
+
+```bash
+npm run exportar    # → dist/la-rosca.html
+```
+
+Un solo archivo de ~190 kB con todo adentro: el juego, los retratos, las 158
+cartas. Se manda por WhatsApp o por mail y **se abre con doble clic**, sin
+instalar nada, sin servidor y sin internet. El legado se guarda en el navegador
+de quien lo abre, así que cada uno tiene el suyo.
+
+Existe porque el juego usa módulos ES y los módulos no cargan desde `file://`:
+el script empaqueta todo en un `<script>` inline, tomando la marcación y los
+estilos del juego real para que la copia no se desincronice. Falla el build si
+queda algún recurso externo o algún módulo sin resolver.
 
 ## Publicar la demo
 

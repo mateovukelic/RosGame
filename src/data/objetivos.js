@@ -145,7 +145,3 @@ export const OBJETIVOS = [
     premio: { campo: 10, rosca: 6 }
   }
 ];
-
-export function objetivoPorId(id) {
-  return OBJETIVOS.find((o) => o.id === id);
-}

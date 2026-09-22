@@ -150,7 +150,3 @@ export const FINALES = [
     condicion: (e) => e.mandato > 1 && e.mes === 1
   }
 ];
-
-export function finalPorId(id) {
-  return FINALES.find((f) => f.id === id);
-}

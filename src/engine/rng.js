@@ -1,7 +1,7 @@
 // Generador pseudoaleatorio determinístico (mulberry32).
 // Misma semilla => misma partida. Indispensable para un roguelike con "seeds".
 
-export function hashSemilla(texto) {
+function hashSemilla(texto) {
   let h = 1779033703 ^ String(texto).length;
   for (let i = 0; i < String(texto).length; i++) {
     h = Math.imul(h ^ String(texto).charCodeAt(i), 3432918353);

@@ -189,7 +189,7 @@ El motor no toca el DOM, así que se puede correr entero en Node. `simulador.js`
 juega miles de partidas con tres estrategias:
 
 - **azar** — el piso. Debe sobrevivir entre 10 y 40 meses de mediana. Si muere
-  antes, el juego es injusto; si sobrevive más, no hay tensión.
+  antes, el juego es injusto; si sobrevive más, no hay tensión. Hoy: 31.
 - **prudente** — una IA que proyecta ambas opciones y elige la que deja el país
   más lejos de los bordes. **Tiene que rendir claramente más que el azar**: si no,
   la habilidad no paga y el juego es una tragamonedas.
@@ -285,7 +285,7 @@ figura en ningún papel, la transmisión que se cortó justo en el gol. Nadie la
 pidió. No hay un sí ni un no: hay dos maneras de pararse frente a algo que ya
 ocurrió, y por eso casi todas son dilemas.
 
-Eso también arregló un desbalance de forma: los dilemas pasaron del 23% al 30% del
+Eso también arregló un desbalance de forma: los dilemas pasaron del 23% al 34% del
 mazo, y hay un test que exige un piso del 25%. Si todo fuera gente pidiendo cosas,
 gobernar sería atender un mostrador.
 
@@ -324,11 +324,18 @@ decisión también. Si "decile que sí a todo el mundo" fuera razonable, el jueg
 resolvería sin pensar. Así que eso también es un test, con dos condiciones:
 
 - Aceptar todo y rechazar todo tienen que rendir **peor** que jugar al azar. Hoy
-  dan 23 y 21 meses de mediana contra 29 al azar.
+  dan 25 y 26 meses de mediana contra 30 al azar.
 - Tienen que **morir de formas distintas**. Si los dos terminaran en el mismo
   final, el mazo estaría empujando sistemáticamente para un lado. Hoy aceptar todo
-  termina en *La patria contratista* (te compraron) y rechazar todo en *Que se
-  vayan todos* (te soltó la calle).
+  termina en *Rehén de la plaza* (no podés tomar una sola decisión impopular) y
+  rechazar todo en *Que se vayan todos* (te soltó la calle). Los dos extremos del
+  mismo medidor, que es exactamente la simetría que se buscaba.
+
+Este test ya se ganó el sueldo una vez. Las cuatro cartas de aviso tenían la
+salida del borde siempre a la derecha, así que "aceptar todo" se rescataba sola de
+los cuatro techos y su mediana se pegó a la del azar. Alternar de qué lado está la
+salida —son dilemas, no hay convención que respetar— devolvió el margen. Ningún
+humano habría detectado eso jugando.
 
 Esas dos condiciones son lo que mantiene honesta la convención.
 

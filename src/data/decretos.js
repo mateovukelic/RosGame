@@ -143,7 +143,3 @@ export const DECRETOS = [
     efecto: { porMes: { pueblo: 0.5, campo: -0.2 } }
   }
 ];
-
-export function decretoPorId(id) {
-  return DECRETOS.find((d) => d.id === id);
-}
