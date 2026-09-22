@@ -20,6 +20,19 @@
       <p class="bajada">Cuatro años. Un país. Dos opciones por vez.</p>
     </header>
 
+    <div id="comojuega" class="comojuega">
+      <p>Sos presidente. Cada mes alguien entra al despacho con un problema y te deja
+        dos opciones: <b>arrastrá la carta</b> hacia un lado o hacia el otro.</p>
+      <ul class="facciones">
+        <li><span>✊</span> Pueblo</li>
+        <li><span>🎩</span> Círculo Rojo</li>
+        <li><span>🌾</span> Campo</li>
+        <li><span>💵</span> Caja</li>
+      </ul>
+      <p class="comojuega-regla">Ninguna de las cuatro puede llegar a cero. Ninguna
+        puede llegar a cien. Y la inflación 🔥 sube sola todos los meses.</p>
+    </div>
+
     <div class="bloque">
       <h2 class="bloque-tit">Elegí tu gabinete</h2>
       <div id="lista-gabinetes" class="gabinetes"></div>
@@ -36,7 +49,9 @@
       </label>
     </div>
 
-    <button id="btn-jugar" class="btn-principal" type="button">Asumir el cargo</button>
+    <div class="barra-accion">
+      <button id="btn-jugar" class="btn-principal" type="button">Asumir el cargo</button>
+    </div>
 
     <div class="bloque legado">
       <h2 class="bloque-tit">Legado</h2>
@@ -71,6 +86,7 @@
   <!-- ============ JUEGO ============ -->
   <section id="pantalla-juego" class="pantalla">
     <div id="hud" class="hud"></div>
+    <div class="avance" title="Avance del mandato"><div id="avance-relleno"></div></div>
 
     <div class="calendario">
       <span id="calendario-texto">Mandato 1 · Año 1 · Mes 1</span>

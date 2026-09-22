@@ -24,7 +24,10 @@
 html, body {
   margin: 0;
   padding: 0;
+  /* dvh sigue a la barra de direcciones del celular; % la ignora y deja la
+     botonera tapada. El 100% queda de respaldo para navegadores viejos. */
   height: 100%;
+  height: 100dvh;
   color-scheme: dark;
   background: var(--fondo);
   color: var(--papel);
@@ -454,3 +457,45 @@ input[type="text"]:focus { outline: none; border-color: var(--celeste); }
   color: var(--tinta-suave); display: block; margin-bottom: 2px;
 }
 .final-caja .bloque-tit { margin-top: 20px; text-align: left; }
+
+
+/* ---------- Cómo se juega (primera pantalla, primera vez) ---------- */
+.comojuega {
+  background: var(--fondo-2); border: 1px solid var(--borde);
+  border-radius: 14px; padding: 15px 16px; margin-bottom: 22px;
+}
+.comojuega p { margin: 0; font-size: 13.5px; line-height: 1.55; color: #a6a294; }
+.comojuega b { color: var(--papel); }
+.comojuega-regla { margin-top: 12px !important; font-size: 12.5px !important; color: var(--dorado) !important; }
+.facciones {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
+  list-style: none; padding: 0; margin: 13px 0 0;
+}
+.facciones li {
+  text-align: center; font-size: 10px; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--tinta-suave); line-height: 1.3;
+}
+.facciones span { display: block; font-size: 19px; margin-bottom: 4px; letter-spacing: 0; }
+
+/* Gabinetes bloqueados: una línea, no una tarjeta */
+.gabinete.bloqueado { padding: 9px 13px; align-items: center; opacity: .5; }
+.gabinete.bloqueado .gabinete-icono { font-size: 16px; }
+.gabinete.bloqueado .gabinete-pista { margin-top: 0; font-size: 12px; color: var(--tinta-suave); }
+
+/* El botón principal del menú no puede depender de que alguien scrollee:
+   se queda pegado abajo mientras se eligen gabinetes. */
+.barra-accion {
+  position: sticky; bottom: 0; z-index: 4; margin: 0 -16px;
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(to top, var(--fondo) 62%, rgba(20, 22, 27, 0));
+}
+
+/* ---------- Avance del mandato ---------- */
+.avance {
+  height: 2px; background: var(--borde); border-radius: 2px;
+  overflow: hidden; margin: 2px 0 0;
+}
+#avance-relleno {
+  height: 100%; width: 0; background: var(--celeste-hondo);
+  transition: width .45s ease; opacity: .8;
+}

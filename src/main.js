@@ -37,17 +37,21 @@ function pintarMenu() {
       crear('span', { texto: `🔥 ${g.inflacion}` })
     ]);
 
-    const cuerpo = crear('div', {}, [
-      crear('div', { clase: 'gabinete-nombre', texto: g.disponible ? g.nombre : '🔒 Bloqueado' }),
-      crear('div', { clase: 'gabinete-desc', texto: g.disponible ? g.desc : '' }),
-      g.disponible ? crear('div', { clase: 'gabinete-detalle', texto: g.detalle }) : null,
-      g.disponible ? stats : crear('div', { clase: 'gabinete-pista', texto: g.pista || '' })
-    ]);
+    // Un gabinete bloqueado no necesita una tarjeta entera: le alcanza una línea
+    // que diga qué es lo que falta. Así el botón de empezar entra sin scrollear.
+    const cuerpo = g.disponible
+      ? crear('div', {}, [
+          crear('div', { clase: 'gabinete-nombre', texto: g.nombre }),
+          crear('div', { clase: 'gabinete-desc', texto: g.desc }),
+          crear('div', { clase: 'gabinete-detalle', texto: g.detalle }),
+          stats
+        ])
+      : crear('div', {}, [crear('div', { clase: 'gabinete-pista', texto: g.pista || 'Bloqueado' })]);
 
     const boton = crear(
       'button',
       {
-        clase: `gabinete${g.id === gabineteElegido ? ' elegido' : ''}`,
+        clase: `gabinete${g.disponible ? '' : ' bloqueado'}${g.id === gabineteElegido ? ' elegido' : ''}`,
         type: 'button',
         disabled: g.disponible ? null : 'disabled',
         onclick: () => {
@@ -59,6 +63,10 @@ function pintarMenu() {
     );
     lista.append(boton);
   }
+
+  // El instructivo es para el que abre el juego por primera vez. Al que ya jugó
+  // un mandato le estorba, así que desaparece solo.
+  $('#comojuega').hidden = legado.datos.mandatosJugados > 0;
 
   const p = legado.progreso();
   $('#progreso').replaceChildren(
@@ -152,6 +160,7 @@ function pintarEstado() {
   const { anio, mesDelAnio } = juego.anioMes();
   $('#calendario-texto').textContent =
     `Mandato ${juego.estado.mandato} · Año ${anio} · Mes ${mesDelAnio}`;
+  $('#avance-relleno').style.width = `${(juego.estado.mes / BALANCE.mesesPorMandato) * 100}%`;
   pintarObjetivos();
 }
 
