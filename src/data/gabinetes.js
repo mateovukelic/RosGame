@@ -1,4 +1,4 @@
-// GABINETES — el "loadout" con el que arrancás la corrida.
+// GABINETES — el "loadout" con el que arrancás la partida.
 // `prologo` es la escena de apertura: se muestra antes de la primera carta.
 // Se desbloquean jugando (ver src/engine/legado.js).
 
@@ -23,7 +23,7 @@ Afuera, en la plaza, hay bastante menos gente de la que esperaban.`,
     nombre: 'El Aparato',
     icono: '🏟️',
     desc: 'Sindicatos, intendentes y micros. Se gobierna con territorio.',
-    detalle: 'Pueblo y Rosca altos. El Campo te mira de reojo y la Caja está flaca.',
+    detalle: 'Pueblo y Círculo Rojo altos. El Campo te mira de reojo y la Caja está flaca.',
     prologo: `Te llevaron en andas hasta el balcón y desde ahí el país parece manejable. Abajo cantan tu nombre. Atrás, en el salón, catorce personas que no cantan nada ya están repartiendo cargos.
 
 Les debés el cargo a los dos grupos. Uno solo te lo va a cobrar.`,
@@ -38,7 +38,7 @@ Les debés el cargo a los dos grupos. Uno solo te lo va a cobrar.`,
     nombre: 'El Outsider',
     icono: '📣',
     desc: 'Nunca militó, nunca roscó, pero llena estadios.',
-    detalle: 'El Pueblo te ama y la Rosca te odia. No tenés a quién llamar.',
+    detalle: 'El Pueblo te ama y el Círculo Rojo te odia. No tenés a quién llamar.',
     prologo: `Nunca pisaste una unidad básica ni un comité. Llegaste porque la gente se cansó de los que sí, y ese enojo es todo el capital que tenés.
 
 El primer día pedís los teléfonos de los gobernadores. Nadie del equipo los tiene. Ahí entendés que los vas a tener que conseguir vos.`,
@@ -53,7 +53,7 @@ El primer día pedís los teléfonos de los gobernadores. Nadie del equipo los t
     nombre: 'El Heredero',
     icono: '👑',
     desc: 'Te pusieron. Todos saben que te pusieron. Vos también.',
-    detalle: 'La Rosca te sostiene mientras seas obediente.',
+    detalle: 'El Círculo Rojo te sostiene mientras seas obediente.',
     prologo: `La foto de la asunción sale con vos adelante y con quien te puso medio paso atrás, sonriendo. Los diarios eligen esa foto y no la otra.
 
 Tenés los votos, el aparato y la estructura armada. Lo único que todavía no tenés es que te consideren el presidente.`,

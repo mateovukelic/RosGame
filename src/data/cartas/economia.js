@@ -41,6 +41,7 @@ export const CARTAS_ECONOMIA = [
     }
   },
   {
+    // Única "corrida" que queda en el proyecto: acá la palabra es la correcta.
     id: 'corrida',
     forma: 'dilema',
     personaje: 'ministro',

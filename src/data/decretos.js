@@ -1,5 +1,5 @@
 // DECRETOS — los "relics" del roguelike. Se eligen cada 12 meses (1 de 3).
-// Son permanentes durante la corrida y modifican cómo pega todo lo demás.
+// Son permanentes durante la partida y modifican cómo pega todo lo demás.
 //
 // efecto admite:
 //   porMes:      { stat: delta }  aplicado cada mes
@@ -54,7 +54,7 @@ export const DECRETOS = [
     nombre: 'Pacto de Gobernadores',
     icono: '🗺️',
     desc: 'Coparticipación a cambio de manos levantadas.',
-    detalle: 'La Rosca te banca. Sale plata todos los meses.',
+    detalle: 'El Círculo Rojo te banca. Sale plata todos los meses.',
     efecto: { porMes: { rosca: 0.7, caja: -0.45 }, amortigua: { rosca: 0.6 } }
   },
   {
@@ -78,7 +78,7 @@ export const DECRETOS = [
     nombre: 'Obra Pública',
     icono: '🏗️',
     desc: 'Cintas cortadas de Ushuaia a La Quiaca.',
-    detalle: 'Pueblo y Rosca contentos. La Caja sangra y la inflación se entusiasma.',
+    detalle: 'Pueblo y Círculo Rojo contentos. La Caja sangra y la inflación se entusiasma.',
     efecto: { porMes: { pueblo: 0.45, rosca: 0.45, caja: -0.8, inflacion: 0.25 } }
   },
   {
@@ -105,7 +105,7 @@ export const DECRETOS = [
     nombre: 'Aparato Territorial',
     icono: '🏟️',
     desc: 'Punteros, unidades básicas y micros que siempre están llenos.',
-    detalle: 'Podés movilizar cuando querés. La Rosca sabe que le debés el aparato.',
+    detalle: 'Podés movilizar cuando querés. El Círculo Rojo sabe que le debés el aparato.',
     efecto: { potencia: { pueblo: 1.35 }, porMes: { rosca: -0.25 } }
   },
   {

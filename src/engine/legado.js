@@ -1,4 +1,4 @@
-// LEGADO — la progresión que sobrevive a las corridas.
+// LEGADO — la progresión que sobrevive a las partidas.
 // Se guarda en localStorage, pero acepta cualquier storage (para tests).
 
 import { GABINETES } from '../data/gabinetes.js';
@@ -72,8 +72,8 @@ export class Legado {
     return this.datos;
   }
 
-  // Se llama al terminar una corrida con el resumen de Juego.resumen()
-  registrarCorrida(resumen) {
+  // Se llama al terminar una partida con el resumen de Juego.resumen()
+  registrarPartida(resumen) {
     const d = this.datos;
     d.mandatosJugados += 1;
     d.mejorMes = Math.max(d.mejorMes, resumen.mesesTotales);
@@ -114,7 +114,7 @@ export class Legado {
     if (!req) return null;
     const partes = [];
     if (req.mandatosJugados) partes.push(`jugá ${req.mandatosJugados} mandatos`);
-    if (req.mejorMes) partes.push(`sobreviví ${req.mejorMes} meses en una corrida`);
+    if (req.mejorMes) partes.push(`sobreviví ${req.mejorMes} meses en una partida`);
     if (req.finalesVistos) partes.push(`descubrí ${req.finalesVistos} finales distintos`);
     if (req.victorias) partes.push(`ganá ${req.victorias} vez/veces`);
     return partes.length ? `Se desbloquea si ${partes.join(' y ')}.` : null;

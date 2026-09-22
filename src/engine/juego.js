@@ -338,7 +338,7 @@ export class Juego {
   }
 
   continuarMandato() {
-    if (!this.puedeContinuar()) throw new Error('Esta corrida terminó');
+    if (!this.puedeContinuar()) throw new Error('Esta partida terminó');
     this.estado.final = null;
     this.estado.fase = FASES.CARTA;
     // Cada mandato nuevo arranca más caliente: el país no se resetea.

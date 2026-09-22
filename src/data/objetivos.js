@@ -1,4 +1,4 @@
-// OBJETIVOS DE MANDATO — le dan a la corrida algo que perseguir además de
+// OBJETIVOS DE MANDATO — le dan a la partida algo que perseguir además de
 // no morirse. Se sortean dos por mandato: uno de plazo corto y uno largo.
 //
 // Forma:
@@ -35,7 +35,7 @@ export const OBJETIVOS = [
     id: 'gobernabilidad',
     plazo: 'corto',
     titulo: 'Tener los votos',
-    desc: 'Llegá al mes 20 con la Rosca arriba de 55. Sin gobernadores no se aprueba nada.',
+    desc: 'Llegá al mes 20 con el Círculo Rojo arriba de 55. Sin gobernadores no se aprueba nada.',
     vence: 20,
     logro: (e) => e.stats.rosca >= 55,
     premio: { decretoExtra: true }

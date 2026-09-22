@@ -60,7 +60,7 @@ export const FINALES = [
     tipo: 'caida',
     prioridad: 50,
     titulo: 'Juicio político',
-    epigrafe: 'Rosca: 0',
+    epigrafe: 'Círculo Rojo: 0',
     texto:
       'Te quedaste sin gobernadores, sin bloque propio y sin nadie que te atienda el teléfono un domingo. La sesión duró once horas. Los votos ya estaban contados antes de que empezara.',
     condicion: (e) => e.stats.rosca <= 0
@@ -72,7 +72,7 @@ export const FINALES = [
     titulo: 'Lockout',
     epigrafe: 'Campo: 0',
     texto:
-      'Las rutas quedaron cortadas por camiones parados y el país descubrió, otra vez, que come porque alguien siembra. A la tercera semana sin carne en las góndolas, la Rosca decidió que era más barato perderte a vos que perder la cosecha.',
+      'Las rutas quedaron cortadas por camiones parados y el país descubrió, otra vez, que come porque alguien siembra. A la tercera semana sin carne en las góndolas, el Círculo Rojo decidió que era más barato perderte a vos que perder la cosecha.',
     condicion: (e) => e.stats.campo <= 0
   },
   {
@@ -102,7 +102,7 @@ export const FINALES = [
     tipo: 'caida',
     prioridad: 45,
     titulo: 'El sello de goma',
-    epigrafe: 'Rosca: 100',
+    epigrafe: 'Círculo Rojo: 100',
     texto:
       'Les diste todo: cajas, cargos, obras, listas. Cada cosa que entregaste compró una semana de gobernabilidad y vendió un pedazo de la decisión. Un martes pediste un café y te trajeron un decreto ya firmado por vos, que no habías leído y que salía al día siguiente. Seguís en el cargo. Hace meses que no gobernás.',
     condicion: (e) => e.stats.rosca >= 100

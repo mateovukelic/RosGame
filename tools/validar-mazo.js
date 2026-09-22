@@ -48,24 +48,24 @@ if (sospechosas.length) {
   linea();
 }
 
-linea('Simulaciones (300 corridas por estrategia):');
+linea('Simulaciones (300 partidas por estrategia):');
 for (const estrategia of ['azar', 'alternada', 'prudente']) {
-  const r = simularLote({ corridas: 300, estrategia });
+  const r = simularLote({ partidas: 300, estrategia });
   linea(
     `  ${estrategia.padEnd(10)} mediana ${String(r.mediana).padStart(3)} meses` +
       ` · p10 ${String(r.p10).padStart(2)} · p90 ${String(r.p90).padStart(3)}` +
-      ` · mandatos completos ${r.victorias}/${r.corridas} · finales distintos ${r.finalesDistintos}`
+      ` · mandatos completos ${r.victorias}/${r.partidas} · finales distintos ${r.finalesDistintos}`
   );
 }
 linea();
 
-linea('Finales alcanzados jugando al azar (400 corridas).');
-linea('Nota: las corridas siguen después de una reelección, así que el final que');
+linea('Finales alcanzados jugando al azar (400 partidas).');
+linea('Nota: las partidas siguen después de una reelección, así que el final que');
 linea('      queda registrado es siempre el último, no el del primer mandato.');
-const lote = simularLote({ corridas: 400, estrategia: 'azar' });
+const lote = simularLote({ partidas: 400, estrategia: 'azar' });
 const ordenados = Object.entries(lote.finales).sort((a, b) => b[1] - a[1]);
 for (const [id, cantidad] of ordenados) {
-  const pct = ((cantidad / lote.corridas) * 100).toFixed(1);
+  const pct = ((cantidad / lote.partidas) * 100).toFixed(1);
   linea(`  ${String(id).padEnd(16)} ${String(cantidad).padStart(4)}  ${pct.padStart(5)}%  ${'▍'.repeat(Math.round(cantidad / 4))}`);
 }
 const nuncaVistos = FINALES.filter((f) => !lote.finales[f.id]).map((f) => f.id);

@@ -14,8 +14,14 @@ Acá la tensión es otra, y más específica:
 
 - **Pueblo vs. Campo** es el conflicto estructural argentino: lo que abarata la
   comida adentro es lo que desalienta producirla y exportarla.
-- **Rosca vs. Pueblo** es la distancia entre gobernar y ser querido.
+- **Círculo Rojo vs. Pueblo** es la distancia entre gobernar y ser querido.
 - **Caja** es el recurso que todos quieren y nadie genera.
+
+Los nombres de las facciones son los que se usan en la mesa: el *Círculo Rojo* no
+es "el Congreso" ni "la política", es como le dicen los que están adentro. La clave
+interna sigue siendo `rosca` —el juego se llama así— y lo que ve el jugador es
+`META_STATS.nombre`. El rótulo del medidor usa `corto`, porque en una columna de
+ochenta y cuatro píxeles entra una palabra y no dos.
 - **Inflación** es el cuarto jugador de la mesa, y no se sienta a negociar.
 
 ## Morir por exceso, y por qué hay que avisar
@@ -29,7 +35,7 @@ que la Rosca te saca"* pedía que el jugador aceptara una traición ajena como
 explicación de su propia derrota. Eso se siente arbitrario, y con razón.
 
 La regla nueva: **cada techo es una forma de captura, y la captura se explica
-sola**. Con la Rosca en 100 seguís en el cargo y hace meses que no gobernás: pedís
+sola**. Con el Círculo Rojo en 100 seguís en el cargo y hace meses que no gobernás: pedís
 un café y te traen un decreto ya firmado por vos. Con el Campo en 100 el gobierno
 tiene dueño y vos firmaste el manual de uso. Con la Caja en 100 la meta fiscal dejó
 de ser un instrumento y pasó a ser la única política. Y con el Pueblo en 100 no
@@ -154,7 +160,7 @@ leyendo no se le corta la frase.
 - `peso` es la probabilidad relativa base.
 - `requiere` filtra por mes, flags, rangos de stats, inflación y decretos tomados.
 - `urgeSi` multiplica el peso cuando el país está en una situación específica
-  (`corrida` pesa 6 veces más si la Caja bajó de 35). Así el mazo **reacciona**
+  (`partida` pesa 6 veces más si la Caja bajó de 35). Así el mazo **reacciona**
   al estado sin necesidad de un director de eventos aparte.
 - `memoriaAntiRepeticion` evita que una carta vuelva a salir en 14 meses.
 - Si se agotan las cartas válidas, se limpia la memoria de usadas (salvo las
@@ -170,17 +176,17 @@ Cada 12 meses, 1 de 3. Tres formas de modificar el juego, no cuatro:
 - `porMesCondicional`: goteo que sólo corre si se cumple una condición
   (`Viento de Cola` sólo rinde mientras el Campo esté por encima de 45).
 
-Están pensados para **inclinar una corrida**, no para resolverla. Todos tienen un
+Están pensados para **inclinar una partida**, no para resolverla. Todos tienen un
 costo explícito en el texto, porque el jugador tiene que poder elegir a ciegas
 pero informado.
 
 ## Gabinetes: el loadout
 
 Definen stats iniciales, inflación inicial, decretos de arranque y flags. Son la
-variedad entre corridas: *El Aparato* empieza con la calle ganada y el Campo en
+variedad entre partidas: *El Aparato* empieza con la calle ganada y el Campo en
 contra; *La Motosierra* al revés; *Gobierno de Emergencia* es el modo difícil.
 
-Tres se desbloquean con el legado, para que las primeras corridas perdidas dejen
+Tres se desbloquean con el legado, para que las primeras partidas perdidas dejen
 algo.
 
 ## Balance: cómo se verifica
@@ -343,18 +349,18 @@ Esas dos condiciones son lo que mantiene honesta la convención.
 
 Reigns tiene un reino que persiste, una maldición de fondo y misiones. Sin nada de
 eso, un roguelike de cartas es un ejercicio de equilibrio: sobrevivís o no, y todas
-las corridas se parecen. Lo que se agregó, en orden de cuánto cambia la partida:
+las partidas se parecen. Lo que se agregó, en orden de cuánto cambia la partida:
 
 **Los objetivos** son lo que más pesa. Dos por mandato, uno corto y uno largo, para
 que el mandato tenga dos tiempos: algo que te ocupa el primer año y algo que te
-acompaña hasta el final. Le dan a la corrida una intención además de "no morirse",
+acompaña hasta el final. Le dan a la partida una intención además de "no morirse",
 y sobre todo le dan forma a las decisiones: la misma carta se elige distinto si
 estás persiguiendo *Domar la bestia* que si perseguís *Sin tutela*.
 
 Tres detalles de balance:
 
 - Algunos objetivos pagan con una **elección de decreto fuera de horario**. Es el
-  premio más fuerte que hay, porque cambia la corrida y no sólo los números.
+  premio más fuerte que hay, porque cambia la partida y no sólo los números.
 - La mayoría **no castiga al fallar**. No cobrar el premio ya es el costo; encima
   castigar convierte el objetivo en una trampa.
 - Unos pocos tienen `falla()`, que los da por perdidos apenas se vuelven
@@ -370,7 +376,7 @@ te las trajo. No es una estadística: es que un mandato son cuarenta y ocho
 elecciones y sólo unas pocas se recuerdan. El final ya contaba cómo caíste; la
 crónica cuenta por qué.
 
-Lo que falta para tener de verdad el "reino que persiste" de Reigns: que una corrida
+Lo que falta para tener de verdad el "reino que persiste" de Reigns: que una partida
 deje marcas en la siguiente. Hoy el legado sólo desbloquea cosas.
 
 ## Los retratos
@@ -427,6 +433,26 @@ obliga a scrollear para ver los botones no es jugable.
 Eso también obligó a comprimir la tira de objetivos a dos fichas en una línea: el
 espacio vertical es de la carta, y todo lo demás está de invitado.
 
+## Vocabulario
+
+Dos palabras se cambiaron porque en la mesa no se dicen así:
+
+- **Círculo Rojo**, no "Rosca", para el medidor 🎩. Es como le dicen los que están
+  adentro. La clave interna sigue siendo `rosca` —el juego se llama así— y lo que
+  ve el jugador sale de `META_STATS.nombre`; el rótulo del medidor usa `corto`,
+  porque en una columna de ochenta y cuatro píxeles entra una palabra y no dos.
+- **Partida**, no "corrida", para una vuelta completa del juego. En este país una
+  corrida es cambiaria o bancaria, y en otro registro es peor. La única excepción
+  es la carta `corrida`, que habla de mil doscientos millones que se fueron en un
+  día: ahí la palabra es exactamente la que corresponde.
+- **Nombre del mandato**, no "semilla". Es lo mismo —el mismo nombre da la misma
+  partida— pero "semilla" es jerga de desarrollo y no le dice nada a nadie. En el
+  código sigue siendo `semilla`, que es lo que es.
+
+La regla general: **las claves del código son identificadores y no se traducen;
+lo que ve el jugador está en una sola propiedad y se puede cambiar sin tocar una
+línea de lógica.** Los tres cambios de arriba no movieron un solo número.
+
 ## Decisiones de tono
 
 - **Arquetipos, nunca personas reales.** Es mejor comedia y no es difamación.
@@ -441,7 +467,7 @@ espacio vertical es de la carta, y todo lo demás está de invitado.
 - Sonido: un golpe por carta, algo feo cuando un medidor entra en zona roja.
 - Un modo "a ciegas" que apague hasta la pista de facción, para quien quiera el
   Reigns puro.
-- Que una corrida deje marcas en la siguiente: el país que heredás debería
+- Que una partida deje marcas en la siguiente: el país que heredás debería
   acordarse de lo que hizo el anterior, que además eras vos.
 - Retratos que reaccionen: la misma receta con `ceja: 'enojada'` cuando el Pueblo
   está en rojo, o `ojos: 'cansado'` pasados los tres años de mandato.

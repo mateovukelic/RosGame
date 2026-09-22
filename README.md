@@ -42,13 +42,13 @@ sirve para revisar los personajes y probar combinaciones de partes al azar.
 | | | Si llega a 0 | Si llega a 100 |
 |---|---|---|---|
 | ✊ | **Pueblo** — la calle, los sindicatos, el aguante | *Que se vayan todos* | *Rehén de la plaza* |
-| 🎩 | **Rosca** — la interna, los gobernadores, el Congreso | *Juicio político* | *El sello de goma* |
+| 🎩 | **Círculo Rojo** — la interna, los gobernadores, el Congreso | *Juicio político* | *El sello de goma* |
 | 🌾 | **Campo** — el agro, los exportadores, los dólares de verdad | *Lockout* | *La patria contratista* |
 | 💵 | **Caja** — reservas, tesoro, la plata que hay | *Default* | *La plata no se come* |
 
 Como en Reigns, **el exceso mata igual que la falta** — pero acá el exceso no mata
-por ser exceso: mata porque cada techo es una forma de captura. Con la Rosca en 100
-no gobernás, firmás lo que te traen; con el Campo en 100 el gobierno tiene dueño;
+por ser exceso: mata porque cada techo es una forma de captura. Con el Círculo Rojo en
+100 no gobernás, firmás lo que te traen; con el Campo en 100 el gobierno tiene dueño;
 con el Pueblo en 100 no podés tomar ninguna decisión que la calle no aplauda, y un
 país no aguanta mucho tiempo así.
 
@@ -70,17 +70,18 @@ pero lo pagás igual, más tarde y más caro.
 
 ### Los toques roguelike
 
-- **Corridas cortas y permadeath.** Un mandato son 48 meses. Cuando caés, caés.
-- **Semillas.** `MATE-7741`. La misma semilla da exactamente la misma partida:
-  sirve para competir con un amigo o para reintentar una corrida injusta.
+- **Partidas cortas y permadeath.** Un mandato son 48 meses. Cuando caés, caés.
+- **Nombre del mandato.** `MATE-7741`. El mismo nombre da exactamente la misma
+  partida: sirve para competir con un amigo o para reintentar una partida injusta.
+  En el código sigue llamándose `semilla`, porque eso es lo que es.
 - **Decretos.** Cada 12 meses elegís 1 de 3 modificadores permanentes (Cepo,
   Motosierra, Ancla Cambiaria, Pacto de Gobernadores…). Cambian cómo pega todo
-  lo demás durante el resto de la corrida.
+  lo demás durante el resto de la partida.
 - **Gabinetes.** El loadout de arranque. Tres disponibles de entrada, tres que se
   desbloquean jugando.
 - **Cadenas de cartas.** Las decisiones dejan *flags* que habilitan cartas más
   adelante. Inaugurar un puente al 60% tiene consecuencias como ocho meses después.
-- **Legado.** Entre corridas se guardan finales descubiertos, récords y desbloqueos.
+- **Legado.** Entre partidas se guardan finales descubiertos, récords y desbloqueos.
 - **Ascensión.** Sobrevivir el mandato completo no termina el juego: podés seguir
   gobernando, con el país más caliente cada vez, hasta tres mandatos.
 
@@ -96,7 +97,7 @@ El archivo del menú los va revelando.
 
 ```bash
 npm test        # 97 tests: motor, mazo, siembra, prosa, objetivos, retratos y balance
-npm run validar # reporte de salud del mazo + 1000 corridas simuladas
+npm run validar # reporte de salud del mazo + 1000 partidas simuladas
 npm run demo    # arma dist/demo.html, para hosts que ponen su propio esqueleto
 npm run exportar # arma dist/la-rosca.html, un archivo para mandar por mensaje
 ```
@@ -108,12 +109,12 @@ index.html
 styles/main.css
 src/
   engine/           # reglas puras, sin DOM: corre entero en Node
-    juego.js        # orquestador de la corrida
+    juego.js        # orquestador de la partida
     mazo.js         # qué carta sale cada mes
     efectos.js      # efectos, condiciones, emisión
     finales.js      # evaluación de finales
     objetivos.js    # sorteo y resolución de los objetivos del mandato
-    legado.js       # progresión entre corridas
+    legado.js       # progresión entre partidas
     simulador.js    # IA de prueba para balancear
     rng.js          # random determinístico por semilla
     constantes.js   # ⚙️ todo el balance en un solo lugar
@@ -306,7 +307,7 @@ Todo vive en `src/engine/constantes.js`. Después de cambiar algo:
 npm run validar
 ```
 
-Te dice la presión neta del mazo sobre cada medidor y simula 1000 corridas con tres
+Te dice la presión neta del mazo sobre cada medidor y simula 1000 partidas con tres
 estrategias distintas (al azar, alternando y una IA prudente). La suite de tests
 falla si el juego se vuelve imposible, trivial, o si un solo final se come todas
 las partidas.
@@ -346,7 +347,7 @@ Vertical slice jugable y completa: 158 cartas (16 de ellas consecuencias con
 fecha), 16 decretos, 14 objetivos, 6 gabinetes, 14 finales, 25 personajes con
 retrato propio.
 
-**Lo próximo, en orden:** sonido · un hilo narrativo que cruce corridas (que lo que
+**Lo próximo, en orden:** sonido · un hilo narrativo que cruce partidas (que lo que
 hiciste en el mandato anterior aparezca en el siguiente) · más cadenas largas ·
 expresión del retrato según el estado del país · modo "provincia".
 

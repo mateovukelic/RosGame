@@ -2,6 +2,9 @@
 
 export const STATS = ['pueblo', 'rosca', 'campo', 'caja'];
 
+// Las claves internas (`rosca`, `caja`…) son identificadores y no cambian: lo
+// que ve el jugador es `nombre`. `corto` existe para el rótulo del medidor,
+// donde hay ancho para una palabra y no para dos.
 export const META_STATS = {
   pueblo: {
     nombre: 'Pueblo',
@@ -9,9 +12,10 @@ export const META_STATS = {
     desc: 'La calle, los sindicatos, el aguante. Sin pueblo no hay gobernabilidad.'
   },
   rosca: {
-    nombre: 'Rosca',
+    nombre: 'Círculo Rojo',
+    corto: 'Círculo',
     icono: '🎩',
-    desc: 'La interna, los gobernadores, el Congreso. Los que te ponen y te sacan.'
+    desc: 'La interna, los gobernadores, el Congreso. Los que te ponen y los que te sacan.'
   },
   campo: {
     nombre: 'Campo',

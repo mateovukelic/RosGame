@@ -53,11 +53,11 @@ test('los stats nunca se salen del rango 0-100', () => {
   }
 });
 
-test('toda corrida termina en un final y nunca se queda sin cartas', () => {
+test('toda partida termina en un final y nunca se queda sin cartas', () => {
   for (let i = 0; i < 40; i++) {
     const j = new Juego({ semilla: `LOOP-${i}` });
     const turnos = jugarHasta(j, (_, t) => ((i + t) % 2 ? 'izq' : 'der'));
-    assert.ok(j.terminado, `semilla LOOP-${i}: la corrida no terminó en ${turnos} turnos`);
+    assert.ok(j.terminado, `semilla LOOP-${i}: la partida no terminó en ${turnos} turnos`);
     assert.ok(j.estado.final, `semilla LOOP-${i}: terminó sin final asignado`);
     assert.ok(j.carta || j.terminado, 'se quedó sin cartas para robar');
   }

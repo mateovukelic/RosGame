@@ -306,7 +306,7 @@ function mostrarDecretos() {
 function mostrarFinal() {
   const final = juego.estado.final;
   const resumen = juego.resumen();
-  legado.registrarCorrida(resumen);
+  legado.registrarPartida(resumen);
 
   $('#final-tipo').textContent =
     { gloria: 'Fin del mandato', caida: 'Se terminó', rareza: 'Final inesperado' }[final.tipo] ||
@@ -341,7 +341,7 @@ function mostrarFinal() {
       ['Meses', resumen.mesesTotales],
       ['Objetivos', `${resumen.objetivosCumplidos}/${resumen.objetivos.length}`],
       ['Decretos', resumen.decretos.length],
-      ['Semilla', resumen.semilla]
+      ['Nombre', resumen.semilla]
     ].map(([nombre, valor]) =>
       crear('div', { clase: 'progreso-item' }, [
         crear('b', { texto: String(valor) }),

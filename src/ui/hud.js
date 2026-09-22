@@ -21,7 +21,7 @@ export class Hud {
         crear('div', { clase: 'medidor-icono', texto: meta.icono }),
         delta,
         crear('div', { clase: 'medidor-barra' }, [relleno]),
-        crear('div', { clase: 'medidor-nombre', texto: meta.nombre }),
+        crear('div', { clase: 'medidor-nombre', texto: meta.corto || meta.nombre }),
         crear('div', { clase: 'medidor-pista' }, [burbuja])
       ]);
       this.medidores[stat] = { raiz: medidor, relleno, burbuja, delta };

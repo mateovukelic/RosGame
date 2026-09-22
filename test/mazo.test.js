@@ -272,7 +272,7 @@ test('una parte del mazo son hechos consumados, no peticiones', () => {
 });
 
 test('el mazo tiene volumen suficiente en cada paquete', () => {
-  assert.ok(TODAS_LAS_CARTAS.length >= 100, 'el mazo es chico para una corrida de 48 meses');
+  assert.ok(TODAS_LAS_CARTAS.length >= 100, 'el mazo es chico para una partida de 48 meses');
   for (const [nombre, cartas] of Object.entries(PAQUETES)) {
     assert.ok(cartas.length >= 8, `el paquete "${nombre}" tiene muy pocas cartas`);
   }

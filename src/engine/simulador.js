@@ -42,7 +42,7 @@ export const ESTRATEGIAS = {
   }
 };
 
-export function simularCorrida({ semilla, gabinete = 'tecnico', estrategia = 'azar', rng = Math.random, maxTurnos = 400 }) {
+export function simularPartida({ semilla, gabinete = 'tecnico', estrategia = 'azar', rng = Math.random, maxTurnos = 400 }) {
   const juego = new Juego({ semilla, gabinete });
   const decidir = typeof estrategia === 'function' ? estrategia : ESTRATEGIAS[estrategia];
   let turnos = 0;
@@ -73,16 +73,16 @@ export function simularCorrida({ semilla, gabinete = 'tecnico', estrategia = 'az
   return { ...juego.resumen(), mandatosCompletados };
 }
 
-export function simularLote({ corridas = 300, gabinete = 'tecnico', estrategia = 'azar', semillaBase = 'SIM' } = {}) {
+export function simularLote({ partidas = 300, gabinete = 'tecnico', estrategia = 'azar', semillaBase = 'SIM' } = {}) {
   const resultados = [];
-  for (let i = 0; i < corridas; i++) {
+  for (let i = 0; i < partidas; i++) {
     // rng propio para las decisiones, así el mazo y la estrategia no se pisan
     let s = i * 2654435761 + 12345;
     const rng = () => {
       s = (s * 1103515245 + 12345) & 0x7fffffff;
       return s / 0x7fffffff;
     };
-    resultados.push(simularCorrida({ semilla: `${semillaBase}-${i}`, gabinete, estrategia, rng }));
+    resultados.push(simularPartida({ semilla: `${semillaBase}-${i}`, gabinete, estrategia, rng }));
   }
 
   const meses = resultados.map((r) => r.mesesTotales).sort((a, b) => a - b);
@@ -90,7 +90,7 @@ export function simularLote({ corridas = 300, gabinete = 'tecnico', estrategia =
   for (const r of resultados) finales[r.final] = (finales[r.final] || 0) + 1;
 
   return {
-    corridas,
+    partidas,
     gabinete,
     estrategia,
     mediana: meses[Math.floor(meses.length / 2)],
