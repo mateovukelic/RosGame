@@ -1,5 +1,6 @@
 // Resolución de efectos y condiciones de las cartas.
 import { STATS, BALANCE } from './constantes.js';
+import { calendario } from './calendario.js';
 
 export function limitar(valor, min, max) {
   return Math.max(min, Math.min(max, valor));
@@ -120,6 +121,8 @@ export function aplicarDeltas(estado, deltas) {
 // ---- Condiciones ----
 // requiere: {
 //   mesMin, mesMax, mandatoMin,
+//   mesCalendario: 'jun' | ['may', 'jun'],   // sólo en esa época del año
+//   anio: 2 | [2, 4],                        // sólo en ese año de gestión
 //   flags: ['x'],        // todas presentes
 //   algunaFlag: ['a','b'],
 //   sinFlags: ['y'],     // ninguna presente
@@ -134,6 +137,12 @@ export function cumpleCondicion(requiere, estado) {
   if (requiere.mesMin != null && estado.mes < requiere.mesMin) return false;
   if (requiere.mesMax != null && estado.mes > requiere.mesMax) return false;
   if (requiere.mandatoMin != null && estado.mandato < requiere.mandatoMin) return false;
+
+  if (requiere.mesCalendario != null || requiere.anio != null) {
+    const { clave, anio } = calendario(estado.mes);
+    if (requiere.mesCalendario != null && ![].concat(requiere.mesCalendario).includes(clave)) return false;
+    if (requiere.anio != null && ![].concat(requiere.anio).includes(anio)) return false;
+  }
 
   if (requiere.flags && !requiere.flags.every((f) => estado.flags.has(f))) return false;
   if (requiere.algunaFlag && !requiere.algunaFlag.some((f) => estado.flags.has(f))) return false;

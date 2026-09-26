@@ -140,6 +140,18 @@ export const PERSONAJES = {
       prenda: 'sotana', tela: '#25262b'
     }
   },
+  obispo: {
+    nombre: 'El Obispo',
+    color: '#5a3a6a',
+    bajada: 'Habla desde el púlpito una vez por año. Con eso le alcanza.',
+    voz:
+      'Habla en nombre de otros —los pobres, la patria— y nunca de sí mismo. Avisa antes, para que después no se pueda decir que no avisó.',
+    retrato: {
+      cara: 'redonda', piel: 'clara', pelo: 'canoso', corte: 'entradas',
+      ojos: 'cansado', ceja: 'alta', boca: 'neutra',
+      prenda: 'sotana', tela: '#25262b', accesorio: 'solideo', accesorioColor: '#7a2f6f'
+    }
+  },
   puntero: {
     nombre: 'El Puntero',
     color: '#7f4f2f',

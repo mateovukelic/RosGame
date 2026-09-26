@@ -5,6 +5,8 @@ import { crearRng } from '../src/engine/rng.js';
 import { aplicarDeltas, calcularEfectos, cumpleCondicion } from '../src/engine/efectos.js';
 import { resolverFinal } from '../src/engine/finales.js';
 import { BALANCE, FASES } from '../src/engine/constantes.js';
+import { AGENDA } from '../src/data/almanaque.js';
+import { TODAS_LAS_CARTAS } from '../src/data/cartas/index.js';
 
 function jugarHasta(juego, elegir, maxTurnos = 400) {
   let turnos = 0;
@@ -168,13 +170,23 @@ test('una carta no se repite mientras haya alternativas', () => {
       j.tomarDecreto(j.estado.ofertaDecretos[0].id);
       continue;
     }
-    vistas.push(j.carta.id);
+    vistas.push({ id: j.carta.id, anio: j.calendario().anio });
     j.elegir(turnos % 2 ? 'izq' : 'der');
     turnos++;
   }
+  // Lo del almanaque vuelve cada año a propósito (la paritaria docente es
+  // todos los febreros), así que se mide distinto: nunca dos veces el mismo año.
+  const delAlmanaque = new Set([
+    ...AGENDA.flatMap((e) => e.cartas),
+    ...TODAS_LAS_CARTAS.filter((c) => c.anual).map((c) => c.id)
+  ]);
   const repetibles = new Set(['emision', 'paritaria', 'inflacion_mensual']);
-  const unicas = vistas.filter((id) => !repetibles.has(id));
-  assert.equal(new Set(unicas).size, unicas.length, `se repitieron cartas: ${vistas.join(', ')}`);
+
+  const sueltas = vistas.filter((v) => !repetibles.has(v.id) && !delAlmanaque.has(v.id)).map((v) => v.id);
+  assert.equal(new Set(sueltas).size, sueltas.length, `se repitieron cartas: ${sueltas.join(', ')}`);
+
+  const almanaque = vistas.filter((v) => delAlmanaque.has(v.id)).map((v) => `${v.id}@${v.anio}`);
+  assert.equal(new Set(almanaque).size, almanaque.length, `una carta del almanaque salió dos veces en el mismo año: ${almanaque.join(', ')}`);
 });
 
 test('previsualizar estima el impacto de cada opción antes de elegirla', () => {

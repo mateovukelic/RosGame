@@ -1,7 +1,7 @@
 # LA ROSCA — hoja de ruta narrativa
 
-> Estado: **propuesta, no implementada.** Este documento define hacia dónde va el
-> contenido. `DESIGN.md` explica cómo funciona lo que ya existe.
+> Estado: **fase 1 hecha** (calendario real y almanaque). Las fases 2 a 5 siguen
+> siendo propuesta. `DESIGN.md` explica cómo funciona lo que ya existe.
 
 ## El diagnóstico
 
@@ -253,11 +253,53 @@ Poco, y todo chico:
 
 | Fase | Qué | Por qué primero |
 |---|---|---|
-| **1** | Calendario real + almanaque anual | El cambio más barato y el que más identidad da. Casi todo es reetiquetar cartas existentes y sumar unas diez. |
+| **1** ✅ | Calendario real + almanaque anual | Hecho. Ver "Fase 1: lo que se construyó" abajo. |
 | **2** | Año 2: el medio término | Le da forma a la mitad del mandato. Suma el Encuestador y el Armador. |
 | **3** | Año 4: la sucesión y el final electoral | Cambia cómo termina el juego. Suma al Candidato Opositor. |
 | **4** | Los cuatro hilos largos | Usa la `siembra` que ya existe. Suma al Ex Presidente. |
 | **5** | Año 3 + balance de facciones + herencia entre partidas | Lo que queda, con todo lo anterior andando. |
+
+## Fase 1: lo que se construyó
+
+**Calendario.** El HUD dice `Junio · Año 1`. Los objetivos se escriben con fechas
+("Llegá a julio del año 2…") y en la partida muestran cuánto falta ("19 meses").
+`src/engine/calendario.js`.
+
+**Agenda** (`src/data/almanaque.js`). Cinco golpes fijos por año, que salen sí o sí
+en su mes, cada uno con dos variantes para que el año 2 no repita el año 1:
+
+| Mes | Golpe | Año 1 | Años siguientes |
+|---|---|---|---|
+| Febrero | Las clases | La Maestra: aumento o no arrancan | La Gobernadora: sin el fondo nacional no pagan |
+| Marzo | La Asamblea y el 24 | Discurso inaugural; tu Vice preside la Asamblea | Se alternan el 24 de marzo y el "otro 1° de marzo" |
+| Abril | La cosecha gruesa | Dólar diferencial para que liquiden | Cosecha récord y precios en el piso |
+| Junio | Aguinaldo y frío | El bono sobre el aguinaldo | Ola polar: barcos de gas o cortes a la industria |
+| Septiembre | El presupuesto | ¿Con qué inflación se escribe? | Tres obras de una provincia a cambio de los votos |
+
+**Estacionales** (`requiere.mesCalendario`). Once cartas que sólo compiten en su
+época y, cuando están en su ventana, pesan treinta veces más: el Tedeum en mayo
+(con el Obispo, personaje nuevo), las vacaciones presidenciales en enero, la
+garrafa en invierno, el paro de controladores en enero, el dengue, el granizo, las
+cajas que pide el intendente cada noviembre y el diciembre que las cobra.
+
+**Anuales** (`anual: true`). Cinco de esas cartas vuelven cada año, pero nunca dos
+veces el mismo año.
+
+Tres decisiones que se tomaron sobre la marcha:
+
+- **El calendario manda.** Si una consecuencia sembrada vence en un mes de agenda,
+  llega el primer mes libre. El 1° de marzo no se corre por una factura.
+- **El 24 de marzo no está en el año 1.** Marzo del año 1 es el discurso
+  inaugural ante la Asamblea; el 24 entra desde el año 2, alternando con la
+  apertura de sesiones.
+- **El 17 de octubre quedó afuera.** Es una fecha de un partido, y la regla es no
+  nombrar partidos. Si se agrega, tiene que ser como "el acto de tu espacio", sin
+  identificarlo.
+
+Efecto en el balance: el azar sube de 30 a 34 meses de mediana (sigue dentro de la
+franja 10–40) y las estrategias automáticas empeoran — aceptar todo baja a 22 y
+rechazar todo a 20. El almanaque castiga el piloto automático, que es lo que tiene
+que hacer.
 
 ## Reglas de tono que se mantienen
 

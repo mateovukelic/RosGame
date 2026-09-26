@@ -69,6 +69,10 @@ export const BALANCE = {
   impactoMedio: 5,
   impactoFuerte: 10,
 
+  // Una carta anclada a una época del año sólo compite en su ventana, así que
+  // ahí tiene que pesar mucho o casi nunca sale: el Tedeum tiene un mes por año.
+  pesoEstacional: 30,
+
   // Cuántas cartas recientes no se pueden repetir (anti-loop)
   memoriaAntiRepeticion: 14,
 

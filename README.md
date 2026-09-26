@@ -96,7 +96,7 @@ El archivo del menú los va revelando.
 ## Desarrollo
 
 ```bash
-npm test        # 97 tests: motor, mazo, siembra, prosa, objetivos, retratos y balance
+npm test        # 108 tests: motor, mazo, almanaque, siembra, prosa, objetivos, retratos y balance
 npm run validar # reporte de salud del mazo + 1000 partidas simuladas
 npm run demo    # arma dist/demo.html, para hosts que ponen su propio esqueleto
 npm run exportar # arma dist/la-rosca.html, un archivo para mandar por mensaje
@@ -114,13 +114,15 @@ src/
     efectos.js      # efectos, condiciones, emisión
     finales.js      # evaluación de finales
     objetivos.js    # sorteo y resolución de los objetivos del mandato
+    calendario.js   # el mes 1 es diciembre: "Junio · Año 1"
     legado.js       # progresión entre partidas
     simulador.js    # IA de prueba para balancear
     rng.js          # random determinístico por semilla
     constantes.js   # ⚙️ todo el balance en un solo lugar
   data/             # contenido
     cartas/         # base · economia · calle · rosca · folklore
-                    # crisis · eventos · consecuencias
+                    # crisis · eventos · consecuencias · almanaque
+    almanaque.js    # la agenda: qué golpe fijo sale en qué mes
     personajes.js decretos.js gabinetes.js finales.js objetivos.js
   ui/               # presentación (DOM)
     retratos.js     # retratos SVG paramétricos (puro: se testea en Node)
@@ -201,7 +203,7 @@ pistas byte por byte idénticas, así que el día que alguien filtre el signo, f
 
 ### La convención de lados
 
-De las 158 cartas, **104 son propuestas** (alguien pide algo) y **54 son dilemas**
+De las 171 cartas, **109 son propuestas** (alguien pide algo) y **62 son dilemas**
 (dos caminos, ningún sí). Cada carta lo declara en `forma`, y las propuestas marcan
 `der: { acepta: true }` / `izq: { rechaza: true }`. Cuatro tests lo verifican, así
 que no se puede colar una carta con el sí a la izquierda.
@@ -210,7 +212,7 @@ La idea es que la dificultad esté en **decidir**, no en descifrar de qué lado 
 el sí. Eso abre un riesgo obvio —que decirle que sí a todo el mundo se vuelva una
 estrategia— y por eso hay dos tests que lo miden: aceptar todo y rechazar todo
 tienen que rendir *peor* que jugar al azar, y tienen que morir de formas distintas.
-Hoy dan 25 y 26 meses de mediana contra 30 al azar, y mueren de formas opuestas:
+Hoy dan 22 y 20 meses de mediana contra 34 al azar, y mueren de formas opuestas:
 aceptar todo termina en *Rehén de la plaza* y rechazar todo en *Que se vayan
 todos*.
 
@@ -350,9 +352,10 @@ Es una propuesta: todavía no está implementada.
 
 ## Estado
 
-Vertical slice jugable y completa: 158 cartas (16 de ellas consecuencias con
-fecha), 16 decretos, 14 objetivos, 6 gabinetes, 14 finales, 25 personajes con
-retrato propio.
+Vertical slice jugable y completa: 171 cartas (16 consecuencias con fecha y 5
+golpes fijos del almanaque), 16 decretos, 14 objetivos, 6 gabinetes, 14 finales,
+26 personajes con retrato propio. El mandato sigue el calendario real: arranca en
+diciembre y cada año tiene sus fechas (ver `NARRATIVA.md`).
 
 **Lo próximo, en orden:** sonido · un hilo narrativo que cruce partidas (que lo que
 hiciste en el mandato anterior aparezca en el siguiente) · más cadenas largas ·

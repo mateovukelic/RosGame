@@ -32,7 +32,7 @@ export const CARTAS_CONSECUENCIAS = [
     personaje: 'gremio_docente',
     soloEncadenada: true,
     irrepetible: true,
-    texto: 'Las escuelas que conectaste en junio pasaron el invierno con calefacción. Vengo a decirte eso y nada más.',
+    texto: 'Las escuelas que conectaste al gas el año pasado pasaron este invierno con calefacción. Vengo a decirte eso nada más.',
     izq: {
       texto: 'Que salga en los diarios',
       efectos: { pueblo: 6, rosca: 3, campo: -2 },

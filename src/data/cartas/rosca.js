@@ -237,8 +237,10 @@ export const CARTAS_ROSCA = [
     id: 'intendente_cajas',
     forma: 'propuesta',
     personaje: 'intendente',
-    texto: 'Necesito las cajas para diciembre. Vos sabés cómo es diciembre acá. Yo lo vi en el noventa y ocho.',
+    texto: 'Necesito las cajas para diciembre. Vos sabés cómo es diciembre acá. Yo lo vi en el dos mil uno.',
     peso: 1.1,
+    anual: true,
+    requiere: { mesCalendario: 'nov' },
     izq: {
       rechaza: true,
       texto: 'Este año no hay',
@@ -259,7 +261,7 @@ export const CARTAS_ROSCA = [
     personaje: 'intendente',
     texto: 'Te avisé lo que pasaba en diciembre. Bueno: es diciembre. Y no te estoy llamando para saludarte.',
     peso: 1.6,
-    requiere: { flags: ['diciembre_bravo'], mesMin: 12 },
+    requiere: { flags: ['diciembre_bravo'], mesMin: 12, mesCalendario: 'dic' },
     izq: {
       rechaza: true,
       texto: 'Que se lo banque él',

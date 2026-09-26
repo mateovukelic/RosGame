@@ -249,8 +249,9 @@ export const CARTAS_BASE = [
     id: 'maestra',
     forma: 'propuesta',
     personaje: 'gremio_docente',
-    texto: 'Cuarenta escuelas sin gas y estamos en junio. Los chicos toman la leche con la campera puesta.',
+    texto: 'Cuarenta escuelas sin gas y ya es invierno. Los chicos toman la leche del recreo con la campera puesta.',
     peso: 1.3,
+    requiere: { mesCalendario: ['may', 'jul', 'ago'] },
     izq: {
       rechaza: true,
       texto: 'Que se dé clase igual',
@@ -479,14 +480,14 @@ export const CARTAS_BASE = [
     id: 'periodista_100dias',
     forma: 'propuesta',
     personaje: 'periodista',
-    texto: 'Cien días de gestión. Le pido un logro concreto. Uno. Tengo la cámara encendida y tengo todo el tiempo.',
+    texto: 'Medio año de gestión. Le pido un logro concreto. Uno. Tengo la cámara encendida y tengo todo el tiempo.',
     peso: 1.3,
-    requiere: { mesMin: 3, mesMax: 8 },
+    requiere: { mesMin: 6, mesMax: 8 },
     izq: {
       rechaza: true,
-      texto: 'Cien días no es nada',
+      texto: 'Medio año no es nada',
       efectos: { pueblo: -4, rosca: -2, campo: 2 },
-      replica: '"CIEN DÍAS NO ES NADA", a ocho columnas, con tu cara al lado del título.'
+      replica: '"MEDIO AÑO NO ES NADA", a ocho columnas, con tu cara al lado del título.'
     },
     der: {
       acepta: true,

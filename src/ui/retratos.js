@@ -353,6 +353,10 @@ export const ACCESORIOS = {
     `<rect x="${CX + rx - 1}" y="${CY - 4}" width="7" height="12" rx="3" fill="${tinta}"/>` +
     `<path d="M${CX - rx - 3},${CY + 6} q-4,10 6,12" fill="none" stroke="${tinta}" stroke-width="2"/>` +
     `<circle cx="${CX - rx + 5}" cy="${CY + 19}" r="2.4" fill="${tinta}"/>`,
+  // Solideo morado y cruz pectoral: el obispo, no el cura del barrio.
+  solideo: ({ ry, tela }) =>
+    `<path d="M${CX - 10},${CY - ry + 3} C${CX - 10},${CY - ry - 6} ${CX + 10},${CY - ry - 6} ${CX + 10},${CY - ry + 3} Z" fill="${tela}"/>` +
+    `<path d="M${CX},${CY + 35} v10 M${CX - 4},${CY + 39} h8" fill="none" stroke="#d8a657" stroke-width="2.4" stroke-linecap="round"/>`,
   aros: ({ rx }) =>
     [-1, 1]
       .map((s) => `<circle cx="${CX + s * (rx + 1)}" cy="${CY + 9}" r="2.6" fill="#d8a657"/>`)

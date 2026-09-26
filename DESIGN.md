@@ -84,6 +84,36 @@ Tres reglas que las sostienen:
 - **Ninguna sale por sorteo.** Son `soloEncadenada`: si nadie la sembró, no existe.
   Un test verifica que ninguna quede huérfana.
 
+## El almanaque
+
+El mes 1 es diciembre, porque se asume el 10 de diciembre. Con esa sola
+correspondencia (`src/engine/calendario.js`) el año de gestión va de diciembre a
+noviembre y las fechas de la política argentina caen solas: el 1° de marzo es el
+mes 4, el medio término el 23, la presidencial el 47.
+
+Sobre eso hay tres clases de carta, de más rígida a más libre:
+
+- **De agenda** (`src/data/almanaque.js`). Salen sí o sí en su mes. Cada entrada es
+  un pozo de variantes: se elige la primera que no salió en la partida, en el orden
+  escrito, así el año 1 abre con la primera y el año 2 trae la segunda. Agotadas,
+  se sortea. Son `soloEncadenada`: nunca salen por sorteo. Hay un test que impide
+  que un año tenga más de seis meses fijos, porque si el almanaque ocupara todo el
+  sorteo desaparecería.
+- **Estacionales** (`requiere: { mesCalendario }`). Sólo compiten en su ventana, y
+  ahí pesan `BALANCE.pesoEstacional` (30) veces más. Sin ese peso, una carta que
+  tiene un mes por año prácticamente no sale nunca: el Tedeum competiría con
+  ochenta cartas en el único mayo del año.
+- **Anuales** (`anual: true`). Pueden volver cada año de gestión, pero nunca dos
+  veces el mismo. Se miden por año y no por la memoria de recientes, porque esa
+  memoria es de catorce meses: con ella, la carta de febrero del año pasado
+  bloquearía la de este febrero.
+
+**El calendario manda.** El orden de robo es: agenda, consecuencias sembradas,
+cartas encadenadas, sorteo. Una consecuencia que vence en un mes de agenda llega el
+primer mes libre; para eso las siembras tienen ventana. Lo contrario —correr el
+1° de marzo porque había una factura pendiente— rompería la única promesa que el
+calendario hace.
+
 ## Por qué la inflación es un medidor aparte
 
 Los cuatro stats son *equilibrios*: matan por exceso y por defecto. La inflación
@@ -195,7 +225,7 @@ El motor no toca el DOM, así que se puede correr entero en Node. `simulador.js`
 juega miles de partidas con tres estrategias:
 
 - **azar** — el piso. Debe sobrevivir entre 10 y 40 meses de mediana. Si muere
-  antes, el juego es injusto; si sobrevive más, no hay tensión. Hoy: 31.
+  antes, el juego es injusto; si sobrevive más, no hay tensión. Hoy: 34.
 - **prudente** — una IA que proyecta ambas opciones y elige la que deja el país
   más lejos de los bordes. **Tiene que rendir claramente más que el azar**: si no,
   la habilidad no paga y el juego es una tragamonedas.
@@ -330,7 +360,7 @@ decisión también. Si "decile que sí a todo el mundo" fuera razonable, el jueg
 resolvería sin pensar. Así que eso también es un test, con dos condiciones:
 
 - Aceptar todo y rechazar todo tienen que rendir **peor** que jugar al azar. Hoy
-  dan 25 y 26 meses de mediana contra 30 al azar.
+  dan 22 y 20 meses de mediana contra 34 al azar.
 - Tienen que **morir de formas distintas**. Si los dos terminaran en el mismo
   final, el mazo estaría empujando sistemáticamente para un lado. Hoy aceptar todo
   termina en *Rehén de la plaza* (no podés tomar una sola decisión impopular) y

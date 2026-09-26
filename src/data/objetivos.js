@@ -26,7 +26,7 @@ export const OBJETIVOS = [
     id: 'dolar_quieto',
     plazo: 'corto',
     titulo: 'Que no se escape',
-    desc: 'Mes 18 con la inflación por debajo de 45 y la Caja arriba de 40. El famoso "veranito".',
+    desc: 'Mayo del año 2 con la inflación por debajo de 45 y la Caja arriba de 40. El famoso "veranito".',
     vence: 18,
     logro: (e) => e.inflacion < 45 && e.stats.caja > 40,
     premio: { campo: 8, pueblo: 4 }
@@ -35,7 +35,7 @@ export const OBJETIVOS = [
     id: 'gobernabilidad',
     plazo: 'corto',
     titulo: 'Tener los votos',
-    desc: 'Llegá al mes 20 con el Círculo Rojo arriba de 55. Sin gobernadores no se aprueba nada.',
+    desc: 'Llegá a julio del año 2 con el Círculo Rojo arriba de 55. Sin gobernadores no se aprueba nada.',
     vence: 20,
     logro: (e) => e.stats.rosca >= 55,
     premio: { decretoExtra: true }
@@ -44,7 +44,7 @@ export const OBJETIVOS = [
     id: 'no_soltar_calle',
     plazo: 'corto',
     titulo: 'No soltar la calle',
-    desc: 'Mes 16 con el Pueblo arriba de 55, y sin que baje de 22 en el camino.',
+    desc: 'Marzo del año 2 con el Pueblo arriba de 55, y sin que baje de 22 en el camino.',
     vence: 16,
     logro: (e) => e.stats.pueblo >= 55,
     falla: (e) => e.stats.pueblo <= 22,
@@ -54,7 +54,7 @@ export const OBJETIVOS = [
     id: 'jubilados',
     plazo: 'corto',
     titulo: 'Cumplirle a los viejos',
-    desc: 'Llegá al mes 22 sin quedar como incumplidor. Lo que se promete en campaña se cobra en el padrón.',
+    desc: 'Llegá a septiembre del año 2 sin quedar como incumplidor. Lo que se promete en campaña se cobra en el padrón.',
     vence: 22,
     logro: sinFlag('incumplidor'),
     premio: { pueblo: 9 },
@@ -64,7 +64,7 @@ export const OBJETIVOS = [
     id: 'sembrar',
     plazo: 'corto',
     titulo: 'Que siembren',
-    desc: 'Mes 20 con el Campo arriba de 58. Sin cosecha no hay dólares, y sin dólares no hay nada.',
+    desc: 'Julio del año 2 con el Campo arriba de 58. Sin cosecha no hay dólares, y sin dólares no hay nada.',
     vence: 20,
     logro: (e) => e.stats.campo >= 58,
     premio: { caja: 10 }
@@ -85,7 +85,7 @@ export const OBJETIVOS = [
     id: 'domar_bestia',
     plazo: 'largo',
     titulo: 'Domar la bestia',
-    desc: 'Mes 36 con la inflación abajo de 35. El logro que ningún gobierno pudo colgarse.',
+    desc: 'Noviembre del año 3 con la inflación abajo de 35. El logro que ningún gobierno pudo colgarse.',
     vence: 36,
     logro: (e) => e.inflacion < 35,
     premio: { pueblo: 12, campo: 6, decretoExtra: true }
@@ -94,7 +94,7 @@ export const OBJETIVOS = [
     id: 'tu_ley',
     plazo: 'largo',
     titulo: 'Tu ley',
-    desc: 'Conseguí aprobar tu ley estrella antes del mes 34. Sin ley no hay legado, hay gestión.',
+    desc: 'Conseguí aprobar tu ley estrella antes de septiembre del año 3. Sin ley no hay legado, hay gestión.',
     vence: 34,
     logro: (e) => e.flags.has('ley_aprobada'),
     premio: { rosca: 8, pueblo: 6 }
@@ -103,7 +103,7 @@ export const OBJETIVOS = [
     id: 'sin_tutela',
     plazo: 'largo',
     titulo: 'Sin tutela',
-    desc: 'Llegá al mes 40 sin firmar con el organismo. Se puede. Cuesta.',
+    desc: 'Llegá a marzo del año 4 sin firmar con el organismo. Se puede. Cuesta.',
     vence: 40,
     logro: sinFlag('acuerdo_firmado'),
     premio: { pueblo: 12, rosca: 5 }
@@ -121,7 +121,7 @@ export const OBJETIVOS = [
     id: 'malabarista',
     plazo: 'largo',
     titulo: 'El malabarista',
-    desc: 'Mes 38 con las cuatro facciones entre 35 y 70. Nadie del todo contento, nadie del todo en contra.',
+    desc: 'Enero del año 4 con las cuatro facciones entre 35 y 70. Nadie del todo contento, nadie del todo en contra.',
     vence: 38,
     logro: (e) => Object.values(e.stats).every((v) => v >= 35 && v <= 70),
     premio: { decretoExtra: true, caja: 8 }
@@ -130,7 +130,7 @@ export const OBJETIVOS = [
     id: 'apostar_futuro',
     plazo: 'largo',
     titulo: 'Apostar al futuro',
-    desc: 'Bancá a la ciencia antes del mes 32. No da votos ahora. Da otra cosa.',
+    desc: 'Bancá a la ciencia antes de julio del año 3. No da votos ahora. Da otra cosa.',
     vence: 32,
     logro: (e) => e.flags.has('ciencia_bancada'),
     premio: { campo: 8, caja: 8 }
@@ -139,7 +139,7 @@ export const OBJETIVOS = [
     id: 'caja_fuerte',
     plazo: 'largo',
     titulo: 'Dejar la casa ordenada',
-    desc: 'Mes 42 con la Caja arriba de 55. Que el que venga no herede un incendio.',
+    desc: 'Mayo del año 4 con la Caja arriba de 55. Que el que venga no herede un incendio.',
     vence: 42,
     logro: (e) => e.stats.caja >= 55,
     premio: { campo: 10, rosca: 6 }

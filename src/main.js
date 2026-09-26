@@ -4,6 +4,7 @@ import { Juego } from './engine/juego.js';
 import { Legado } from './engine/legado.js';
 import { FASES, BALANCE } from './engine/constantes.js';
 import { semillaAlAzar } from './engine/rng.js';
+import { fecha, fechaCorta } from './engine/calendario.js';
 import { personaje } from './data/personajes.js';
 import { ESTADO_OBJETIVO } from './engine/objetivos.js';
 import { retratoSvg } from './ui/retratos.js';
@@ -96,14 +97,24 @@ function pintarMenu() {
 // ---------------------------------------------------------------- PRÓLOGO
 const MARCA = { cumplido: '✓', fallido: '✕', activo: '◦' };
 
-function fichaObjetivo(objetivo, { conDesc = true } = {}) {
+// Durante la partida, la ficha dice cuánto falta: es lo que sirve para decidir
+// y no obliga a hacer la cuenta. La fecha exacta está en la descripción (que se
+// ve al tocar la ficha) y en el prólogo, que muestra el calendario completo.
+function plazoObjetivo(objetivo, mesActual) {
+  if (mesActual == null || objetivo.resultado !== ESTADO_OBJETIVO.ACTIVO) return fechaCorta(objetivo.vence);
+  const faltan = objetivo.vence - mesActual;
+  if (faltan <= 0) return 'este mes';
+  return faltan === 1 ? '1 mes' : `${faltan} meses`;
+}
+
+function fichaObjetivo(objetivo, { conDesc = true, mesActual = null } = {}) {
   return crear('div', { clase: `objetivo ${objetivo.resultado || 'activo'}` }, [
     crear('span', { clase: 'objetivo-marca', texto: MARCA[objetivo.resultado || 'activo'] }),
     crear('div', { clase: 'objetivo-cuerpo' }, [
       crear('div', { clase: 'objetivo-tit', texto: objetivo.titulo }),
       conDesc ? crear('div', { clase: 'objetivo-desc', texto: objetivo.desc }) : null
     ]),
-    crear('span', { clase: 'objetivo-plazo', texto: `mes ${objetivo.vence}` })
+    crear('span', { clase: 'objetivo-plazo', texto: plazoObjetivo(objetivo, mesActual) })
   ]);
 }
 
@@ -157,16 +168,18 @@ function pintarEstado() {
   const valores = juego.statsVisibles();
   hud.pintar(valores);
   pintarInflacion(valores.inflacion);
-  const { anio, mesDelAnio } = juego.anioMes();
-  $('#calendario-texto').textContent =
-    `Mandato ${juego.estado.mandato} · Año ${anio} · Mes ${mesDelAnio}`;
+  // "Junio · Año 1". El número de mandato sólo aparece cuando hay más de uno.
+  const mandato = juego.estado.mandato > 1 ? `${juego.estado.mandato}º mandato · ` : '';
+  $('#calendario-texto').textContent = mandato + fecha(juego.estado.mes);
   $('#avance-relleno').style.width = `${(juego.estado.mes / BALANCE.mesesPorMandato) * 100}%`;
   pintarObjetivos();
 }
 
 function pintarObjetivos() {
   const activos = juego.objetivosActivos();
-  $('#objetivos').replaceChildren(...activos.map((o) => fichaObjetivo(o)));
+  $('#objetivos').replaceChildren(
+    ...activos.map((o) => fichaObjetivo(o, { mesActual: juego.estado.mes }))
+  );
 }
 
 // Aviso breve cuando un objetivo se resuelve.
@@ -334,7 +347,10 @@ function mostrarFinal() {
           html: retratoSvg(p.retrato, { fondo: p.color, uid: `cr${c.mandato}-${c.mes}` })
         }),
         crear('div', { clase: 'cronica-texto' }, [
-          crear('span', { clase: 'cronica-mes', texto: `Mandato ${c.mandato} · Mes ${c.mes}` }),
+          crear('span', {
+            clase: 'cronica-mes',
+            texto: (c.mandato > 1 ? `${c.mandato}º mandato · ` : '') + fecha(c.mes)
+          }),
           crear('span', { html: `${p.nombre} — <b>«${c.eleccion}»</b>` })
         ])
       ]);

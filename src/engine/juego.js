@@ -11,6 +11,8 @@ import { DECRETOS } from '../data/decretos.js';
 import { GABINETES, gabinetePorId } from '../data/gabinetes.js';
 import { FINALES } from '../data/finales.js';
 import { OBJETIVOS } from '../data/objetivos.js';
+import { AGENDA } from '../data/almanaque.js';
+import { calendario } from './calendario.js';
 import {
   asignarObjetivos, evaluarObjetivos, objetivosActivos, contarCumplidos, ESTADO_OBJETIVO
 } from './objetivos.js';
@@ -24,6 +26,7 @@ export class Juego {
       decretos = DECRETOS,
       finales = FINALES,
       objetivos = OBJETIVOS,
+      agenda = AGENDA,
       cartasDesbloqueadas = null
     } = opciones;
 
@@ -32,6 +35,7 @@ export class Juego {
     this.catalogoDecretos = decretos;
     this.catalogoFinales = finales;
     this.catalogoObjetivos = objetivos;
+    this.agenda = agenda;
     this.gabinete = gabinetePorId(gabinete) || GABINETES[0];
 
     this.mazo = new Mazo(cartas, this.rng, { desbloqueadas: cartasDesbloqueadas });
@@ -50,6 +54,8 @@ export class Juego {
         .filter(Boolean),
       fase: FASES.CARTA,
       objetivos: [],
+      agendaUsadas: new Set(), // variantes del almanaque que ya salieron
+      agendaEntregada: new Set(), // "mandato-mes" ya resueltos por la agenda
       carta: null,
       ultimo: null,
       final: null,
@@ -63,7 +69,7 @@ export class Juego {
 
     this.estado.objetivos = asignarObjetivos(this.rng, this.catalogoObjetivos);
     this.mazo.encolar('asuncion');
-    this.estado.carta = this.mazo.robar(this.estado);
+    this.estado.carta = this.siguienteCarta();
   }
 
   // ---------- Lecturas ----------
@@ -82,10 +88,36 @@ export class Juego {
     return visibles;
   }
 
-  anioMes() {
-    const anio = Math.floor((this.estado.mes - 1) / 12) + 1;
-    const mesDelAnio = ((this.estado.mes - 1) % 12) + 1;
-    return { anio, mesDelAnio };
+  calendario() {
+    return calendario(this.estado.mes);
+  }
+
+  // ---------- El almanaque ----------
+  // Cada mes, antes de sortear, se mira si el calendario tiene algo fijo.
+  siguienteCarta() {
+    const agendada = this.cartaDeAgenda();
+    if (agendada) this.mazo.forzar(agendada);
+    return this.mazo.robar(this.estado);
+  }
+
+  cartaDeAgenda() {
+    const marca = `${this.estado.mandato}-${this.estado.mes}`;
+    if (this.estado.agendaEntregada.has(marca)) return null;
+
+    const { clave, anio } = calendario(this.estado.mes);
+    const entrada = this.agenda.find(
+      (e) => e.mes === clave && (!e.anios || e.anios.includes(anio))
+    );
+    if (!entrada) return null;
+    this.estado.agendaEntregada.add(marca);
+
+    const existentes = entrada.cartas.filter((id) => this.mazo.carta(id));
+    if (!existentes.length) return null;
+    // La primera variante que todavía no salió; agotadas, cualquiera.
+    const nueva = existentes.find((id) => !this.estado.agendaUsadas.has(id));
+    const id = nueva ?? this.rng.elegir(existentes);
+    this.estado.agendaUsadas.add(id);
+    return id;
   }
 
   /**
@@ -213,7 +245,7 @@ export class Juego {
       }
     }
 
-    this.estado.carta = this.mazo.robar(this.estado);
+    this.estado.carta = this.siguienteCarta();
     resultado.siguiente = this.estado.carta;
     this.estado.ultimo = resultado;
     return resultado;
@@ -324,7 +356,7 @@ export class Juego {
     this.estado.ofertaDecretos = [];
     this.estado.decretoPendiente = false;
     this.estado.fase = FASES.CARTA;
-    this.estado.carta = this.mazo.robar(this.estado);
+    this.estado.carta = this.siguienteCarta();
     return decreto;
   }
 
@@ -345,7 +377,7 @@ export class Juego {
     this.estado.inflacion = limitar(this.estado.inflacion + 6, 0, BALANCE.inflacionMax);
     this.estado.flags.add(`mandato_${this.estado.mandato}`);
     this.estado.objetivos = asignarObjetivos(this.rng, this.catalogoObjetivos);
-    this.estado.carta = this.mazo.robar(this.estado);
+    this.estado.carta = this.siguienteCarta();
     return this.estado.carta;
   }
 

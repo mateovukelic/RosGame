@@ -100,6 +100,7 @@ export const CARTAS_FOLKLORE = [
     id: 'aguinaldo',
     forma: 'propuesta',
     personaje: 'sindicalista',
+    soloEncadenada: true, // lo trae la agenda del almanaque en junio
     texto: 'Viene el medio aguinaldo. Si le ponés un bono encima, nos quedamos todos tranquilos hasta marzo.',
     peso: 1.2,
     izq: {
@@ -122,7 +123,8 @@ export const CARTAS_FOLKLORE = [
     personaje: 'intendente',
     texto: 'Faltan tres semanas para enero y los hoteles de la costa tienen un quinto de las reservas de siempre.',
     peso: 1,
-    requiere: { mesMin: 10 },
+    anual: true,
+    requiere: { mesMin: 10, mesCalendario: 'dic' },
     izq: {
       rechaza: true,
       texto: 'Que cada uno haga lo suyo',

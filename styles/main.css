@@ -412,7 +412,9 @@ input[type="text"]:focus { outline: none; border-color: var(--celeste); }
 .objetivos .objetivo.activo { border-color: #4a4230; }
 .objetivos .objetivo-marca { font-size: 10px; color: var(--dorado); flex: none; }
 .objetivos .objetivo-cuerpo { overflow: hidden; }
-.objetivos .objetivo-plazo { flex: none; }
+.objetivos .objetivo-plazo {
+  flex: none; text-transform: none; letter-spacing: 0; font-size: 10.5px;
+}
 .objetivos .objetivo-tit {
   font-size: 11.5px; font-weight: 600; white-space: nowrap;
   overflow: hidden; text-overflow: ellipsis;

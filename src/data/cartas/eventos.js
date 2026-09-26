@@ -50,7 +50,7 @@ export const CARTAS_EVENTOS = [
     personaje: 'productor',
     texto: 'Cayó granizo del tamaño de un huevo sobre la zona núcleo. Ochenta mil hectáreas hechas nada en veinte minutos.',
     peso: 1.1,
-    requiere: { mesMin: 5 },
+    requiere: { mesMin: 5, mesCalendario: ['ago', 'oct'] },
     izq: {
       rechaza: true,
       texto: 'Que responda el seguro',
@@ -187,7 +187,7 @@ export const CARTAS_EVENTOS = [
     personaje: 'cientifico',
     texto: 'Brote de dengue en ocho provincias. No hay repelente en las farmacias y hay un importador que tiene todo el stock.',
     peso: 1.1,
-    requiere: { mesMin: 6 },
+    requiere: { mesMin: 6, mesCalendario: ['ene', 'may'] },
     izq: {
       rechaza: true,
       texto: 'Que lo resuelva el mercado',
@@ -249,7 +249,7 @@ export const CARTAS_EVENTOS = [
     personaje: 'militar',
     texto: 'La base antártica pide relevo. El rompehielos está roto desde hace tres años y la ventana de hielo cierra en marzo.',
     peso: 0.85,
-    requiere: { mesMin: 8 },
+    requiere: { mesMin: 8, mesCalendario: ['dic', 'ene'] },
     izq: {
       rechaza: true,
       texto: 'Que aguanten un año más',
@@ -326,7 +326,7 @@ export const CARTAS_EVENTOS = [
     personaje: 'sindicalista',
     texto: 'Paro de controladores aéreos en pleno enero. Cuatrocientos vuelos cancelados y doce mil personas durmiendo en Ezeiza.',
     peso: 1.1,
-    requiere: { mesMin: 6 },
+    requiere: { mesMin: 6, mesCalendario: 'ene' },
     izq: {
       rechaza: true,
       texto: 'Conciliación obligatoria',
