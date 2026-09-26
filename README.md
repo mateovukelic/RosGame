@@ -15,11 +15,11 @@ local sin build ni dependencias — es HTML + módulos ES:
 
 ```bash
 npm start            # levanta http://localhost:8080
-# o, si preferís:
-python3 -m http.server 8080
 ```
 
-Abrí `http://localhost:8080` y asumí el cargo.
+Abrí `http://localhost:8080` y asumí el cargo. `npm start` no necesita Python ni
+nada instalado aparte de Node: usa `http-server` vía `npx`, que se descarga solo
+la primera vez.
 
 **Controles:** arrastrá la carta hacia un lado y las barras te muestran **qué
 facciones toca esa opción y con cuánta fuerza** — nunca en qué dirección. Soltá

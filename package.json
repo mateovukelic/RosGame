@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "test": "node --test test/*.test.js",
-    "start": "python3 -m http.server 8080",
+    "start": "npx --yes http-server -p 8080 -s .",
     "validar": "node tools/validar-mazo.js",
     "demo": "node tools/construir-demo.js",
     "exportar": "node tools/exportar.mjs"
