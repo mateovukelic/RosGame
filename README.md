@@ -341,6 +341,13 @@ El workflow corre `npm test` antes de publicar, así que nunca sale una demo rot
 que aportan su propio esqueleto. Se genera desde `index.html` y `styles/main.css`
 en vez de mantenerse a mano, para que no se desincronice.
 
+## Hacia dónde va
+
+`NARRATIVA.md` es la hoja de ruta del contenido: el mandato atado al almanaque
+político real, los cuatro años con identidad propia (herencia, medio término,
+gobernar o durar, sucesión), los personajes nuevos y el orden de trabajo.
+Es una propuesta: todavía no está implementada.
+
 ## Estado
 
 Vertical slice jugable y completa: 158 cartas (16 de ellas consecuencias con
